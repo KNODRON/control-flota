@@ -1,17 +1,15 @@
-// app.js
-
 const salidaForm = document.getElementById('salidaForm');
 const regresoForm = document.getElementById('regresoForm');
 const registroOutput = document.getElementById('registroOutput');
 
 let salidas = [];
 
-salidaForm.addEventListener('submit', function(e) {
+salidaForm.addEventListener('submit', function (e) {
   e.preventDefault();
 
   const salida = {
     patente: document.getElementById('patente').value.toUpperCase(),
-    conductor: document.getElementById('conductor').value,
+    jefePatrulla: document.getElementById('jefePatrulla').value,
     acompanantes: document.getElementById('acompanantes').value,
     kmSalida: parseInt(document.getElementById('kmSalida').value),
     horaSalida: new Date().toLocaleString()
@@ -22,7 +20,7 @@ salidaForm.addEventListener('submit', function(e) {
   salidaForm.reset();
 });
 
-regresoForm.addEventListener('submit', function(e) {
+regresoForm.addEventListener('submit', function (e) {
   e.preventDefault();
 
   const patente = document.getElementById('patenteRegreso').value.toUpperCase();
@@ -31,12 +29,18 @@ regresoForm.addEventListener('submit', function(e) {
 
   const salida = salidas.find(s => s.patente === patente && !s.kmRegreso);
 
-  if (salida) {
-    salida.kmRegreso = kmRegreso;
-    salida.horaRegreso = horaRegreso;
-  } else {
+  if (!salida) {
     alert("No se encontró una salida activa con esa patente.");
+    return;
   }
+
+  if (kmRegreso < salida.kmSalida) {
+    alert("El kilometraje de regreso no puede ser menor al de salida.");
+    return;
+  }
+
+  salida.kmRegreso = kmRegreso;
+  salida.horaRegreso = horaRegreso;
 
   actualizarVista();
   regresoForm.reset();
