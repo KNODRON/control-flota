@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Control de Flota</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🚓 Salida de Vehículo</h1>
+
+    <form id="salidaForm">
+      <label>Patente:</label>
+      <input type="text" id="patente" required>
+
+      <label>Nombre del conductor:</label>
+      <input type="text" id="conductor" required>
+
+      <label>Acompañantes:</label>
+      <input type="text" id="acompanantes" placeholder="Separar con coma">
+
+      <label>Kilometraje de salida:</label>
+      <input type="number" id="kmSalida" required>
+
+      <button type="submit">Registrar salida</button>
+    </form>
+
+    <hr>
+
+    <h2>🔙 Regreso del Vehículo</h2>
+    <form id="regresoForm">
+      <label>Patente:</label>
+      <input type="text" id="patenteRegreso" required>
+
+      <label>Kilometraje de regreso:</label>
+      <input type="number" id="kmRegreso" required>
+
+      <button type="submit">Registrar regreso</button>
+    </form>
+
+    <hr>
+
+    <h3>📝 Registro temporal</h3>
+    <pre id="registroOutput">[sin datos aún]</pre>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
