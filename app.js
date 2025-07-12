@@ -7,8 +7,17 @@ let salidas = [];
 salidaForm.addEventListener('submit', function (e) {
   e.preventDefault();
 
+  const patente = document.getElementById('patente').value.toUpperCase();
+
+  // Verificar si ya existe una salida activa con esa patente
+  const existeSalida = salidas.some(s => s.patente === patente && !s.kmRegreso);
+  if (existeSalida) {
+    alert("Ese vehículo se encuentra en la población.");
+    return;
+  }
+
   const salida = {
-    patente: document.getElementById('patente').value.toUpperCase(),
+    patente: patente,
     jefePatrulla: document.getElementById('jefePatrulla').value,
     acompanantes: document.getElementById('acompanantes').value,
     kmSalida: parseInt(document.getElementById('kmSalida').value),
