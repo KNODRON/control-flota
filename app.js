@@ -20,6 +20,7 @@ salidaForm.addEventListener('submit', function (e) {
     patente: patente,
     jefePatrulla: document.getElementById('jefePatrulla').value,
     acompanantes: document.getElementById('acompanantes').value,
+    asignacionEquipo: document.getElementById('asignacionEquipo').value,
     kmSalida: parseInt(document.getElementById('kmSalida').value),
     horaSalida: new Date().toLocaleString()
   };
