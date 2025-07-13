@@ -1,178 +1,150 @@
-const salidaForm = document.getElementById('salidaForm');
-const regresoForm = document.getElementById('regresoForm');
-const registroOutput = document.getElementById('registroOutput');
+document.addEventListener('DOMContentLoaded', () => {
+  const salidaForm = document.getElementById('salidaForm');
+  const regresoForm = document.getElementById('regresoForm');
+  const salidaData = [];
 
-let salidas = [];
+  salidaForm.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-salidaForm.addEventListener('submit', function (e) {
-  e.preventDefault();
+    const seccion = document.getElementById('seccion').value;
+    const patente = document.getElementById('patente').value.toUpperCase();
+    const kmSalida = document.getElementById('kmSalida').value;
+    const horaSalida = new Date().toLocaleString('es-CL');
+    
+    const jefe = {
+      nombre: document.getElementById('jpNombre').value,
+      telefono: document.getElementById('jpTelefono').value,
+      pistola: document.getElementById('jpPistola').value,
+      chaleco: document.getElementById('jpChaleco').value,
+      casco: document.getElementById('jpCasco').value,
+      portatil: document.getElementById('jpPortatil').value,
+    };
 
-  const patente = document.getElementById('patente').value.toUpperCase();
-
-  const existeSalida = salidas.some(s => s.patente === patente && !s.kmRegreso);
-  if (existeSalida) {
-    alert("Vehículo se encuentra en la población.");
-    return;
-  }
-
-  const salida = {
-    patente: patente,
-    seccion: document.getElementById('seccion').value,
-    kmSalida: parseInt(document.getElementById('kmSalida').value),
-    horaSalida: new Date().toLocaleString(),
-    patrulla: [
-      {
-        rol: "Jefe de patrulla",
-        nombre: document.getElementById('jefeNombre').value,
-        telefono: document.getElementById('jefeTelefono').value,
-        pistola: document.getElementById('jefePistola').value,
-        chaleco: document.getElementById('jefeChaleco').value,
-        casco: document.getElementById('jefeCasco').value,
-        portatil: document.getElementById('jefePortatil').value,
-        camara: document.getElementById('jefeCamara').value,
-      },
-      {
-        rol: "Acompañante 1",
-        nombre: document.getElementById('acomp1Nombre').value,
-        pistola: document.getElementById('acomp1Pistola').value,
-        chaleco: document.getElementById('acomp1Chaleco').value,
-        casco: document.getElementById('acomp1Casco').value,
-        portatil: document.getElementById('acomp1Portatil').value,
-        camara: document.getElementById('acomp1Camara').value,
-      },
-      {
-        rol: "Acompañante 2",
-        nombre: document.getElementById('acomp2Nombre').value,
-        pistola: document.getElementById('acomp2Pistola').value,
-        chaleco: document.getElementById('acomp2Chaleco').value,
-        casco: document.getElementById('acomp2Casco').value,
-        portatil: document.getElementById('acomp2Portatil').value,
-        camara: document.getElementById('acomp2Camara').value,
+    const ocupantes = [jefe];
+    for (let i = 1; i <= 3; i++) {
+      const nombre = document.getElementById(`acom${i}Nombre`).value;
+      if (nombre) {
+        ocupantes.push({
+          nombre,
+          pistola: document.getElementById(`acom${i}Pistola`).value,
+          chaleco: document.getElementById(`acom${i}Chaleco`).value,
+          casco: document.getElementById(`acom${i}Casco`).value,
+          portatil: document.getElementById(`acom${i}Portatil`).value,
+        });
       }
-    ]
-  };
-
-  salidas.push(salida);
-  actualizarVista();
-  salidaForm.reset();
-});
-
-regresoForm.addEventListener('submit', function (e) {
-  e.preventDefault();
-
-  const patente = document.getElementById('patenteRegreso').value.toUpperCase();
-  const kmRegreso = parseInt(document.getElementById('kmRegreso').value);
-  const horaRegreso = new Date().toLocaleString();
-
-  const salida = salidas.find(s => s.patente === patente && !s.kmRegreso);
-
-  if (!salida) {
-    alert("No se encontró una salida con esa patente.");
-    return;
-  }
-
-  if (kmRegreso < salida.kmSalida) {
-    alert("El kilometraje de regreso no puede ser menor al de salida.");
-    return;
-  }
-
-  salida.kmRegreso = kmRegreso;
-  salida.horaRegreso = horaRegreso;
-
-  actualizarVista();
-  regresoForm.reset();
-});
-
-function actualizarVista() {
-  registroOutput.textContent = JSON.stringify(salidas, null, 2);
-}
-
-// === FUNCIÓN PARA GENERAR PDF ===
-async function generarPDF() {
-  if (salidas.length === 0) {
-    alert("No hay ninguna salida registrada.");
-    return;
-  }
-
-  const ultima = salidas[salidas.length - 1];
-  const jp = ultima.patrulla[0]; // Jefe de patrulla (primero en la lista)
-
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ orientation: "landscape" });
-
-  const logoURL = "https://knodron.github.io/control-flota/logo-os9.jpeg";
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.src = logoURL;
-
-  img.onload = function () {
-    // Logo arriba derecha
-    doc.addImage(img, "JPEG", 250, 10, 30, 30);
-
-    // Título
-    doc.setFontSize(18);
-    doc.setFont("helvetica", "bold");
-    doc.text("SALIDA A POBLACIÓN", 148, 20, { align: "center" });
-
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "normal");
-
-    // Datos generales
-    doc.text(`Sección: ${ultima.seccion}`, 20, 40);
-    doc.text(`Patente: ${ultima.patente}`, 20, 48);
-    doc.text(`Fecha y hora de salida: ${ultima.horaSalida}`, 20, 56);
-    doc.text(`Kilometraje salida: ${ultima.kmSalida} km`, 20, 64);
-
-    // Tabla de personal
-    let y = 80;
-    doc.setFont("helvetica", "bold");
-    doc.text("Personal y Equipamiento", 20, y);
-    y += 8;
-
-    doc.setFont("helvetica", "bold");
-    doc.text("Nombre", 20, y);
-    doc.text("Pistola", 80, y);
-    doc.text("Chaleco", 110, y);
-    doc.text("Casco", 140, y);
-    doc.text("Portátil", 170, y);
-    doc.text("C. Corporal", 200, y);
-    y += 6;
-    doc.setLineWidth(0.2);
-    doc.line(20, y, 270, y);
-    y += 6;
-
-    doc.setFont("helvetica", "normal");
-
-    ultima.patrulla.forEach(p => {
-      if (!p.nombre) return;
-      doc.text(p.nombre, 20, y);
-      doc.text(p.pistola || "-", 80, y);
-      doc.text(p.chaleco || "-", 110, y);
-      doc.text(p.casco || "-", 140, y);
-      doc.text(p.portatil || "-", 170, y);
-      doc.text(p.camara || "-", 200, y);
-      y += 8;
-    });
-
-    y += 10;
-    // Datos regreso (si existen)
-    if (ultima.horaRegreso && ultima.kmRegreso) {
-      doc.setFont("helvetica", "bold");
-      doc.text("Datos de regreso", 20, y);
-      y += 8;
-      doc.setFont("helvetica", "normal");
-      doc.text(`Hora de regreso: ${ultima.horaRegreso}`, 20, y);
-      y += 8;
-      doc.text(`Kilometraje regreso: ${ultima.kmRegreso} km`, 20, y);
-      y += 10;
     }
 
-    // Firma Jefe de Patrulla
-    y += 20;
-    doc.line(20, y, 100, y);
-    doc.text(`Jefe de Patrulla: ${jp.nombre}`, 20, y + 6);
+    // Validación: evitar duplicado de vehículo en salida
+    const enUso = salidaData.find(s => s.patente === patente && !s.kmRegreso);
+    if (enUso) {
+      alert("🚨 Este vehículo se encuentra en la población.");
+      return;
+    }
 
-    // Guardar PDF
-    doc.save(`salida_${ultima.patente}_${new Date().toISOString().slice(0, 10)}.pdf`);
-  };
-}
+    salidaData.push({
+      seccion,
+      patente,
+      kmSalida,
+      horaSalida,
+      ocupantes
+    });
+
+    salidaForm.reset();
+    alert("✅ Salida registrada");
+  });
+
+  regresoForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const patente = document.getElementById('patenteRegreso').value.toUpperCase();
+    const kmRegreso = parseInt(document.getElementById('kmRegreso').value);
+    const horaRegreso = new Date().toLocaleString('es-CL');
+
+    const salida = salidaData.find(s => s.patente === patente && !s.kmRegreso);
+    if (!salida) {
+      alert("❌ No hay salida registrada para esta patente.");
+      return;
+    }
+
+    if (kmRegreso < parseInt(salida.kmSalida)) {
+      alert("❌ El kilometraje de regreso no puede ser menor al de salida.");
+      return;
+    }
+
+    salida.kmRegreso = kmRegreso;
+    salida.horaRegreso = horaRegreso;
+
+    alert("✅ Regreso registrado correctamente");
+  });
+
+  document.getElementById('generarPDF').addEventListener('click', () => {
+    if (salidaData.length === 0) return alert("No hay datos para exportar");
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: "landscape" });
+
+    const salida = salidaData[salidaData.length - 1];
+    const jefe = salida.ocupantes[0];
+    const nombreJP = jefe.nombre.toUpperCase();
+    const gradoJP = jefe.nombre.split(" de Carabineros")[0].trim();
+
+    const logo = new Image();
+    logo.src = "logo-os9.jpeg"; // Asegúrate que el logo esté en la misma carpeta
+
+    logo.onload = () => {
+      doc.addImage(logo, "JPEG", 240, 5, 40, 40);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(18);
+      doc.setTextColor(0, 102, 0);
+      doc.text("REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9", 10, 20);
+
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Sección: ${salida.seccion}`, 10, 30);
+      doc.text(`Patente: ${salida.patente}`, 10, 38);
+      doc.text(`Hora salida: ${salida.horaSalida}`, 10, 46);
+      if (salida.horaRegreso) doc.text(`Hora regreso: ${salida.horaRegreso}`, 10, 54);
+      doc.text(`Km salida: ${salida.kmSalida}`, 90, 38);
+      if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 90, 46);
+
+      // Tabla de ocupantes
+      const encabezado = ["N°", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil"];
+      const datos = salida.ocupantes.map((o, i) => [
+        (i + 1).toString(),
+        o.nombre,
+        o.pistola,
+        o.chaleco,
+        o.casco,
+        o.portatil
+      ]);
+
+      doc.autoTable({
+        startY: 65,
+        head: [encabezado],
+        body: datos,
+        theme: 'grid',
+        headStyles: { fillColor: [0, 102, 0] },
+        styles: { fontSize: 10 },
+      });
+
+      // Pie de firma (alineado a la derecha)
+      let y = doc.lastAutoTable.finalY + 20;
+      const firmaX = 230;
+
+      doc.setLineWidth(0.3);
+      doc.line(firmaX, y, firmaX + 50, y);
+
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(11);
+      doc.text(nombreJP, firmaX + 25, y + 6, { align: "center" });
+
+      doc.setFont("helvetica", "normal");
+      doc.text(`${gradoJP} de Carabineros`, firmaX + 25, y + 12, { align: "center" });
+
+      doc.setFont("helvetica", "bold");
+      doc.text("JEFE DE PATRULLA", firmaX + 25, y + 18, { align: "center" });
+
+      doc.save(`salida-${salida.patente}.pdf`);
+    };
+  });
+});
