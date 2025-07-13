@@ -9,7 +9,6 @@ salidaForm.addEventListener('submit', function (e) {
 
   const patente = document.getElementById('patente').value.toUpperCase();
 
-  // Verificar si ya existe una salida activa con esa patente
   const existeSalida = salidas.some(s => s.patente === patente && !s.kmRegreso);
   if (existeSalida) {
     alert("Ese vehículo se encuentra en la población.");
@@ -18,11 +17,37 @@ salidaForm.addEventListener('submit', function (e) {
 
   const salida = {
     patente: patente,
-    jefePatrulla: document.getElementById('jefePatrulla').value,
-    acompanantes: document.getElementById('acompanantes').value,
-    asignacionEquipo: document.getElementById('asignacionEquipo').value,
     kmSalida: parseInt(document.getElementById('kmSalida').value),
-    horaSalida: new Date().toLocaleString()
+    horaSalida: new Date().toLocaleString(),
+    patrulla: [
+      {
+        rol: "Jefe de patrulla",
+        nombre: document.getElementById('jefeNombre').value,
+        pistola: document.getElementById('jefePistola').value,
+        chaleco: document.getElementById('jefeChaleco').value,
+        casco: document.getElementById('jefeCasco').value,
+        portatil: document.getElementById('jefePortatil').value,
+        camara: document.getElementById('jefeCamara').value,
+      },
+      {
+        rol: "Acompañante 1",
+        nombre: document.getElementById('acomp1Nombre').value,
+        pistola: document.getElementById('acomp1Pistola').value,
+        chaleco: document.getElementById('acomp1Chaleco').value,
+        casco: document.getElementById('acomp1Casco').value,
+        portatil: document.getElementById('acomp1Portatil').value,
+        camara: document.getElementById('acomp1Camara').value,
+      },
+      {
+        rol: "Acompañante 2",
+        nombre: document.getElementById('acomp2Nombre').value,
+        pistola: document.getElementById('acomp2Pistola').value,
+        chaleco: document.getElementById('acomp2Chaleco').value,
+        casco: document.getElementById('acomp2Casco').value,
+        portatil: document.getElementById('acomp2Portatil').value,
+        camara: document.getElementById('acomp2Camara').value,
+      }
+    ]
   };
 
   salidas.push(salida);
