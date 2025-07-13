@@ -12,13 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const horaSalida = new Date().toLocaleString('es-CL');
     
     const jefe = {
-      nombre: document.getElementById('jpNombre').value,
-      telefono: document.getElementById('jpTelefono').value,
-      pistola: document.getElementById('jpPistola').value,
-      chaleco: document.getElementById('jpChaleco').value,
-      casco: document.getElementById('jpCasco').value,
-      portatil: document.getElementById('jpPortatil').value,
-    };
+  nombre: document.getElementById('jefeNombre').value,
+  telefono: document.getElementById('jefeTelefono').value,
+  pistola: document.getElementById('jefePistola').value,
+  chaleco: document.getElementById('jefeChaleco').value,
+  casco: document.getElementById('jefeCasco').value,
+  portatil: document.getElementById('jefePortatil').value,
+  camara: document.getElementById('jefeCamara').value
+};
 
     const ocupantes = [jefe];
     for (let i = 1; i <= 3; i++) {
