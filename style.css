@@ -1,5 +1,3 @@
-/* style.css */
-
 body {
   font-family: 'Segoe UI', sans-serif;
   background: #f4f4f4;
@@ -28,12 +26,13 @@ label {
   font-weight: bold;
 }
 
-input {
+input, textarea {
   width: 100%;
   padding: 0.5rem;
   margin-top: 0.3rem;
   border: 1px solid #ccc;
   border-radius: 5px;
+  resize: vertical;
 }
 
 button {
@@ -49,7 +48,7 @@ button {
 }
 
 button:hover {
-  background-color: #1b5e20; /* Verde más oscuro */
+  background-color: #1b5e20;
 }
 
 hr {
