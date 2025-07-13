@@ -11,7 +11,7 @@ salidaForm.addEventListener('submit', function (e) {
 
   const existeSalida = salidas.some(s => s.patente === patente && !s.kmRegreso);
   if (existeSalida) {
-    alert("Ese vehículo se encuentra en la población.");
+    alert("Vehículo se encuentra en la población.");
     return;
   }
 
@@ -67,7 +67,7 @@ regresoForm.addEventListener('submit', function (e) {
   const salida = salidas.find(s => s.patente === patente && !s.kmRegreso);
 
   if (!salida) {
-    alert("No se encontró una salida activa con esa patente.");
+    alert("No se encontró una salida con esa patente.");
     return;
   }
 
@@ -95,50 +95,84 @@ async function generarPDF() {
   }
 
   const ultima = salidas[salidas.length - 1];
+  const jp = ultima.patrulla[0]; // Jefe de patrulla (primero en la lista)
 
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
+  const doc = new jsPDF({ orientation: "landscape" });
 
-  const logoURL = "https://knodron.github.io/control-flota/logo-os9.jpeg"; // o ruta que subas
+  const logoURL = "https://knodron.github.io/control-flota/logo-os9.jpeg";
   const img = new Image();
   img.crossOrigin = "anonymous";
   img.src = logoURL;
 
   img.onload = function () {
-    doc.addImage(img, "JPEG", 80, 10, 50, 50);
+    // Logo arriba derecha
+    doc.addImage(img, "JPEG", 250, 10, 30, 30);
 
-    doc.setFontSize(16);
-    doc.text("SALIDA DE VEHÍCULO - OS9", 105, 70, { align: "center" });
+    // Título
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("SALIDA A POBLACIÓN", 148, 20, { align: "center" });
 
     doc.setFontSize(12);
-    doc.text(`Sección: ${ultima.seccion}`, 20, 85);
-    doc.text(`Patente: ${ultima.patente}`, 20, 95);
-    doc.text(`Hora de salida: ${ultima.horaSalida}`, 20, 105);
-    doc.text(`Kilometraje: ${ultima.kmSalida} km`, 20, 115);
+    doc.setFont("helvetica", "normal");
 
-    doc.setFontSize(14);
-    doc.text("🧍 Personal y equipamiento", 20, 130);
+    // Datos generales
+    doc.text(`Sección: ${ultima.seccion}`, 20, 40);
+    doc.text(`Patente: ${ultima.patente}`, 20, 48);
+    doc.text(`Fecha y hora de salida: ${ultima.horaSalida}`, 20, 56);
+    doc.text(`Kilometraje salida: ${ultima.kmSalida} km`, 20, 64);
 
-    let y = 140;
-    ultima.patrulla.forEach(persona => {
-      if (!persona.nombre) return;
+    // Tabla de personal
+    let y = 80;
+    doc.setFont("helvetica", "bold");
+    doc.text("Personal y Equipamiento", 20, y);
+    y += 8;
 
-      doc.setFontSize(12);
-      doc.text(`• ${persona.rol}: ${persona.nombre}`, 20, y);
+    doc.setFont("helvetica", "bold");
+    doc.text("Nombre", 20, y);
+    doc.text("Pistola", 80, y);
+    doc.text("Chaleco", 110, y);
+    doc.text("Casco", 140, y);
+    doc.text("Portátil", 170, y);
+    doc.text("C. Corporal", 200, y);
+    y += 6;
+    doc.setLineWidth(0.2);
+    doc.line(20, y, 270, y);
+    y += 6;
+
+    doc.setFont("helvetica", "normal");
+
+    ultima.patrulla.forEach(p => {
+      if (!p.nombre) return;
+      doc.text(p.nombre, 20, y);
+      doc.text(p.pistola || "-", 80, y);
+      doc.text(p.chaleco || "-", 110, y);
+      doc.text(p.casco || "-", 140, y);
+      doc.text(p.portatil || "-", 170, y);
+      doc.text(p.camara || "-", 200, y);
       y += 8;
-
-      if (persona.telefono) {
-        doc.text(`   Teléfono: ${persona.telefono}`, 25, y);
-        y += 8;
-      }
-
-      doc.text(`   Pistola: ${persona.pistola || '-'}`, 25, y); y += 8;
-      doc.text(`   Chaleco: ${persona.chaleco || '-'}`, 25, y); y += 8;
-      doc.text(`   Casco: ${persona.casco || '-'}`, 25, y); y += 8;
-      doc.text(`   Portátil: ${persona.portatil || '-'}`, 25, y); y += 8;
-      doc.text(`   Cámara corporal: ${persona.camara || '-'}`, 25, y); y += 10;
     });
 
+    y += 10;
+    // Datos regreso (si existen)
+    if (ultima.horaRegreso && ultima.kmRegreso) {
+      doc.setFont("helvetica", "bold");
+      doc.text("Datos de regreso", 20, y);
+      y += 8;
+      doc.setFont("helvetica", "normal");
+      doc.text(`Hora de regreso: ${ultima.horaRegreso}`, 20, y);
+      y += 8;
+      doc.text(`Kilometraje regreso: ${ultima.kmRegreso} km`, 20, y);
+      y += 10;
+    }
+
+    // Firma Jefe de Patrulla
+    y += 20;
+    doc.line(20, y, 100, y);
+    doc.text(`Jefe de Patrulla: ${jp.nombre}`, 20, y + 6);
+
+    // Guardar PDF
     doc.save(`salida_${ultima.patente}_${new Date().toISOString().slice(0, 10)}.pdf`);
   };
 }
