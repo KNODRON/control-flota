@@ -10,32 +10,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const patente = document.getElementById('patente').value.toUpperCase();
     const kmSalida = document.getElementById('kmSalida').value;
     const horaSalida = new Date().toLocaleString('es-CL');
-    
+
     const jefe = {
-  nombre: document.getElementById('jefeNombre').value,
-  telefono: document.getElementById('jefeTelefono').value,
-  pistola: document.getElementById('jefePistola').value,
-  chaleco: document.getElementById('jefeChaleco').value,
-  casco: document.getElementById('jefeCasco').value,
-  portatil: document.getElementById('jefePortatil').value,
-  camara: document.getElementById('jefeCamara').value
-};
+      nombre: document.getElementById('jefeNombre').value,
+      telefono: document.getElementById('jefeTelefono').value,
+      pistola: document.getElementById('jefePistola').value,
+      chaleco: document.getElementById('jefeChaleco').value,
+      casco: document.getElementById('jefeCasco').value,
+      portatil: document.getElementById('jefePortatil').value,
+      camara: document.getElementById('jefeCamara').value
+    };
 
     const ocupantes = [jefe];
-    for (let i = 1; i <= 3; i++) {
-      const nombre = document.getElementById(`acom${i}Nombre`).value;
+    for (let i = 1; i <= 2; i++) {
+      const nombre = document.getElementById(`acomp${i}Nombre`).value;
       if (nombre) {
         ocupantes.push({
           nombre,
-          pistola: document.getElementById(`acom${i}Pistola`).value,
-          chaleco: document.getElementById(`acom${i}Chaleco`).value,
-          casco: document.getElementById(`acom${i}Casco`).value,
-          portatil: document.getElementById(`acom${i}Portatil`).value,
+          pistola: document.getElementById(`acomp${i}Pistola`).value,
+          chaleco: document.getElementById(`acomp${i}Chaleco`).value,
+          casco: document.getElementById(`acomp${i}Casco`).value,
+          portatil: document.getElementById(`acomp${i}Portatil`).value,
+          camara: document.getElementById(`acomp${i}Camara`).value
         });
       }
     }
 
-    // Validación: evitar duplicado de vehículo en salida
     const enUso = salidaData.find(s => s.patente === patente && !s.kmRegreso);
     if (enUso) {
       alert("🚨 Este vehículo se encuentra en la población.");
@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   regresoForm.addEventListener('submit', (e) => {
     e.preventDefault();
+
     const patente = document.getElementById('patenteRegreso').value.toUpperCase();
     const kmRegreso = parseInt(document.getElementById('kmRegreso').value);
     const horaRegreso = new Date().toLocaleString('es-CL');
@@ -89,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const gradoJP = jefe.nombre.split(" de Carabineros")[0].trim();
 
     const logo = new Image();
-    logo.src = "logo-os9.jpeg"; // Asegúrate que el logo esté en la misma carpeta
+    logo.src = "logo-os9.jpeg";
 
     logo.onload = () => {
       doc.addImage(logo, "JPEG", 240, 5, 40, 40);
@@ -108,15 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
       doc.text(`Km salida: ${salida.kmSalida}`, 90, 38);
       if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 90, 46);
 
-      // Tabla de ocupantes
-      const encabezado = ["N°", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil"];
+      const encabezado = ["N°", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil", "Cámara"];
       const datos = salida.ocupantes.map((o, i) => [
         (i + 1).toString(),
         o.nombre,
         o.pistola,
         o.chaleco,
         o.casco,
-        o.portatil
+        o.portatil,
+        o.camara
       ]);
 
       doc.autoTable({
@@ -128,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         styles: { fontSize: 10 },
       });
 
-      // Pie de firma (alineado a la derecha)
+      // Pie de firma
       let y = doc.lastAutoTable.finalY + 20;
       const firmaX = 230;
 
