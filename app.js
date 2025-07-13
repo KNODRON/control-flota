@@ -17,12 +17,14 @@ salidaForm.addEventListener('submit', function (e) {
 
   const salida = {
     patente: patente,
+    seccion: document.getElementById('seccion').value,
     kmSalida: parseInt(document.getElementById('kmSalida').value),
     horaSalida: new Date().toLocaleString(),
     patrulla: [
       {
         rol: "Jefe de patrulla",
         nombre: document.getElementById('jefeNombre').value,
+        telefono: document.getElementById('jefeTelefono').value,
         pistola: document.getElementById('jefePistola').value,
         chaleco: document.getElementById('jefeChaleco').value,
         casco: document.getElementById('jefeCasco').value,
