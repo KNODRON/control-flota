@@ -87,25 +87,28 @@ document.addEventListener('DOMContentLoaded', () => {
     alert("✅ Regreso registrado correctamente");
   });
 
-  document.getElementById('generarPDF').addEventListener('click', () => {
+  document.getElementById('PDF').addEventListener('click', () => {
     if (salidaData.length === 0) return alert("No hay datos para exportar");
 
     const { jsPDF } = window.jspdf;
-    const salida = salidaData[salidaData.length - 1];
-    const jefe = salida.ocupantes[0];
     const doc = new jsPDF({ orientation: "landscape" });
 
+    const salida = salidaData[salidaData.length - 1];
+    const jefe = salida.ocupantes[0];
     const logo = new Image();
     logo.src = "logo-os9.jpeg";
 
     logo.onload = () => {
-      doc.addImage(logo, "JPEG", 260, 10, 20, 20);  // logo más pequeño
+      // Logo
+      doc.addImage(logo, "JPEG", 250, 10, 25, 25);
 
+      // Título
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
       doc.setTextColor(0, 102, 0);
       doc.text("REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9", 15, 20);
 
+      // Datos generales
       doc.setFont("helvetica", "normal");
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
@@ -113,20 +116,20 @@ document.addEventListener('DOMContentLoaded', () => {
       doc.text(`Patente: ${salida.patente}`, 15, 38);
       doc.text(`Fecha / Hora salida: ${salida.horaSalida}`, 15, 46);
       if (salida.horaRegreso) doc.text(`Fecha / Hora regreso: ${salida.horaRegreso}`, 15, 54);
-
       doc.text(`Km salida: ${salida.kmSalida}`, 130, 30);
       if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 130, 38);
       doc.text(`Teléfono JP: ${salida.telefono}`, 130, 46);
 
+      // Tabla de ocupantes
       const encabezado = ["CALZO", "NOMBRE", "PISTOLA", "CHALECO", "CASCO", "PORTÁTIL", "CÁM. CORPORAL"];
       const datos = salida.ocupantes.map(o => [
-        o.calzo || '',
+        o.calzo || "",
         o.nombre,
-        o.pistola || '',
-        o.chaleco || '',
-        o.casco || '',
-        o.portatil || '',
-        o.camara || ''
+        o.pistola || "",
+        o.chaleco || "",
+        o.casco || "",
+        o.portatil || "",
+        o.camara || ""
       ]);
 
       doc.autoTable({
@@ -138,16 +141,16 @@ document.addEventListener('DOMContentLoaded', () => {
         styles: { fontSize: 10 },
       });
 
-      const y = doc.lastAutoTable.finalY + 20;
+      // Firma
+      const yFirma = doc.lastAutoTable.finalY + 20;
       const firmaX = 230;
-
       doc.setLineWidth(0.3);
-      doc.line(firmaX, y, firmaX + 50, y);
+      doc.line(firmaX, yFirma, firmaX + 50, yFirma);
 
       const nombreJP = jefe.nombre.toUpperCase();
       doc.setFont("helvetica", "bold");
-      doc.text(nombreJP, firmaX + 25, y + 6, { align: "center" });
-      doc.text("JEFE DE PATRULLA", firmaX + 25, y + 12, { align: "center" });
+      doc.text(nombreJP, firmaX + 25, yFirma + 6, { align: "center" });
+      doc.text("JEFE DE PATRULLA", firmaX + 25, yFirma + 12, { align: "center" });
 
       doc.save(`salida-${salida.patente}.pdf`);
     };
