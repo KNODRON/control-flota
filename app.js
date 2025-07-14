@@ -2,21 +2,20 @@
 document.addEventListener('DOMContentLoaded', () => {
   const salidaForm = document.getElementById('salidaForm');
   const regresoForm = document.getElementById('regresoForm');
-  const registroOutput = document.getElementById('registroOutput');
   const salidaData = [];
 
   salidaForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const seccion = document.getElementById('seccion').value;
+    const seccion = document.getElementById('seccion')?.value || '';
     const patente = document.getElementById('patente').value.toUpperCase();
     const kmSalida = document.getElementById('kmSalida').value;
     const horaSalida = new Date().toLocaleString('es-CL');
 
     const jefe = {
-      calzo: document.getElementById('jefeCalzo').value,
       nombre: document.getElementById('jefeNombre').value,
       telefono: document.getElementById('jefeTelefono').value,
+      calzo: document.getElementById('jefeCalzo').value,
       pistola: document.getElementById('jefePistola').value,
       chaleco: document.getElementById('jefeChaleco').value,
       casco: document.getElementById('jefeCasco').value,
@@ -25,12 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const ocupantes = [jefe];
+
     for (let i = 1; i <= 2; i++) {
       const nombre = document.getElementById(`acomp${i}Nombre`).value;
       if (nombre) {
         ocupantes.push({
-          calzo: document.getElementById(`acomp${i}Calzo`).value,
           nombre,
+          calzo: document.getElementById(`acomp${i}Calzo`).value,
           pistola: document.getElementById(`acomp${i}Pistola`).value,
           chaleco: document.getElementById(`acomp${i}Chaleco`).value,
           casco: document.getElementById(`acomp${i}Casco`).value,
@@ -40,14 +40,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    if (salidaData.find(s => s.patente === patente && !s.kmRegreso)) {
+    const enUso = salidaData.find(s => s.patente === patente && !s.kmRegreso);
+    if (enUso) {
       alert("🚨 Este vehículo se encuentra en la población.");
       return;
     }
 
-    salidaData.push({ seccion, patente, kmSalida, horaSalida, ocupantes });
+    salidaData.push({
+      seccion,
+      patente,
+      kmSalida,
+      horaSalida,
+      ocupantes
+    });
+
     salidaForm.reset();
-    actualizarRegistro();
+    mostrarRegistroTemporal();
     alert("✅ Salida registrada");
   });
 
@@ -58,27 +66,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const horaRegreso = new Date().toLocaleString('es-CL');
 
     const salida = salidaData.find(s => s.patente === patente && !s.kmRegreso);
-    if (!salida) return alert("❌ No hay salida registrada para esta patente.");
-    if (kmRegreso < parseInt(salida.kmSalida)) return alert("❌ El kilometraje de regreso no puede ser menor al de salida.");
+    if (!salida) {
+      alert("❌ No hay salida registrada para esta patente.");
+      return;
+    }
+
+    if (kmRegreso < parseInt(salida.kmSalida)) {
+      alert("❌ El kilometraje de regreso no puede ser menor al de salida.");
+      return;
+    }
 
     salida.kmRegreso = kmRegreso;
     salida.horaRegreso = horaRegreso;
-    actualizarRegistro();
+
+    mostrarRegistroTemporal();
     alert("✅ Regreso registrado correctamente");
   });
 
-  function actualizarRegistro() {
-    if (!registroOutput) return;
-    registroOutput.textContent = JSON.stringify(salidaData, null, 2);
+  function mostrarRegistroTemporal() {
+    const salida = salidaData[salidaData.length - 1];
+    const texto = JSON.stringify(salida, null, 2);
+    document.getElementById('registroOutput').textContent = texto;
   }
 
-  document.getElementById('generarPDF').addEventListener('click', () => {
+  document.getElementById('generarPDF')?.addEventListener('click', () => {
     if (salidaData.length === 0) return alert("No hay datos para exportar");
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: "landscape" });
+
     const salida = salidaData[salidaData.length - 1];
     const jefe = salida.ocupantes[0];
+    const nombreJP = jefe.nombre.toUpperCase();
 
     const logo = new Image();
     logo.src = "logo-os9.jpeg";
@@ -99,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
       doc.text(`Km salida: ${salida.kmSalida}`, 90, 38);
       if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 90, 46);
 
-      const encabezado = ["CALZO", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil", "Cámara"];
+      const encabezado = ["CALZO", "Nombre", "Armamento", "Chaleco", "Casco", "Portátil", "Cam. corporal"];
       const datos = salida.ocupantes.map((o) => [
         o.calzo || "",
         o.nombre,
@@ -127,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(11);
-      doc.text(jefe.nombre.toUpperCase(), firmaX + 25, y + 6, { align: "center" });
+      doc.text(nombreJP, firmaX + 25, y + 6, { align: "center" });
       doc.text("JEFE DE PATRULLA", firmaX + 25, y + 12, { align: "center" });
 
       doc.save(`salida-${salida.patente}.pdf`);
