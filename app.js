@@ -137,23 +137,23 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       // Pie de firma
+      // Pie de firma (alineado a la derecha)
       let y = doc.lastAutoTable.finalY + 20;
       const firmaX = 230;
 
+// Línea
       doc.setLineWidth(0.3);
       doc.line(firmaX, y, firmaX + 50, y);
 
+// Nombre en mayúsculas
       doc.setFont("helvetica", "bold");
       doc.setFontSize(11);
       doc.text(nombreJP, firmaX + 25, y + 6, { align: "center" });
 
-      doc.setFont("helvetica", "normal");
-      doc.text(`${gradoJP} de Carabineros`, firmaX + 25, y + 12, { align: "center" });
-
+// Rol
       doc.setFont("helvetica", "bold");
-      doc.text("JEFE DE PATRULLA", firmaX + 25, y + 18, { align: "center" });
+      doc.text("JEFE DE PATRULLA", firmaX + 25, y + 12, { align: "center" });
 
-      doc.save(`salida-${salida.patente}.pdf`);
     };
   });
 });
