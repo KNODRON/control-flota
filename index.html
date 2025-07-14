@@ -8,20 +8,22 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
+      background-color: #f3f3f3;
       margin: 0;
-      padding: 0 10px;
+      padding: 1rem;
     }
 
     .container {
       max-width: 600px;
-      margin: 0 auto;
-      padding-bottom: 3rem;
+      margin: auto;
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     h1, h2, h3 {
       color: #006400;
-      text-align: center;
     }
 
     form {
@@ -29,72 +31,69 @@
     }
 
     label {
-      font-weight: bold;
-      margin-top: 1rem;
       display: block;
+      margin-top: 1rem;
+      font-weight: bold;
     }
 
     input, select {
       width: 100%;
       padding: 0.5rem;
       margin-top: 0.25rem;
-      margin-bottom: 1rem;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 5px;
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .fila-doble {
+      display: flex;
       gap: 1rem;
     }
 
+    .fila-doble > div {
+      flex: 1;
+    }
+
     button {
+      margin-top: 1.5rem;
+      padding: 0.7rem;
+      width: 100%;
       background-color: #28a745;
       color: white;
       border: none;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
+      font-weight: bold;
       border-radius: 5px;
       cursor: pointer;
-      margin-top: 1rem;
-      width: 100%;
     }
 
-    button:hover {
-      background-color: #218838;
-    }
-
-    .logo-container {
-      text-align: center;
-      margin: 1rem 0;
-    }
-
-    .logo-container img {
-      width: 80px;
-      border-radius: 50%;
+    hr {
+      margin: 2rem 0;
     }
 
     pre {
-      background-color: #fff;
+      background: #f0f0f0;
       padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      overflow-x: auto;
+      border-radius: 5px;
+      font-size: 0.85rem;
+    }
+
+    img.logo {
+      border-radius: 50%;
+      width: 70px;
+      margin-bottom: 1rem;
+    }
+
+    .center {
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div class="container">
-
-    <!-- Logo -->
-    <div class="logo-container">
-      <img src="logo-os9.jpeg" alt="Logo OS9">
+    <div class="center">
+      <img src="logo-os9.jpeg" alt="Logo OS9" class="logo">
+      <h1>Salida OS9</h1>
     </div>
 
-    <h1>Salida OS9</h1>
-
-    <!-- Formulario salida -->
     <form id="salidaForm">
       <label for="seccion">Sección:</label>
       <select id="seccion" required>
@@ -109,55 +108,71 @@
       <label for="patente">Patente:</label>
       <input type="text" id="patente" placeholder="Ej: AB1234" required>
 
-      <h3>👮 Jefe de Patrulla</h3>
-      <input type="text" id="jefeNombre" placeholder="Nombre del JP" required>
-      <input type="tel" id="jefeTelefono" placeholder="Teléfono del JP (+56...)">
+      <h3>👨‍✈️ Jefe de patrulla</h3>
+      <label for="jefeNombre">Nombre:</label>
+      <input type="text" id="jefeNombre" placeholder="Ej: SGTO 2º Juan Jiménez" required>
 
-      <div class="grid-2">
-        <input type="text" id="jefeCalzo" placeholder="Calzo">
-        <input type="text" id="jefePistola" placeholder="Armamento">
-        <input type="text" id="jefeChaleco" placeholder="Chaleco">
-        <input type="text" id="jefeCasco" placeholder="Casco">
-        <input type="text" id="jefePortatil" placeholder="Portátil">
-        <input type="text" id="jefeCamara" placeholder="Cámara corporal">
+      <label for="jefeTelefono">Teléfono:</label>
+      <input type="tel" id="jefeTelefono" placeholder="+56 9 1234 5678">
+
+      <div class="fila-doble">
+        <div><input type="text" id="jefeCalzo" placeholder="Calzo"></div>
+        <div><input type="text" id="jefePistola" placeholder="Armamento"></div>
+      </div>
+      <div class="fila-doble">
+        <div><input type="text" id="jefeChaleco" placeholder="Chaleco"></div>
+        <div><input type="text" id="jefeCasco" placeholder="Casco"></div>
+      </div>
+      <div class="fila-doble">
+        <div><input type="text" id="jefePortatil" placeholder="Portátil"></div>
+        <div><input type="text" id="jefeCamara" placeholder="Cam. Corporal"></div>
       </div>
 
       <h3>👥 Acompañante 1</h3>
-      <input type="text" id="acomp1Nombre" placeholder="Nombre acompañante 1">
-      <div class="grid-2">
-        <input type="text" id="acomp1Calzo" placeholder="Calzo">
-        <input type="text" id="acomp1Pistola" placeholder="Armamento">
-        <input type="text" id="acomp1Chaleco" placeholder="Chaleco">
-        <input type="text" id="acomp1Casco" placeholder="Casco">
-        <input type="text" id="acomp1Portatil" placeholder="Portátil">
-        <input type="text" id="acomp1Camara" placeholder="Cámara corporal">
+      <input type="text" id="acomp1Nombre" placeholder="Nombre">
+      <div class="fila-doble">
+        <div><input type="text" id="acomp1Calzo" placeholder="Calzo"></div>
+        <div><input type="text" id="acomp1Pistola" placeholder="Armamento"></div>
+      </div>
+      <div class="fila-doble">
+        <div><input type="text" id="acomp1Chaleco" placeholder="Chaleco"></div>
+        <div><input type="text" id="acomp1Casco" placeholder="Casco"></div>
+      </div>
+      <div class="fila-doble">
+        <div><input type="text" id="acomp1Portatil" placeholder="Portátil"></div>
+        <div><input type="text" id="acomp1Camara" placeholder="Cam. Corporal"></div>
       </div>
 
       <h3>👥 Acompañante 2</h3>
-      <input type="text" id="acomp2Nombre" placeholder="Nombre acompañante 2">
-      <div class="grid-2">
-        <input type="text" id="acomp2Calzo" placeholder="Calzo">
-        <input type="text" id="acomp2Pistola" placeholder="Armamento">
-        <input type="text" id="acomp2Chaleco" placeholder="Chaleco">
-        <input type="text" id="acomp2Casco" placeholder="Casco">
-        <input type="text" id="acomp2Portatil" placeholder="Portátil">
-        <input type="text" id="acomp2Camara" placeholder="Cámara corporal">
+      <input type="text" id="acomp2Nombre" placeholder="Nombre">
+      <div class="fila-doble">
+        <div><input type="text" id="acomp2Calzo" placeholder="Calzo"></div>
+        <div><input type="text" id="acomp2Pistola" placeholder="Armamento"></div>
+      </div>
+      <div class="fila-doble">
+        <div><input type="text" id="acomp2Chaleco" placeholder="Chaleco"></div>
+        <div><input type="text" id="acomp2Casco" placeholder="Casco"></div>
+      </div>
+      <div class="fila-doble">
+        <div><input type="text" id="acomp2Portatil" placeholder="Portátil"></div>
+        <div><input type="text" id="acomp2Camara" placeholder="Cam. Corporal"></div>
       </div>
 
       <label for="kmSalida">Kilometraje de salida:</label>
-      <input type="number" id="kmSalida" placeholder="Ej: 12345" required>
+      <input type="number" id="kmSalida" placeholder="Ej: 153200" required>
 
       <button type="submit">Registrar salida</button>
     </form>
 
-    <!-- Regreso -->
+    <hr>
+
     <h2>🔙 Regreso del Vehículo</h2>
     <form id="regresoForm">
       <label for="patenteRegreso">Patente:</label>
       <input type="text" id="patenteRegreso" placeholder="Ej: AB1234" required>
 
       <label for="kmRegreso">Kilometraje de regreso:</label>
-      <input type="number" id="kmRegreso" placeholder="Ej: 12500" required>
+      <input type="number" id="kmRegreso" placeholder="Ej: 153400" required>
 
       <button type="submit">Registrar regreso</button>
     </form>
@@ -167,15 +182,14 @@
     <h3>📝 Registro temporal</h3>
     <pre id="registroOutput">[sin datos aún]</pre>
 
-    <div style="text-align: center; margin-top: 1.5rem;">
-      <button id="PDF">Generar PDF</button>
+    <div class="center">
+      <button id="generarPDF">Generar PDF</button>
     </div>
-
   </div>
 
-  <!-- Librerías necesarias -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
