@@ -98,13 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const salida = salidaData[salidaData.length - 1];
     const jefe = salida.ocupantes[0];
     const nombreJP = jefe.nombre.toUpperCase();
-    const gradoJP = jefe.nombre.split(" ")[0].toUpperCase(); // ejemplo: SGTO
+    const jefeGradoNombre = nombreJP.replace(" DE CARABINEROS", "").trim();
 
     const logo = new Image();
     logo.src = "logo-os9.jpeg";
 
     logo.onload = () => {
-      doc.addImage(logo, "JPEG", 250, 10, 25, 25); // tamaño reducido
+      doc.addImage(logo, "JPEG", 250, 10, 25, 25); // más pequeño
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
@@ -114,15 +114,16 @@ document.addEventListener('DOMContentLoaded', () => {
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.text(`Sección: ${salida.seccion}`, 10, 30);
+      doc.text(`Teléfono JP: ${salida.jefeTelefono}`, 120, 30); // movido a la derecha de sección
+
       doc.text(`Patente: ${salida.patente}`, 10, 38);
-      doc.text(`Fecha / Hora salida: ${salida.horaSalida}`, 10, 46);
-      if (salida.horaRegreso) doc.text(`Fecha / Hora regreso: ${salida.horaRegreso}`, 10, 54);
       doc.text(`Km salida: ${salida.kmSalida}`, 120, 38);
+      doc.text(`Fecha / Hora salida: ${salida.horaSalida}`, 10, 46);
       if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 120, 46);
-      if (salida.jefeTelefono) doc.text(`Teléfono JP: ${salida.jefeTelefono}`, 120, 54);
+      if (salida.horaRegreso) doc.text(`Fecha / Hora regreso: ${salida.horaRegreso}`, 10, 54);
 
       const encabezado = ["CALZO", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil", "Cámara"];
-      const datos = salida.ocupantes.map((o, i) => [
+      const datos = salida.ocupantes.map((o) => [
         o.calzo || "",
         o.nombre,
         o.pistola,
@@ -149,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(11);
-      doc.text(`${gradoJP} ${nombreJP}`, firmaX + 25, y + 6, { align: "center" });
+      doc.text(jefeGradoNombre, firmaX + 25, y + 6, { align: "center" });
       doc.text("JEFE DE PATRULLA", firmaX + 25, y + 12, { align: "center" });
 
       doc.save(`salida-${salida.patente}.pdf`);
