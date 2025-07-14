@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logo.src = "logo-os9.jpeg";
 
     logo.onload = () => {
-      doc.addImage(logo, "JPEG", 250, 10, 25, 25); // tamaño reducido
+      doc.addImage(logo, "JPEG", 250, 10, 25, 25); // logo pequeño
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
@@ -114,14 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
       doc.text(`Fecha / Hora salida: ${salida.horaSalida}`, 15, 46);
       if (salida.horaRegreso) doc.text(`Fecha / Hora regreso: ${salida.horaRegreso}`, 15, 54);
 
-      // Kilometrajes y teléfono
       doc.text(`Km salida: ${salida.kmSalida}`, 130, 30);
       if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 130, 38);
       doc.text(`Teléfono JP: ${salida.telefono}`, 130, 46);
 
-      // Tabla ocupantes
       const encabezado = ["CALZO", "NOMBRE", "PISTOLA", "CHALECO", "CASCO", "PORTÁTIL", "CÁM. CORPORAL"];
-      const datos = salida.ocupantes.map((o, i) => [
+      const datos = salida.ocupantes.map((o) => [
         o.calzo || '',
         o.nombre,
         o.pistola || '',
@@ -140,13 +138,11 @@ document.addEventListener('DOMContentLoaded', () => {
         styles: { fontSize: 10 },
       });
 
-      // Firma derecha
+      // Firma final
       let y = doc.lastAutoTable.finalY + 20;
       const firmaX = 230;
-
       doc.setLineWidth(0.3);
       doc.line(firmaX, y, firmaX + 50, y);
-
       const nombreJP = jefe.nombre.toUpperCase();
       doc.setFont("helvetica", "bold");
       doc.text(nombreJP, firmaX + 25, y + 6, { align: "center" });
