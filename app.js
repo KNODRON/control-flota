@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const enUso = salidaData.find(s => s.patente === patente && !s.kmRegreso);
     if (enUso) {
-      alert("🚨 Este vehículo se encuentra en la población.");
+      alert("🚨 Vehículo se encuentra en la población.");
       return;
     }
 
@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
       horaSalida,
       ocupantes
     });
+
+    // Actualizar registro temporal
+    document.getElementById('registroOutput').textContent = JSON.stringify(salidaData, null, 2);
 
     salidaForm.reset();
     alert("✅ Salida registrada");
@@ -75,9 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
     salida.kmRegreso = kmRegreso;
     salida.horaRegreso = horaRegreso;
 
+    // Actualizar registro temporal
+    document.getElementById('registroOutput').textContent = JSON.stringify(salidaData, null, 2);
+
     alert("✅ Regreso registrado correctamente");
   });
 
+  // BOTÓN EXPORTAR PDF
   document.getElementById('generarPDF').addEventListener('click', () => {
     if (salidaData.length === 0) return alert("No hay datos para exportar");
 
