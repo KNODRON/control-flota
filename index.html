@@ -11,14 +11,15 @@
 
     <!-- Logo OS9 -->
     <div style="text-align: center; margin-bottom: 1rem;">
-      <img src="logo-os9.jpeg" alt="Logo OS9" width="100" style="border-radius: 50%;">
+      <img src="logo-os9.jpeg" alt="Logo OS9" width="80" style="border-radius: 50%; float: right; margin-left: 1rem;">
     </div>
 
     <!-- Título principal -->
     <h1 style="text-align: center; color: #006400;">Salida OS9</h1>
 
     <form id="salidaForm">
-      <!-- Selector de sección -->
+
+      <!-- Selector de sección y teléfono JP -->
       <label>Sección:</label>
       <select id="seccion" required>
         <option value="">Seleccione sección</option>
@@ -29,125 +30,116 @@
         <option>Delitos Económicos</option>
       </select>
 
+      <label>Teléfono JP:</label>
+      <input type="tel" id="jefeTelefono" placeholder="+56 9 1234 5678" required>
+
       <label>Patente:</label>
       <input type="text" id="patente" required>
 
-      <<!-- Jefe de patrulla -->
-<h3>👨‍✈️ Jefe de patrulla</h3>
-<label>Nombre:</label>
-<input type="text" id="jefeNombre" required>
+      <!-- Jefe de patrulla -->
+      <h3>👨‍✈️ Jefe de patrulla</h3>
+      <label>Nombre:</label>
+      <input type="text" id="jefeNombre" required>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Calzo:</label>
+          <input type="text" id="jefeCalzo">
+        </div>
+        <div style="flex:1">
+          <label>Armamento:</label>
+          <input type="text" id="jefePistola">
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Chaleco:</label>
+          <input type="text" id="jefeChaleco">
+        </div>
+        <div style="flex:1">
+          <label>Casco:</label>
+          <input type="text" id="jefeCasco">
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Portátil:</label>
+          <input type="text" id="jefePortatil">
+        </div>
+        <div style="flex:1">
+          <label>Cámara corporal:</label>
+          <input type="text" id="jefeCamara">
+        </div>
+      </div>
 
-<label>Teléfono:</label>
-<input type="tel" id="jefeTelefono" placeholder="+56 9 1234 5678">
+      <!-- Acompañante 1 -->
+      <h3>👥 Acompañante 1</h3>
+      <label>Nombre:</label>
+      <input type="text" id="acomp1Nombre">
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Calzo:</label>
+          <input type="text" id="acomp1Calzo">
+        </div>
+        <div style="flex:1">
+          <label>Armamento:</label>
+          <input type="text" id="acomp1Pistola">
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Chaleco:</label>
+          <input type="text" id="acomp1Chaleco">
+        </div>
+        <div style="flex:1">
+          <label>Casco:</label>
+          <input type="text" id="acomp1Casco">
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Portátil:</label>
+          <input type="text" id="acomp1Portatil">
+        </div>
+        <div style="flex:1">
+          <label>Cámara corporal:</label>
+          <input type="text" id="acomp1Camara">
+        </div>
+      </div>
 
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Calzo:</label>
-    <input type="text" id="jefeCalzo">
-  </div>
-  <div style="flex: 1;">
-    <label>Armamento:</label>
-    <input type="text" id="jefePistola">
-  </div>
-</div>
-
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Chaleco:</label>
-    <input type="text" id="jefeChaleco">
-  </div>
-  <div style="flex: 1;">
-    <label>Casco:</label>
-    <input type="text" id="jefeCasco">
-  </div>
-</div>
-
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Portátil:</label>
-    <input type="text" id="jefePortatil">
-  </div>
-  <div style="flex: 1;">
-    <label>Cam. corporal:</label>
-    <input type="text" id="jefeCamara">
-  </div>
-</div>
-
-<!-- Acompañante 1 -->
-<h3>👥 Acompañante 1</h3>
-<label>Nombre:</label>
-<input type="text" id="acomp1Nombre">
-
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Calzo:</label>
-    <input type="text" id="acomp1Calzo">
-  </div>
-  <div style="flex: 1;">
-    <label>Armamento:</label>
-    <input type="text" id="acomp1Pistola">
-  </div>
-</div>
-
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Chaleco:</label>
-    <input type="text" id="acomp1Chaleco">
-  </div>
-  <div style="flex: 1;">
-    <label>Casco:</label>
-    <input type="text" id="acomp1Casco">
-  </div>
-</div>
-
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Portátil:</label>
-    <input type="text" id="acomp1Portatil">
-  </div>
-  <div style="flex: 1;">
-    <label>Cam. corporal:</label>
-    <input type="text" id="acomp1Camara">
-  </div>
-</div>
-
-<!-- Acompañante 2 -->
-<h3>👥 Acompañante 2</h3>
-<label>Nombre:</label>
-<input type="text" id="acomp2Nombre">
-
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Calzo:</label>
-    <input type="text" id="acomp2Calzo">
-  </div>
-  <div style="flex: 1;">
-    <label>Armamento:</label>
-    <input type="text" id="acomp2Pistola">
-  </div>
-</div>
-
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Chaleco:</label>
-    <input type="text" id="acomp2Chaleco">
-  </div>
-  <div style="flex: 1;">
-    <label>Casco:</label>
-    <input type="text" id="acomp2Casco">
-  </div>
-</div>
-
-<div style="display: flex; gap: 1rem;">
-  <div style="flex: 1;">
-    <label>Portátil:</label>
-    <input type="text" id="acomp2Portatil">
-  </div>
-  <div style="flex: 1;">
-    <label>Cam. corporal:</label>
-    <input type="text" id="acomp2Camara">
-  </div>
-</div>
+      <!-- Acompañante 2 -->
+      <h3>👥 Acompañante 2</h3>
+      <label>Nombre:</label>
+      <input type="text" id="acomp2Nombre">
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Calzo:</label>
+          <input type="text" id="acomp2Calzo">
+        </div>
+        <div style="flex:1">
+          <label>Armamento:</label>
+          <input type="text" id="acomp2Pistola">
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Chaleco:</label>
+          <input type="text" id="acomp2Chaleco">
+        </div>
+        <div style="flex:1">
+          <label>Casco:</label>
+          <input type="text" id="acomp2Casco">
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <div style="flex:1">
+          <label>Portátil:</label>
+          <input type="text" id="acomp2Portatil">
+        </div>
+        <div style="flex:1">
+          <label>Cámara corporal:</label>
+          <input type="text" id="acomp2Camara">
+        </div>
+      </div>
 
       <label>Kilometraje de salida:</label>
       <input type="number" id="kmSalida" required>
@@ -161,8 +153,10 @@
     <form id="regresoForm">
       <label>Patente:</label>
       <input type="text" id="patenteRegreso" required>
+
       <label>Kilometraje de regreso:</label>
       <input type="number" id="kmRegreso" required>
+
       <button type="submit">Registrar regreso</button>
     </form>
 
@@ -171,27 +165,13 @@
     <h3>📝 Registro temporal</h3>
     <pre id="registroOutput">[sin datos aún]</pre>
 
-    <!-- Botón PDF -->
     <div style="text-align: center; margin-top: 2rem;">
-      <button id="generarPDF" style="
-        background-color: #006400;
-        color: white;
-        padding: 0.75rem 2rem;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;">
-        Exportar PDF
-      </button>
+      <button id="generarPDF">PDF</button>
     </div>
-
   </div>
 
-  <!-- LIBRERÍAS PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-
-  <!-- JS PRINCIPAL -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
