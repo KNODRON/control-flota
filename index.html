@@ -4,178 +4,154 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Salida OS9</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
+      font-family: sans-serif;
       margin: 0;
-      padding: 0 10px;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding-bottom: 3rem;
-    }
-
-    h1, h2, h3 {
-      color: #006400;
-      text-align: center;
-    }
-
-    form {
-      margin-bottom: 2rem;
-    }
-
-    label {
-      font-weight: bold;
-      margin-top: 1rem;
-      display: block;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    button {
-      background-color: #28a745;
-      color: white;
-      border: none;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 1rem;
-      width: 100%;
-    }
-
-    button:hover {
-      background-color: #218838;
-    }
-
-    .logo-container {
-      text-align: center;
-      margin: 1rem 0;
-    }
-
-    .logo-container img {
-      width: 80px;
-      border-radius: 50%;
-    }
-
-    pre {
-      background-color: #fff;
       padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      overflow-x: auto;
+      background: #f8f9fa;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto;
+      width: 100px;
+    }
+    h1 {
+      text-align: center;
+      color: #147514;
+    }
+    form {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+      max-width: 500px;
+      margin: auto;
+    }
+    .group {
+      margin-bottom: 1rem;
+    }
+    .row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .row input {
+      flex: 1;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #147514;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+    }
+    h3 {
+      color: #147514;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <img src="logo-os9.jpeg" alt="Logo OS9" class="logo"/>
+  <h1>Salida OS9</h1>
 
-    <!-- Logo -->
-    <div class="logo-container">
-      <img src="logo-os9.jpeg" alt="Logo OS9">
-    </div>
-
-    <h1>Salida OS9</h1>
-
-    <!-- Formulario salida -->
-    <form id="salidaForm">
-      <label for="seccion">Sección:</label>
-      <select id="seccion" required>
+  <form id="salidaForm">
+    <div class="group">
+      <label>Sección:</label>
+      <select id="seccion">
         <option value="">Seleccione sección</option>
-        <option>Análisis</option>
-        <option>Art. Explosivos</option>
-        <option>Muertes Violentas</option>
-        <option>Crimen Organizado</option>
-        <option>Delitos Económicos</option>
+        <option value="Análisis">Análisis</option>
+        <option value="Art. Explosivos">Art. Explosivos</option>
+        <option value="Interceptación">Interceptación</option>
       </select>
-
-      <label for="patente">Patente:</label>
-      <input type="text" id="patente" placeholder="Ej: AB1234" required>
-
-      <h3>👮 Jefe de Patrulla</h3>
-      <input type="text" id="jefeNombre" placeholder="Nombre del JP" required>
-      <input type="tel" id="jefeTelefono" placeholder="Teléfono del JP (+56...)">
-
-      <div class="grid-2">
-        <input type="text" id="jefeCalzo" placeholder="Calzo">
-        <input type="text" id="jefePistola" placeholder="Armamento">
-        <input type="text" id="jefeChaleco" placeholder="Chaleco">
-        <input type="text" id="jefeCasco" placeholder="Casco">
-        <input type="text" id="jefePortatil" placeholder="Portátil">
-        <input type="text" id="jefeCamara" placeholder="Cámara corporal">
-      </div>
-
-      <h3>👥 Acompañante 1</h3>
-      <input type="text" id="acomp1Nombre" placeholder="Nombre acompañante 1">
-      <div class="grid-2">
-        <input type="text" id="acomp1Calzo" placeholder="Calzo">
-        <input type="text" id="acomp1Pistola" placeholder="Armamento">
-        <input type="text" id="acomp1Chaleco" placeholder="Chaleco">
-        <input type="text" id="acomp1Casco" placeholder="Casco">
-        <input type="text" id="acomp1Portatil" placeholder="Portátil">
-        <input type="text" id="acomp1Camara" placeholder="Cámara corporal">
-      </div>
-
-      <h3>👥 Acompañante 2</h3>
-      <input type="text" id="acomp2Nombre" placeholder="Nombre acompañante 2">
-      <div class="grid-2">
-        <input type="text" id="acomp2Calzo" placeholder="Calzo">
-        <input type="text" id="acomp2Pistola" placeholder="Armamento">
-        <input type="text" id="acomp2Chaleco" placeholder="Chaleco">
-        <input type="text" id="acomp2Casco" placeholder="Casco">
-        <input type="text" id="acomp2Portatil" placeholder="Portátil">
-        <input type="text" id="acomp2Camara" placeholder="Cámara corporal">
-      </div>
-
-      <label for="kmSalida">Kilometraje de salida:</label>
-      <input type="number" id="kmSalida" placeholder="Ej: 12345" required>
-
-      <button type="submit">Registrar salida</button>
-    </form>
-
-    <!-- Regreso -->
-    <h2>🔙 Regreso del Vehículo</h2>
-    <form id="regresoForm">
-      <label for="patenteRegreso">Patente:</label>
-      <input type="text" id="patenteRegreso" placeholder="Ej: AB1234" required>
-
-      <label for="kmRegreso">Kilometraje de regreso:</label>
-      <input type="number" id="kmRegreso" placeholder="Ej: 12500" required>
-
-      <button type="submit">Registrar regreso</button>
-    </form>
-
-    <hr>
-
-    <h3>📝 Registro temporal</h3>
-    <pre id="registroOutput">[sin datos aún]</pre>
-
-    <div style="text-align: center; margin-top: 1.5rem;">
-      <button id="PDF">Generar PDF</button>
     </div>
 
-  </div>
+    <div class="group">
+      <label>Patente:</label>
+      <input type="text" id="patente" placeholder="Ingrese patente" />
+    </div>
 
-  <!-- Librerías necesarias -->
+    <h3>👮‍♂️ Jefe de patrulla</h3>
+    <div class="group">
+      <input type="text" id="jefeNombre" placeholder="Nombre" />
+      <input type="text" id="jefeTelefono" placeholder="Teléfono" />
+    </div>
+    <div class="row">
+      <input type="text" id="jefeCalzo" placeholder="Calzo" />
+      <input type="text" id="jefePistola" placeholder="Armamento" />
+    </div>
+    <div class="row">
+      <input type="text" id="jefeCasco" placeholder="Casco" />
+      <input type="text" id="jefeChaleco" placeholder="Chaleco" />
+    </div>
+    <div class="row">
+      <input type="text" id="jefePortatil" placeholder="Portátil" />
+      <input type="text" id="jefeCamara" placeholder="Cám. Corporal" />
+    </div>
+
+    <h3>👥 Acompañante 1</h3>
+    <div class="group">
+      <input type="text" id="acomp1Nombre" placeholder="Nombre" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp1Calzo" placeholder="Calzo" />
+      <input type="text" id="acomp1Pistola" placeholder="Armamento" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp1Casco" placeholder="Casco" />
+      <input type="text" id="acomp1Chaleco" placeholder="Chaleco" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp1Portatil" placeholder="Portátil" />
+      <input type="text" id="acomp1Camara" placeholder="Cám. Corporal" />
+    </div>
+
+    <h3>👥 Acompañante 2</h3>
+    <div class="group">
+      <input type="text" id="acomp2Nombre" placeholder="Nombre" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp2Calzo" placeholder="Calzo" />
+      <input type="text" id="acomp2Pistola" placeholder="Armamento" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp2Casco" placeholder="Casco" />
+      <input type="text" id="acomp2Chaleco" placeholder="Chaleco" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp2Portatil" placeholder="Portátil" />
+      <input type="text" id="acomp2Camara" placeholder="Cám. Corporal" />
+    </div>
+
+    <div class="group">
+      <input type="number" id="kmSalida" placeholder="Kilometraje de salida" />
+    </div>
+
+    <button type="submit">Registrar salida</button>
+  </form>
+
+  <br/>
+  <form id="regresoForm">
+    <h3>🔙 Regreso del Vehículo</h3>
+    <input type="text" id="patenteRegreso" placeholder="Patente" />
+    <input type="number" id="kmRegreso" placeholder="Kilometraje de regreso" />
+    <button type="submit">Registrar regreso</button>
+  </form>
+
+  <pre id="registroOutput">📋 Registro temporal<br />[sin datos aún]</pre>
+
+  <button id="PDF">Exportar PDF</button>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
