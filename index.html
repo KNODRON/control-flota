@@ -4,100 +4,154 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Salida OS9</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
     body {
-      background-color: #f5f5f5;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    .form-section {
-      background-color: white;
-      border-radius: 10px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-family: sans-serif;
+      margin: 0;
+      padding: 1rem;
+      background: #f8f9fa;
     }
     .logo {
-      width: 90px;
       display: block;
-      margin: 0 auto 10px;
+      margin: 0 auto;
+      width: 100px;
     }
-    h2, h4 {
-      color: #006400;
+    h1 {
       text-align: center;
+      color: #147514;
     }
-    .form-label {
-      margin-bottom: 0;
+    form {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+      max-width: 500px;
+      margin: auto;
+    }
+    .group {
+      margin-bottom: 1rem;
+    }
+    .row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .row input {
+      flex: 1;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #147514;
+      color: white;
       font-weight: bold;
+      border: none;
+      border-radius: 5px;
+    }
+    h3 {
+      color: #147514;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="logo-os9.jpeg" alt="Logo OS9" class="logo">
-    <h2>Salida OS9</h2>
+  <img src="logo-os9.jpeg" alt="Logo OS9" class="logo"/>
+  <h1>Salida OS9</h1>
 
-    <form id="salidaForm">
-      <div class="form-section">
-        <div class="mb-3">
-          <select class="form-select" id="seccion">
-            <option selected disabled>Seleccione sección</option>
-            <option>Análisis</option>
-            <option>Art. Explosivos</option>
-            <option>Crimen Organizado</option>
-          </select>
-        </div>
-        <div class="mb-3">
-          <input type="text" class="form-control" id="patente" placeholder="Patente">
-        </div>
-
-        <h4>👮‍♂️ Jefe de patrulla</h4>
-        <input class="form-control mb-2" id="jefeNombre" placeholder="Nombre">
-        <input class="form-control mb-2" id="jefeTelefono" placeholder="Teléfono">
-        <input class="form-control mb-2" id="jefeCalzo" placeholder="Calzo">
-        <input class="form-control mb-2" id="jefePistola" placeholder="Armamento">
-        <input class="form-control mb-2" id="jefeCasco" placeholder="Casco">
-        <input class="form-control mb-2" id="jefeChaleco" placeholder="Chaleco">
-        <input class="form-control mb-2" id="jefePortatil" placeholder="Portátil">
-        <input class="form-control mb-2" id="jefeCamara" placeholder="Cám. Corporal">
-
-        <h4>👥 Acompañante 1</h4>
-        <input class="form-control mb-2" id="acomp1Nombre" placeholder="Nombre">
-        <input class="form-control mb-2" id="acomp1Calzo" placeholder="Calzo">
-        <input class="form-control mb-2" id="acomp1Pistola" placeholder="Armamento">
-        <input class="form-control mb-2" id="acomp1Casco" placeholder="Casco">
-        <input class="form-control mb-2" id="acomp1Chaleco" placeholder="Chaleco">
-        <input class="form-control mb-2" id="acomp1Portatil" placeholder="Portátil">
-        <input class="form-control mb-2" id="acomp1Camara" placeholder="Cám. Corporal">
-
-        <h4>👥 Acompañante 2</h4>
-        <input class="form-control mb-2" id="acomp2Nombre" placeholder="Nombre">
-        <input class="form-control mb-2" id="acomp2Calzo" placeholder="Calzo">
-        <input class="form-control mb-2" id="acomp2Pistola" placeholder="Armamento">
-        <input class="form-control mb-2" id="acomp2Casco" placeholder="Casco">
-        <input class="form-control mb-2" id="acomp2Chaleco" placeholder="Chaleco">
-        <input class="form-control mb-2" id="acomp2Portatil" placeholder="Portátil">
-        <input class="form-control mb-2" id="acomp2Camara" placeholder="Cám. Corporal">
-
-        <input class="form-control mb-2" id="kmSalida" placeholder="Kilometraje de salida">
-        <button class="btn btn-success w-100" type="submit">Registrar salida</button>
-      </div>
-    </form>
-
-    <form id="regresoForm" class="form-section">
-      <h4>📦 Regreso del Vehículo</h4>
-      <input class="form-control mb-2" id="patenteRegreso" placeholder="Patente">
-      <input class="form-control mb-2" id="kmRegreso" placeholder="Kilometraje de regreso">
-      <button class="btn btn-secondary w-100" type="submit">Registrar regreso</button>
-    </form>
-
-    <div class="form-section">
-      <h4>📝 Registro temporal</h4>
-      <pre id="registroOutput">[sin datos aún]</pre>
+  <form id="salidaForm">
+    <div class="group">
+      <label>Sección:</label>
+      <select id="seccion">
+        <option value="">Seleccione sección</option>
+        <option value="Análisis">Análisis</option>
+        <option value="Art. Explosivos">Art. Explosivos</option>
+        <option value="Interceptación">Interceptación</option>
+      </select>
     </div>
 
-    <button class="btn btn-success w-100 mb-3" id="PDF">Exportar PDF</button>
-  </div>
+    <div class="group">
+      <label>Patente:</label>
+      <input type="text" id="patente" placeholder="Ingrese patente" />
+    </div>
+
+    <h3>👮‍♂️ Jefe de patrulla</h3>
+    <div class="group">
+      <input type="text" id="jefeNombre" placeholder="Nombre" />
+      <input type="text" id="jefeTelefono" placeholder="Teléfono" />
+    </div>
+    <div class="row">
+      <input type="text" id="jefeCalzo" placeholder="Calzo" />
+      <input type="text" id="jefePistola" placeholder="Armamento" />
+    </div>
+    <div class="row">
+      <input type="text" id="jefeCasco" placeholder="Casco" />
+      <input type="text" id="jefeChaleco" placeholder="Chaleco" />
+    </div>
+    <div class="row">
+      <input type="text" id="jefePortatil" placeholder="Portátil" />
+      <input type="text" id="jefeCamara" placeholder="Cám. Corporal" />
+    </div>
+
+    <h3>👥 Acompañante 1</h3>
+    <div class="group">
+      <input type="text" id="acomp1Nombre" placeholder="Nombre" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp1Calzo" placeholder="Calzo" />
+      <input type="text" id="acomp1Pistola" placeholder="Armamento" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp1Casco" placeholder="Casco" />
+      <input type="text" id="acomp1Chaleco" placeholder="Chaleco" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp1Portatil" placeholder="Portátil" />
+      <input type="text" id="acomp1Camara" placeholder="Cám. Corporal" />
+    </div>
+
+    <h3>👥 Acompañante 2</h3>
+    <div class="group">
+      <input type="text" id="acomp2Nombre" placeholder="Nombre" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp2Calzo" placeholder="Calzo" />
+      <input type="text" id="acomp2Pistola" placeholder="Armamento" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp2Casco" placeholder="Casco" />
+      <input type="text" id="acomp2Chaleco" placeholder="Chaleco" />
+    </div>
+    <div class="row">
+      <input type="text" id="acomp2Portatil" placeholder="Portátil" />
+      <input type="text" id="acomp2Camara" placeholder="Cám. Corporal" />
+    </div>
+
+    <div class="group">
+      <input type="number" id="kmSalida" placeholder="Kilometraje de salida" />
+    </div>
+
+    <button type="submit">Registrar salida</button>
+  </form>
+
+  <br/>
+  <form id="regresoForm">
+    <h3>🔙 Regreso del Vehículo</h3>
+    <input type="text" id="patenteRegreso" placeholder="Patente" />
+    <input type="number" id="kmRegreso" placeholder="Kilometraje de regreso" />
+    <button type="submit">Registrar regreso</button>
+  </form>
+
+  <pre id="registroOutput">📋 Registro temporal<br />[sin datos aún]</pre>
+
+  <button id="PDF">Exportar PDF</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
