@@ -94,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const salida = salidaData[salidaData.length - 1];
     const jefe = salida.ocupantes[0];
     const nombreJP = jefe.nombre.toUpperCase();
-    const gradoJP = jefe.nombre.split(" de Carabineros")[0].trim();
 
     const logo = new Image();
     logo.src = "logo-os9.jpeg";
