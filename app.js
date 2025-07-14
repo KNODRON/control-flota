@@ -1,6 +1,8 @@
+
 document.addEventListener('DOMContentLoaded', () => {
   const salidaForm = document.getElementById('salidaForm');
   const regresoForm = document.getElementById('regresoForm');
+  const registroOutput = document.getElementById('registroOutput');
   const salidaData = [];
 
   salidaForm.addEventListener('submit', (e) => {
@@ -12,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const horaSalida = new Date().toLocaleString('es-CL');
 
     const jefe = {
+      calzo: document.getElementById('jefeCalzo').value,
       nombre: document.getElementById('jefeNombre').value,
       telefono: document.getElementById('jefeTelefono').value,
       pistola: document.getElementById('jefePistola').value,
@@ -26,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const nombre = document.getElementById(`acomp${i}Nombre`).value;
       if (nombre) {
         ocupantes.push({
+          calzo: document.getElementById(`acomp${i}Calzo`).value,
           nombre,
           pistola: document.getElementById(`acomp${i}Pistola`).value,
           chaleco: document.getElementById(`acomp${i}Chaleco`).value,
@@ -36,71 +40,51 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    const enUso = salidaData.find(s => s.patente === patente && !s.kmRegreso);
-    if (enUso) {
-      alert("🚨 Vehículo se encuentra en la población.");
+    if (salidaData.find(s => s.patente === patente && !s.kmRegreso)) {
+      alert("🚨 Este vehículo se encuentra en la población.");
       return;
     }
 
-    salidaData.push({
-      seccion,
-      patente,
-      kmSalida,
-      horaSalida,
-      ocupantes
-    });
-
-    // Actualizar registro temporal
-    document.getElementById('registroOutput').textContent = JSON.stringify(salidaData, null, 2);
-
+    salidaData.push({ seccion, patente, kmSalida, horaSalida, ocupantes });
     salidaForm.reset();
+    actualizarRegistro();
     alert("✅ Salida registrada");
   });
 
   regresoForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
     const patente = document.getElementById('patenteRegreso').value.toUpperCase();
     const kmRegreso = parseInt(document.getElementById('kmRegreso').value);
     const horaRegreso = new Date().toLocaleString('es-CL');
 
     const salida = salidaData.find(s => s.patente === patente && !s.kmRegreso);
-    if (!salida) {
-      alert("❌ No hay salida registrada para esta patente.");
-      return;
-    }
-
-    if (kmRegreso < parseInt(salida.kmSalida)) {
-      alert("❌ El kilometraje de regreso no puede ser menor al de salida.");
-      return;
-    }
+    if (!salida) return alert("❌ No hay salida registrada para esta patente.");
+    if (kmRegreso < parseInt(salida.kmSalida)) return alert("❌ El kilometraje de regreso no puede ser menor al de salida.");
 
     salida.kmRegreso = kmRegreso;
     salida.horaRegreso = horaRegreso;
-
-    // Actualizar registro temporal
-    document.getElementById('registroOutput').textContent = JSON.stringify(salidaData, null, 2);
-
+    actualizarRegistro();
     alert("✅ Regreso registrado correctamente");
   });
 
-  // BOTÓN EXPORTAR PDF
+  function actualizarRegistro() {
+    if (!registroOutput) return;
+    registroOutput.textContent = JSON.stringify(salidaData, null, 2);
+  }
+
   document.getElementById('generarPDF').addEventListener('click', () => {
     if (salidaData.length === 0) return alert("No hay datos para exportar");
 
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ orientation: "landscape" });
-
     const salida = salidaData[salidaData.length - 1];
     const jefe = salida.ocupantes[0];
-    const nombreJP = jefe.nombre.toUpperCase();
 
     const logo = new Image();
     logo.src = "logo-os9.jpeg";
 
     logo.onload = () => {
       doc.addImage(logo, "JPEG", 240, 5, 40, 40);
-
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
       doc.setTextColor(0, 102, 0);
@@ -115,9 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
       doc.text(`Km salida: ${salida.kmSalida}`, 90, 38);
       if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 90, 46);
 
-      const encabezado = ["N°", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil", "Cámara"];
-      const datos = salida.ocupantes.map((o, i) => [
-        (i + 1).toString(),
+      const encabezado = ["CALZO", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil", "Cámara"];
+      const datos = salida.ocupantes.map((o) => [
+        o.calzo || "",
         o.nombre,
         o.pistola,
         o.chaleco,
@@ -135,24 +119,18 @@ document.addEventListener('DOMContentLoaded', () => {
         styles: { fontSize: 10 },
       });
 
-      // Pie de firma
-      // Pie de firma (alineado a la derecha)
-      let y = doc.lastAutoTable.finalY + 20;
+      const y = doc.lastAutoTable.finalY + 20;
       const firmaX = 230;
 
-// Línea
       doc.setLineWidth(0.3);
       doc.line(firmaX, y, firmaX + 50, y);
 
-// Nombre en mayúsculas
       doc.setFont("helvetica", "bold");
       doc.setFontSize(11);
-      doc.text(nombreJP, firmaX + 25, y + 6, { align: "center" });
-
-// Rol
-      doc.setFont("helvetica", "bold");
+      doc.text(jefe.nombre.toUpperCase(), firmaX + 25, y + 6, { align: "center" });
       doc.text("JEFE DE PATRULLA", firmaX + 25, y + 12, { align: "center" });
 
+      doc.save(`salida-${salida.patente}.pdf`);
     };
   });
 });
