@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Salida OS9</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+<!-- ... comienza igual el head ... -->
 <body>
   <div class="container">
-
     <div style="text-align: center; margin-bottom: 1rem;">
-      <img src="logo-os9.jpeg" alt="Logo OS9" width="100" style="border-radius: 50%;">
+      <img src="logo-os9.jpeg" alt="Logo OS9" width="80" style="border-radius: 50%;">
     </div>
 
     <h1 style="text-align: center; color: #006400;">Salida OS9</h1>
@@ -29,75 +21,59 @@
       <label>Patente:</label>
       <input type="text" id="patente" required>
 
-      <h3>👨‍✈️ Jefe de patrulla</h3>
-      <label>Calzo:</label>
-      <input type="text" id="jefeCalzo">
+      <!-- Jefe de patrulla -->
+      <h3>👮‍♂️ Jefe de patrulla</h3>
       <label>Nombre:</label>
       <input type="text" id="jefeNombre" required>
       <label>Teléfono:</label>
       <input type="tel" id="jefeTelefono">
 
-      <div style="display: flex; gap: 1rem;">
-        <div style="flex: 1;">
-          <label>Armamento:</label>
-          <input type="text" id="jefePistola">
-          <label>Chaleco:</label>
-          <input type="text" id="jefeChaleco">
-          <label>Portátil:</label>
-          <input type="text" id="jefePortatil">
-        </div>
-        <div style="flex: 1;">
-          <label>Casco:</label>
-          <input type="text" id="jefeCasco">
-          <label>Cámara corporal:</label>
-          <input type="text" id="jefeCamara">
-        </div>
+      <div class="fila">
+        <div><label>Calzo:</label><input type="text" id="jefeCalzo"></div>
+        <div><label>Armamento:</label><input type="text" id="jefePistola"></div>
+      </div>
+      <div class="fila">
+        <div><label>Casco:</label><input type="text" id="jefeCasco"></div>
+        <div><label>Chaleco:</label><input type="text" id="jefeChaleco"></div>
+      </div>
+      <div class="fila">
+        <div><label>Portátil:</label><input type="text" id="jefePortatil"></div>
+        <div><label>Cám. Corporal:</label><input type="text" id="jefeCamara"></div>
       </div>
 
+      <!-- Acompañantes -->
       <h3>👥 Acompañante 1</h3>
-      <label>Calzo:</label>
-      <input type="text" id="acomp1Calzo">
       <label>Nombre:</label>
       <input type="text" id="acomp1Nombre">
 
-      <div style="display: flex; gap: 1rem;">
-        <div style="flex: 1;">
-          <label>Armamento:</label>
-          <input type="text" id="acomp1Pistola">
-          <label>Chaleco:</label>
-          <input type="text" id="acomp1Chaleco">
-          <label>Portátil:</label>
-          <input type="text" id="acomp1Portatil">
-        </div>
-        <div style="flex: 1;">
-          <label>Casco:</label>
-          <input type="text" id="acomp1Casco">
-          <label>Cámara corporal:</label>
-          <input type="text" id="acomp1Camara">
-        </div>
+      <div class="fila">
+        <div><label>Calzo:</label><input type="text" id="acomp1Calzo"></div>
+        <div><label>Armamento:</label><input type="text" id="acomp1Pistola"></div>
+      </div>
+      <div class="fila">
+        <div><label>Casco:</label><input type="text" id="acomp1Casco"></div>
+        <div><label>Chaleco:</label><input type="text" id="acomp1Chaleco"></div>
+      </div>
+      <div class="fila">
+        <div><label>Portátil:</label><input type="text" id="acomp1Portatil"></div>
+        <div><label>Cám. Corporal:</label><input type="text" id="acomp1Camara"></div>
       </div>
 
       <h3>👥 Acompañante 2</h3>
-      <label>Calzo:</label>
-      <input type="text" id="acomp2Calzo">
       <label>Nombre:</label>
       <input type="text" id="acomp2Nombre">
 
-      <div style="display: flex; gap: 1rem;">
-        <div style="flex: 1;">
-          <label>Armamento:</label>
-          <input type="text" id="acomp2Pistola">
-          <label>Chaleco:</label>
-          <input type="text" id="acomp2Chaleco">
-          <label>Portátil:</label>
-          <input type="text" id="acomp2Portatil">
-        </div>
-        <div style="flex: 1;">
-          <label>Casco:</label>
-          <input type="text" id="acomp2Casco">
-          <label>Cámara corporal:</label>
-          <input type="text" id="acomp2Camara">
-        </div>
+      <div class="fila">
+        <div><label>Calzo:</label><input type="text" id="acomp2Calzo"></div>
+        <div><label>Armamento:</label><input type="text" id="acomp2Pistola"></div>
+      </div>
+      <div class="fila">
+        <div><label>Casco:</label><input type="text" id="acomp2Casco"></div>
+        <div><label>Chaleco:</label><input type="text" id="acomp2Chaleco"></div>
+      </div>
+      <div class="fila">
+        <div><label>Portátil:</label><input type="text" id="acomp2Portatil"></div>
+        <div><label>Cám. Corporal:</label><input type="text" id="acomp2Camara"></div>
       </div>
 
       <label>Kilometraje de salida:</label>
@@ -107,7 +83,6 @@
     </form>
 
     <hr>
-
     <h2>🔙 Regreso del Vehículo</h2>
     <form id="regresoForm">
       <label>Patente:</label>
@@ -118,15 +93,15 @@
     </form>
 
     <hr>
-
     <h3>📝 Registro temporal</h3>
     <pre id="registroOutput">[sin datos aún]</pre>
 
     <div style="text-align: center; margin-top: 2rem;">
-      <button id="generarPDF">Exportar PDF</button>
+      <button id="PDF" style="background-color: #006400; color: white; padding: 0.75rem 1.5rem;">Exportar PDF</button>
     </div>
   </div>
 
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <script src="app.js"></script>
