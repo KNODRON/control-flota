@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     logo.src = "logo-os9.jpeg";
 
     logo.onload = () => {
-      doc.addImage(logo, "JPEG", 250, 10, 25, 25); // logo pequeño
+      doc.addImage(logo, "JPEG", 250, 10, 25, 25); // Tamaño reducido
 
       doc.setFont("helvetica", "bold");
       doc.setFontSize(18);
@@ -110,14 +110,15 @@ document.addEventListener('DOMContentLoaded', () => {
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
       doc.text(`Sección: ${salida.seccion}`, 15, 30);
+      doc.text(`Teléfono JP: ${salida.telefono}`, 100, 30);
       doc.text(`Patente: ${salida.patente}`, 15, 38);
       doc.text(`Fecha / Hora salida: ${salida.horaSalida}`, 15, 46);
       if (salida.horaRegreso) doc.text(`Fecha / Hora regreso: ${salida.horaRegreso}`, 15, 54);
 
-      doc.text(`Km salida: ${salida.kmSalida}`, 130, 30);
-      if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 130, 38);
-      doc.text(`Teléfono JP: ${salida.telefono}`, 130, 46);
+      doc.text(`Km salida: ${salida.kmSalida}`, 140, 38);
+      if (salida.kmRegreso) doc.text(`Km regreso: ${salida.kmRegreso}`, 140, 46);
 
+      // Tabla de ocupantes
       const encabezado = ["CALZO", "NOMBRE", "PISTOLA", "CHALECO", "CASCO", "PORTÁTIL", "CÁM. CORPORAL"];
       const datos = salida.ocupantes.map((o) => [
         o.calzo || '',
@@ -138,11 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
         styles: { fontSize: 10 },
       });
 
-      // Firma final
+      // Firma
       let y = doc.lastAutoTable.finalY + 20;
       const firmaX = 230;
+
       doc.setLineWidth(0.3);
       doc.line(firmaX, y, firmaX + 50, y);
+
       const nombreJP = jefe.nombre.toUpperCase();
       doc.setFont("helvetica", "bold");
       doc.text(nombreJP, firmaX + 25, y + 6, { align: "center" });
