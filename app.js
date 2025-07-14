@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     alert("✅ Regreso registrado correctamente");
   });
 
-  document.getElementById('PDF').addEventListener('click', () => {
+  document.getElementById('generarPDF').addEventListener('click', () => {
     if (salidaData.length === 0) return alert("No hay datos para exportar");
 
     const { jsPDF } = window.jspdf;
