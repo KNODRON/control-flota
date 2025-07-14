@@ -1,79 +1,72 @@
-<!-- ... comienza igual el head ... -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Salida OS9</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 <body>
   <div class="container">
-    <div style="text-align: center; margin-bottom: 1rem;">
-      <img src="logo-os9.jpeg" alt="Logo OS9" width="80" style="border-radius: 50%;">
+
+    <div class="logo">
+      <img src="logo-os9.jpeg" alt="Logo OS9" />
     </div>
 
-    <h1 style="text-align: center; color: #006400;">Salida OS9</h1>
+    <h1 class="titulo">Salida OS9</h1>
 
     <form id="salidaForm">
-      <label>Sección:</label>
-      <select id="seccion" required>
-        <option value="">Seleccione sección</option>
-        <option>Análisis</option>
-        <option>Art. Explosivos</option>
-        <option>Muertes Violentas</option>
-        <option>Crimen Organizado</option>
-        <option>Delitos Económicos</option>
-      </select>
 
-      <label>Patente:</label>
-      <input type="text" id="patente" required>
+      <div class="form-row">
+        <label>Sección:</label>
+        <select id="seccion" required>
+          <option value="">Seleccione sección</option>
+          <option>Análisis</option>
+          <option>Art. Explosivos</option>
+          <option>Muertes Violentas</option>
+          <option>Crimen Organizado</option>
+          <option>Delitos Económicos</option>
+        </select>
+
+        <label>Patente:</label>
+        <input type="text" id="patente" required>
+      </div>
 
       <!-- Jefe de patrulla -->
       <h3>👮‍♂️ Jefe de patrulla</h3>
-      <label>Nombre:</label>
-      <input type="text" id="jefeNombre" required>
-      <label>Teléfono:</label>
-      <input type="tel" id="jefeTelefono">
-
-      <div class="fila">
-        <div><label>Calzo:</label><input type="text" id="jefeCalzo"></div>
-        <div><label>Armamento:</label><input type="text" id="jefePistola"></div>
-      </div>
-      <div class="fila">
-        <div><label>Casco:</label><input type="text" id="jefeCasco"></div>
-        <div><label>Chaleco:</label><input type="text" id="jefeChaleco"></div>
-      </div>
-      <div class="fila">
-        <div><label>Portátil:</label><input type="text" id="jefePortatil"></div>
-        <div><label>Cám. Corporal:</label><input type="text" id="jefeCamara"></div>
+      <div class="grid-pareja">
+        <input type="text" id="jefeNombre" placeholder="Nombre" required>
+        <input type="tel" id="jefeTelefono" placeholder="Teléfono">
+        <input type="text" id="jefeCalzo" placeholder="Calzo">
+        <input type="text" id="jefePistola" placeholder="Armamento">
+        <input type="text" id="jefeCasco" placeholder="Casco">
+        <input type="text" id="jefeChaleco" placeholder="Chaleco">
+        <input type="text" id="jefePortatil" placeholder="Portátil">
+        <input type="text" id="jefeCamara" placeholder="Cám. Corporal">
       </div>
 
-      <!-- Acompañantes -->
+      <!-- Acompañante 1 -->
       <h3>👥 Acompañante 1</h3>
-      <label>Nombre:</label>
-      <input type="text" id="acomp1Nombre">
-
-      <div class="fila">
-        <div><label>Calzo:</label><input type="text" id="acomp1Calzo"></div>
-        <div><label>Armamento:</label><input type="text" id="acomp1Pistola"></div>
-      </div>
-      <div class="fila">
-        <div><label>Casco:</label><input type="text" id="acomp1Casco"></div>
-        <div><label>Chaleco:</label><input type="text" id="acomp1Chaleco"></div>
-      </div>
-      <div class="fila">
-        <div><label>Portátil:</label><input type="text" id="acomp1Portatil"></div>
-        <div><label>Cám. Corporal:</label><input type="text" id="acomp1Camara"></div>
+      <div class="grid-pareja">
+        <input type="text" id="acomp1Nombre" placeholder="Nombre">
+        <input type="text" id="acomp1Calzo" placeholder="Calzo">
+        <input type="text" id="acomp1Pistola" placeholder="Armamento">
+        <input type="text" id="acomp1Casco" placeholder="Casco">
+        <input type="text" id="acomp1Chaleco" placeholder="Chaleco">
+        <input type="text" id="acomp1Portatil" placeholder="Portátil">
+        <input type="text" id="acomp1Camara" placeholder="Cám. Corporal">
       </div>
 
+      <!-- Acompañante 2 -->
       <h3>👥 Acompañante 2</h3>
-      <label>Nombre:</label>
-      <input type="text" id="acomp2Nombre">
-
-      <div class="fila">
-        <div><label>Calzo:</label><input type="text" id="acomp2Calzo"></div>
-        <div><label>Armamento:</label><input type="text" id="acomp2Pistola"></div>
-      </div>
-      <div class="fila">
-        <div><label>Casco:</label><input type="text" id="acomp2Casco"></div>
-        <div><label>Chaleco:</label><input type="text" id="acomp2Chaleco"></div>
-      </div>
-      <div class="fila">
-        <div><label>Portátil:</label><input type="text" id="acomp2Portatil"></div>
-        <div><label>Cám. Corporal:</label><input type="text" id="acomp2Camara"></div>
+      <div class="grid-pareja">
+        <input type="text" id="acomp2Nombre" placeholder="Nombre">
+        <input type="text" id="acomp2Calzo" placeholder="Calzo">
+        <input type="text" id="acomp2Pistola" placeholder="Armamento">
+        <input type="text" id="acomp2Casco" placeholder="Casco">
+        <input type="text" id="acomp2Chaleco" placeholder="Chaleco">
+        <input type="text" id="acomp2Portatil" placeholder="Portátil">
+        <input type="text" id="acomp2Camara" placeholder="Cám. Corporal">
       </div>
 
       <label>Kilometraje de salida:</label>
@@ -83,25 +76,26 @@
     </form>
 
     <hr>
+
     <h2>🔙 Regreso del Vehículo</h2>
     <form id="regresoForm">
       <label>Patente:</label>
       <input type="text" id="patenteRegreso" required>
+
       <label>Kilometraje de regreso:</label>
       <input type="number" id="kmRegreso" required>
+
       <button type="submit">Registrar regreso</button>
     </form>
 
     <hr>
+
     <h3>📝 Registro temporal</h3>
     <pre id="registroOutput">[sin datos aún]</pre>
 
-    <div style="text-align: center; margin-top: 2rem;">
-      <button id="PDF" style="background-color: #006400; color: white; padding: 0.75rem 1.5rem;">Exportar PDF</button>
-    </div>
+    <button id="generarPDF">Exportar PDF</button>
   </div>
 
-  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <script src="app.js"></script>
