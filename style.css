@@ -65,10 +65,10 @@ pre {
 
 .field-row {
   display: flex;
-  gap: 11px; /* Ajusta este valor para más o menos espacio entre columnas */
-  margin-top: 0.8rem;
+  gap: 12px; /* Ajusta este valor para más o menos espacio entre columnas */
+  margin-top: 0.7rem;
 }
 
 .field-row input {
-  flex: 0.8;
+  flex: 1;
 }
