@@ -48,7 +48,7 @@ document.getElementById("salidaForm").addEventListener("submit", function (e) {
     ]
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbyH8nHZ6hQJ-FUzYUsRRneAZdZyQ7kkdnkCQes53Wn4C4in0efmfJR5ulfKinatEEY3tQ/exec", {
+  fetch("google.com", {
     method: "POST",
     body: JSON.stringify(salida),
     headers: {
