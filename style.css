@@ -62,3 +62,13 @@ pre {
   font-size: 0.9rem;
   overflow-x: auto;
 }
+
+.field-row {
+  display: flex;
+  gap: 12px; /* Ajusta este valor para más o menos espacio entre columnas */
+  margin-top: 0.7rem;
+}
+
+.field-row input {
+  flex: 1;
+}
