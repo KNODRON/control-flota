@@ -65,8 +65,8 @@ pre {
 
 .field-row {
   display: flex;
-  gap: 12px; /* Ajusta este valor para más o menos espacio entre columnas */
-  margin-top: 0.5rem;
+  gap: 11px; /* Ajusta este valor para más o menos espacio entre columnas */
+  margin-top: 0.4rem;
 }
 
 .field-row input {
