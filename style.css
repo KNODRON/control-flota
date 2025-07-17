@@ -1,74 +1,51 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f4f4f4;
-  margin: 0;
-  padding: 1rem;
-  color: #333;
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba de salida</title>
+</head>
+<body>
+  <h2>Enviar registro de salida</h2>
+  <button onclick="enviar()">Enviar datos de prueba</button>
+  <pre id="resultado"></pre>
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  padding: 2.0rem;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-h1, h2, h3 {
-  text-align: center;
-  color: #0d47a1;
-}
-
-label {
-  display: block;
-  margin-top: 1rem;
-  font-weight: bold;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
-}
-
-button {
-  margin-top: 1.5rem;
-  width: 100%;
-  padding: 0.7rem;
-  background-color: #2e7d32; /* Verde */
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #1b5e20;
-}
-
-hr {
-  margin: 2rem 0;
-}
-
-pre {
-  background: #eeeeee;
-  padding: 1rem;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  overflow-x: auto;
-}
-
-.field-row {
-  display: flex;
-  gap: 12px; /* Ajusta este valor para más o menos espacio entre columnas */
-  margin-top: 0.7rem;
-}
-
-.field-row input {
-  flex: 1;
-}
+  <script>
+    function enviar() {
+      fetch("https://script.google.com/macros/s/AKfycbyH8nHZ6hQJ-FUzYUsRRneAZdZyQ7kkdnKCQes53Wn4C4inOefmfJR5ulfKinatEEY3tQ/exec", {
+        method: "POST",
+        body: JSON.stringify({
+          horaSalida: "15-07-2025 02:00",
+          seccion: "OS9",
+          patente: "AB1234",
+          kmSalida: "12000",
+          kmRegreso: "",
+          horaRegreso: "",
+          ocupantes: [
+            {
+              calzo: "Sí",
+              nombre: "JP",
+              telefono: "912345678",
+              pistola: "Sí",
+              chaleco: "Sí",
+              casco: "Sí",
+              portatil: "Sí",
+              camara: "Sí"
+            },
+            {
+              nombre: "Acomp 1",
+              calzo: "Sí"
+            },
+            {
+              nombre: "Acomp 2",
+              calzo: "No"
+            }
+          ]
+        })
+      })
+      .then(r => r.text())
+      .then(txt => document.getElementById("resultado").textContent = "✅ Guardado: " + txt)
+      .catch(err => document.getElementById("resultado").textContent = "❌ Error: " + err);
+    }
+  </script>
+</body>
+</html>
