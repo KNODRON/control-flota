@@ -1,95 +1,40 @@
-document.getElementById("salidaForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+document.getElementById("generarPDF").addEventListener("click", async () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
 
-  const salida = {
-    tipo: "salida",
-    horaSalida: new Date().toLocaleString(),
-    seccion: document.getElementById("seccion").value,
-    patente: document.getElementById("patente").value,
-    kmSalida: document.getElementById("kmSalida").value,
-    jefe: {
-      nombre: document.getElementById("jefeNombre").value,
-      telefono: document.getElementById("jefeTelefono").value,
-      calzo: document.getElementById("jefeCalzo").value,
-      pistola: document.getElementById("jefePistola").value,
-      chaleco: document.getElementById("jefeChaleco").value,
-      casco: document.getElementById("jefeCasco").value,
-      portatil: document.getElementById("jefePortatil").value,
-      camara: document.getElementById("jefeCamara").value
-    },
-    ocupantes: [
-      {
-        nombre: document.getElementById("jefeNombre").value,
-        calzo: document.getElementById("jefeCalzo").value,
-        pistola: document.getElementById("jefePistola").value,
-        chaleco: document.getElementById("jefeChaleco").value,
-        casco: document.getElementById("jefeCasco").value,
-        portatil: document.getElementById("jefePortatil").value,
-        camara: document.getElementById("jefeCamara").value
-      },
-      {
-        nombre: document.getElementById("acomp1Nombre").value,
-        calzo: document.getElementById("acomp1Calzo").value,
-        pistola: document.getElementById("acomp1Pistola").value,
-        chaleco: document.getElementById("acomp1Chaleco").value,
-        casco: document.getElementById("acomp1Casco").value,
-        portatil: document.getElementById("acomp1Portatil").value,
-        camara: document.getElementById("acomp1Camara").value
-      },
-      {
-        nombre: document.getElementById("acomp2Nombre").value,
-        calzo: document.getElementById("acomp2Calzo").value,
-        pistola: document.getElementById("acomp2Pistola").value,
-        chaleco: document.getElementById("acomp2Chaleco").value,
-        casco: document.getElementById("acomp2Casco").value,
-        portatil: document.getElementById("acomp2Portatil").value,
-        camara: document.getElementById("acomp2Camara").value
-      }
-    ]
-  };
+  // Captura el contenido de la app
+  const content = document.querySelector(".container");
+  const canvas = await html2canvas(content);
+  const imgData = canvas.toDataURL("image/png");
 
-  fetch("google.com", {
-    method: "POST",
-    body: JSON.stringify(salida),
-    headers: {
-      "Content-Type": "application/json"
+  const pdfWidth = doc.internal.pageSize.getWidth();
+  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+  // Genera nombre dinámico del archivo
+  const fecha = new Date().toISOString().split("T")[0];
+  const nombrePDF = `Salida_OS9_${fecha}.pdf`;
+
+  // Guarda localmente
+  doc.save(nombrePDF);
+
+  // Convierte a blob para enviar por WhatsApp
+  const blob = doc.output("blob");
+  const file = new File([blob], nombrePDF, { type: "application/pdf" });
+
+  // Envía al número fijo de Proservipol
+  const proserviURL = `https://api.whatsapp.com/send?phone=+56933700267&text=Salida%20enviada%20a%20Proservipol`;
+  window.open(proserviURL, "_blank");
+
+  // Pregunta si desea enviar a otro contacto
+  const enviarExtra = confirm("¿Desea enviar también el PDF a otro número por WhatsApp?");
+  if (enviarExtra) {
+    const otroNumero = prompt("Ingrese el número de WhatsApp (ej: 56912345678):");
+    if (otroNumero && otroNumero.match(/^569\d{8}$/)) {
+      const extraURL = `https://api.whatsapp.com/send?phone=${otroNumero}&text=Aquí%20va%20el%20PDF%20de%20la%20salida%20OS9.%20(Adjuntar%20manualmente%20el%20archivo%20si%20es%20necesario)`;
+      window.open(extraURL, "_blank");
+    } else {
+      alert("Número inválido. Debe tener el formato 569XXXXXXXX");
     }
-  })
-  .then(res => res.text())
-  .then(txt => {
-    console.log("✅ Resultado:", txt);
-    alert("✅ Registro de salida guardado correctamente.");
-  })
-  .catch(err => {
-    console.error("❌ Error:", err);
-    alert("❌ Error al guardar la salida.");
-  });
-});
-
-document.getElementById("regresoForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const regreso = {
-    tipo: "regreso",
-    patente: document.getElementById("patenteRegreso").value,
-    kmRegreso: document.getElementById("kmRegreso").value,
-    horaRegreso: new Date().toLocaleString()
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbyH8nHZ6hQJ-FUzYUsRRneAZdZyQ7kkdnkCQes53Wn4C4in0efmfJR5ulfKinatEEY3tQ/exec", {
-    method: "POST",
-    body: JSON.stringify(regreso),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-  .then(res => res.text())
-  .then(txt => {
-    console.log("✅ Resultado:", txt);
-    alert("✅ Registro de regreso guardado correctamente.");
-  })
-  .catch(err => {
-    console.error("❌ Error:", err);
-    alert("❌ Error al guardar el regreso.");
-  });
+  }
 });
