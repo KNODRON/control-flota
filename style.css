@@ -1,51 +1,38 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Prueba de salida</title>
-</head>
-<body>
-  <h2>Enviar registro de salida</h2>
-  <button onclick="enviar()">Enviar datos de prueba</button>
-  <pre id="resultado"></pre>
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #f4f4f4;
+}
 
-  <script>
-    function enviar() {
-      fetch("https://script.google.com/macros/s/AKfycbyH8nHZ6hQJ-FUzYUsRRneAZdZyQ7kkdnKCQes53Wn4C4inOefmfJR5ulfKinatEEY3tQ/exec", {
-        method: "POST",
-        body: JSON.stringify({
-          horaSalida: "15-07-2025 02:00",
-          seccion: "OS9",
-          patente: "AB1234",
-          kmSalida: "12000",
-          kmRegreso: "",
-          horaRegreso: "",
-          ocupantes: [
-            {
-              calzo: "Sí",
-              nombre: "JP",
-              telefono: "912345678",
-              pistola: "Sí",
-              chaleco: "Sí",
-              casco: "Sí",
-              portatil: "Sí",
-              camara: "Sí"
-            },
-            {
-              nombre: "Acomp 1",
-              calzo: "Sí"
-            },
-            {
-              nombre: "Acomp 2",
-              calzo: "No"
-            }
-          ]
-        })
-      })
-      .then(r => r.text())
-      .then(txt => document.getElementById("resultado").textContent = "✅ Guardado: " + txt)
-      .catch(err => document.getElementById("resultado").textContent = "❌ Error: " + err);
-    }
-  </script>
-</body>
-</html>
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 60px;
+}
+
+form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input, button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.btnWp {
+  display: block;
+  margin-top: 15px;
+  padding: 12px;
+  background-color: green;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+}
