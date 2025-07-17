@@ -1,61 +1,109 @@
-document.getElementById('formulario').addEventListener('submit', async function (e) {
-  e.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+  const salidaForm = document.getElementById("salidaForm");
+  const regresoForm = document.getElementById("regresoForm");
+  const registroOutput = document.getElementById("registroOutput");
+  const generarPDFBtn = document.getElementById("generarPDF");
 
-  const datos = {
-    seccion: document.getElementById('seccion').value,
-    patente: document.getElementById('patente').value,
-    horaSalida: document.getElementById('horaSalida').value,
-    kmSalida: document.getElementById('kmSalida').value,
-    jefeNombre: document.getElementById('jefeNombre').value,
-    jefeTelefono: document.getElementById('jefeTelefono').value,
-    calzo: document.getElementById('calzo').value,
-    pistola: document.getElementById('pistola').value,
-    chaleco: document.getElementById('chaleco').value,
-    casco: document.getElementById('casco').value,
-    portatil: document.getElementById('portatil').value,
-    camara: document.getElementById('camara').value
-  };
+  let datosSalida = {};
+  let datosRegreso = {};
+  let pdfBase64 = "";
 
-  // Generar PDF
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
+  salidaForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  doc.setFontSize(14);
-  doc.text("CONTROL DE FLOTA - SALIDA DE VEHÍCULO", 20, 20);
+    datosSalida = {
+      seccion: document.getElementById("seccion").value,
+      patente: document.getElementById("patente").value,
+      jefeNombre: document.getElementById("jefeNombre").value,
+      jefeTelefono: document.getElementById("jefeTelefono").value,
+      jefeCalzo: document.getElementById("jefeCalzo").value,
+      jefePistola: document.getElementById("jefePistola").value,
+      jefeChaleco: document.getElementById("jefeChaleco").value,
+      jefeCasco: document.getElementById("jefeCasco").value,
+      jefePortatil: document.getElementById("jefePortatil").value,
+      jefeCamara: document.getElementById("jefeCamara").value,
+      acomp1Nombre: document.getElementById("acomp1Nombre").value,
+      acomp1Calzo: document.getElementById("acomp1Calzo").value,
+      acomp1Pistola: document.getElementById("acomp1Pistola").value,
+      acomp1Chaleco: document.getElementById("acomp1Chaleco").value,
+      acomp1Casco: document.getElementById("acomp1Casco").value,
+      acomp1Portatil: document.getElementById("acomp1Portatil").value,
+      acomp1Camara: document.getElementById("acomp1Camara").value,
+      acomp2Nombre: document.getElementById("acomp2Nombre").value,
+      acomp2Calzo: document.getElementById("acomp2Calzo").value,
+      acomp2Pistola: document.getElementById("acomp2Pistola").value,
+      acomp2Chaleco: document.getElementById("acomp2Chaleco").value,
+      acomp2Casco: document.getElementById("acomp2Casco").value,
+      acomp2Portatil: document.getElementById("acomp2Portatil").value,
+      acomp2Camara: document.getElementById("acomp2Camara").value,
+      kmSalida: document.getElementById("kmSalida").value,
+    };
 
-  const contenido = `
-SECCIÓN: ${datos.seccion}
-PATENTE: ${datos.patente}
-HORA SALIDA: ${datos.horaSalida}
-KM SALIDA: ${datos.kmSalida}
-NOMBRE JP: ${datos.jefeNombre}
-TELÉFONO JP: ${datos.jefeTelefono}
-CALZO: ${datos.calzo}
-ARMAMENTO: ${datos.pistola}
-CHALECO: ${datos.chaleco}
-CASCO: ${datos.casco}
-PORTÁTIL: ${datos.portatil}
-CÁMARA: ${datos.camara}
-  `.trim();
+    alert("Salida registrada. Ahora puedes registrar el regreso.");
+  });
 
-  doc.text(contenido, 20, 40);
+  regresoForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  const pdfBlob = doc.output("blob");
-  const pdfUrl = URL.createObjectURL(pdfBlob);
+    datosRegreso = {
+      patente: document.getElementById("patenteRegreso").value,
+      kmRegreso: document.getElementById("kmRegreso").value,
+    };
 
-  // WhatsApp Proservipol fijo
-  const numeroFijo = "56933700267";
-  const mensaje = encodeURIComponent("Salida enviada a Proservipol.");
-  document.getElementById("btnWpFijo").href = `https://wa.me/${numeroFijo}?text=${mensaje}`;
+    const resumen = `
+📋 **RESUMEN DE SALIDA Y REGRESO**
 
-  // WhatsApp extra (pedir número)
-  const numeroExtra = prompt("¿Enviar también a otro número? Escribe solo el número sin + ni espacios (ej. 56912345678):");
-  if (numeroExtra) {
-    document.getElementById("btnWpExtra").href = `https://wa.me/${numeroExtra}?text=${mensaje}`;
-  } else {
-    document.getElementById("btnWpExtra").style.display = "none";
+📌 Sección: ${datosSalida.seccion}
+🚗 Patente: ${datosSalida.patente}
+🧑‍✈️ Jefe de patrulla: ${datosSalida.jefeNombre} (${datosSalida.jefeTelefono})
+🧢 Calzo: ${datosSalida.jefeCalzo}, Armamento: ${datosSalida.jefePistola}, Chaleco: ${datosSalida.jefeChaleco}, Casco: ${datosSalida.jefeCasco}, Portátil: ${datosSalida.jefePortatil}, Cam. Corporal: ${datosSalida.jefeCamara}
+👥 Acompañante 1: ${datosSalida.acomp1Nombre}
+👥 Acompañante 2: ${datosSalida.acomp2Nombre}
+📍 Kilometraje de salida: ${datosSalida.kmSalida}
+🔙 Kilometraje de regreso: ${datosRegreso.kmRegreso}
+
+📄 Ahora puedes generar el PDF para enviar.
+    `;
+    registroOutput.textContent = resumen;
+  });
+
+  generarPDFBtn.addEventListener("click", async function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text("CARABINEROS DE CHILE", 70, 20);
+    doc.setFontSize(12);
+    doc.text("DEPARTAMENTO OS9", 80, 28);
+    doc.setFontSize(10);
+    doc.text(`SECCIÓN: ${datosSalida.seccion}`, 20, 40);
+    doc.text(`PATENTE: ${datosSalida.patente}`, 20, 46);
+    doc.text(`JEFE DE PATRULLA: ${datosSalida.jefeNombre} (${datosSalida.jefeTelefono})`, 20, 52);
+    doc.text(`ACOMPAÑANTES: ${datosSalida.acomp1Nombre}, ${datosSalida.acomp2Nombre}`, 20, 58);
+    doc.text(`KILOMETRAJE SALIDA: ${datosSalida.kmSalida}`, 20, 64);
+    doc.text(`KILOMETRAJE REGRESO: ${datosRegreso.kmRegreso}`, 20, 70);
+
+    doc.text("_________________________", 20, 90);
+    doc.text("Firma Jefe de Patrulla", 30, 95);
+
+    const pdfBlob = doc.output("blob");
+    const reader = new FileReader();
+    reader.onload = function () {
+      pdfBase64 = reader.result.split(",")[1];
+      mostrarBotonWhatsApp();
+    };
+    reader.readAsDataURL(pdfBlob);
+  });
+
+  function mostrarBotonWhatsApp() {
+    const numeroFijo = "56933700267";
+    const mensaje = "Salida enviada a Proservipol";
+
+    const botonWA = document.createElement("a");
+    botonWA.href = `https://wa.me/${numeroFijo}?text=${encodeURIComponent(mensaje)}`;
+    botonWA.textContent = "Enviar PDF a WhatsApp Proservipol";
+    botonWA.className = "whatsapp-btn";
+    botonWA.target = "_blank";
+    document.querySelector(".center").appendChild(botonWA);
   }
-
-  // Abrir PDF para descargar (opcional)
-  doc.save(`salida-${datos.patente}.pdf`);
 });
