@@ -2,21 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Salida OS9</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <div class="center">
-      <img src="logo-os9.jpeg" alt="Logo OS9" class="logo">
+    <div class="header">
       <h1>Salida OS9</h1>
+      <img src="logo-os9.jpeg" alt="Logo OS9" class="logo-os9" />
     </div>
 
     <form id="salidaForm">
       <label for="seccion">Sección:</label>
       <select id="seccion" required>
-        <option value="">Seleccione sección</option>
+        <option value="">Seleccionar sección</option>
         <option>Análisis</option>
         <option>Art. Explosivos</option>
         <option>Muertes Violentas</option>
@@ -25,73 +25,47 @@
       </select>
 
       <label for="patente">Patente:</label>
-      <input type="text" id="patente" placeholder="Ej: AB1234" required>
+      <input type="text" id="patente" placeholder="Ej: AB1234" required />
 
-      <h3>👨‍✈️ Jefe de patrulla</h3>
-      <label for="jefeNombre">Nombre:</label>
-      <input type="text" id="jefeNombre" placeholder="Ej: SGTO 2º Juan Jiménez" required>
+      <h3>👮 Jefe de patrulla</h3>
+      <input type="text" id="jefeNombre" placeholder="Nombre completo" required />
+      <input type="tel" id="jefeTelefono" placeholder="Teléfono" required />
 
-      <label for="jefeTelefono">Teléfono:</label>
-      <input type="tel" id="jefeTelefono" placeholder="+56 9 1234 5678">
-
-      <div class="field-row">
-        <input type="text" id="jefeCalzo" placeholder="Calzo">
-        <input type="text" id="jefePistola" placeholder="Armamento">
-      </div>
-      <div class="field-row">
-        <input type="text" id="jefeChaleco" placeholder="Chaleco">
-        <input type="text" id="jefeCasco" placeholder="Casco">
-      </div>
-      <div class="field-row">
-        <input type="text" id="jefePortatil" placeholder="Portátil">
-        <input type="text" id="jefeCamara" placeholder="Cam. Corporal">
+      <div class="grid">
+        <input type="text" id="jefeCalzo" placeholder="Calzo" />
+        <input type="text" id="jefeArma" placeholder="Armamento" />
+        <input type="text" id="jefeChaleco" placeholder="Chaleco" />
+        <input type="text" id="jefeCasco" placeholder="Casco" />
+        <input type="text" id="jefePortatil" placeholder="Portátil" />
+        <input type="text" id="jefeCamara" placeholder="Cámara corporal" />
       </div>
 
-      <h3>👥 Acompañante 1</h3>
-      <input type="text" id="acomp1Nombre" placeholder="Nombre">
-      <div class="field-row">
-        <input type="text" id="acomp1Calzo" placeholder="Calzo">
-        <input type="text" id="acomp1Pistola" placeholder="Armamento">
-      </div>
-      <div class="field-row">
-        <input type="text" id="acomp1Chaleco" placeholder="Chaleco">
-        <input type="text" id="acomp1Casco" placeholder="Casco">
-      </div>
-      <div class="field-row">
-        <input type="text" id="acomp1Portatil" placeholder="Portátil">
-        <input type="text" id="acomp1Camara" placeholder="Cam. Corporal">
-      </div>
-
-      <h3>👥 Acompañante 2</h3>
-      <input type="text" id="acomp2Nombre" placeholder="Nombre">
-      <div class="field-row">
-        <input type="text" id="acomp2Calzo" placeholder="Calzo">
-        <input type="text" id="acomp2Pistola" placeholder="Armamento">
-      </div>
-      <div class="field-row">
-        <input type="text" id="acomp2Chaleco" placeholder="Chaleco">
-        <input type="text" id="acomp2Casco" placeholder="Casco">
-      </div>
-      <div class="field-row">
-        <input type="text" id="acomp2Portatil" placeholder="Portátil">
-        <input type="text" id="acomp2Camara" placeholder="Cam. Corporal">
-      </div>
+      <div id="acompanantesContainer"></div>
+      <button type="button" id="agregarAcompanante">Agregar acompañante</button>
 
       <label for="kmSalida">Kilometraje de salida:</label>
-      <input type="number" id="kmSalida" placeholder="Ej: 153200" required>
+      <input type="number" id="kmSalida" placeholder="Ej: 153000" required />
 
       <button type="submit">Registrar salida</button>
     </form>
 
-    <div class="center">
-      <button id="generarPDF">Generar PDF y Enviar</button>
-    </div>
+    <hr />
+
+    <form id="regresoForm">
+      <h3>🚗 Regresar vehículo</h3>
+      <label for="patenteRegreso">Patente:</label>
+      <input type="text" id="patenteRegreso" placeholder="Ej: AB1234" required />
+
+      <label for="kmRegreso">Kilometraje de regreso:</label>
+      <input type="number" id="kmRegreso" placeholder="Ej: 153250" required />
+
+      <button type="submit">Registrar regreso</button>
+    </form>
+
+    <hr />
+    <button id="generarPDF">Generar PDF</button>
   </div>
 
-  <!-- Librerías -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
