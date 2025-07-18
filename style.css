@@ -1,73 +1,43 @@
+
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f4f4f4;
+  font-family: Arial, sans-serif;
+  background-color: #e0e0e0;
   margin: 0;
-  padding: 1rem;
-  color: #333;
+  padding: 20px;
 }
-
 .container {
-  max-width: 600px;
+  background: #fff;
+  padding: 2rem;
+  max-width: 700px;
   margin: auto;
-  background: white;
-  padding: 1.5rem;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
-
-h1, h2, h3 {
-  text-align: center;
-  color: #0d47a1;
+h1, h2 {
+  color: #0a3d62;
 }
-
-label {
-  display: block;
-  margin-top: 1rem;
-  font-weight: bold;
-}
-
-input, select {
+input {
   width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.3rem;
-  border: 1px solid #ccc;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
   border-radius: 5px;
-  font-size: 1rem;
+  border: 1px solid #999;
 }
-
-.field-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-top: 0.5rem;
+.equipo-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
 }
-
-.field-row input {
-  flex: 1;
-}
-
-button {
-  margin-top: 1.5rem;
+button, #enviarWhatsapp {
+  margin-top: 1.2rem;
+  padding: 0.8rem;
   width: 100%;
-  padding: 0.7rem;
-  background-color: #2e7d32; /* Verde */
+  font-weight: bold;
+  background-color: #006400;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-}
-
-button:hover {
-  background-color: #1b5e20;
-}
-
-.logo {
-  width: 70px;
-  border-radius: 60%;
-  margin-bottom: 1rem;
-}
-
-.center {
   text-align: center;
+  text-decoration: none;
 }
