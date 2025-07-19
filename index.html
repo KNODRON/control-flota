@@ -8,21 +8,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    h1 { margin: 0; }
-    label, select, input, button { display: block; margin: 8px 0; }
-    input, select { padding: 8px; width: 100%; max-width: 400px; }
-    button { padding: 10px 20px; cursor: pointer; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f2; color: #333; padding: 1rem; margin: 0; }
+    .header { display: flex; align-items: center; justify-content: space-between; background-color: #0f9d58; color: white; padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 0.5rem; }
+    .header h1 { margin: 0; font-size: 1.5rem; }
+    .logo-os9 { height: 50px; }
+    label { display: block; margin-top: 0.75rem; font-weight: bold; }
+    input[type="text"], input[type="number"], select { width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+    button { display: block; margin: 1.5rem auto; padding: 0.75rem 1.5rem; background-color: #0f9d58; color: white; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #0c7d44; }
     .equipment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .companion { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+    .companion { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background: #e8f5e9; border-radius: 0.5rem; }
   </style>
 </head>
 <body>
-  <header>
+  <div class="header">
     <h1>Salida OS9</h1>
-    <img src="logo_os9.png" alt="Logo OS9" style="height:50px;">
-  </header>
+    <img src="logo_os9.png" alt="Logo OS9" class="logo-os9">
+  </div>
 
   <!-- Formulario de Salida -->
   <form id="departure-form">
@@ -45,16 +47,14 @@
     <label>Jefe de Patrulla - Teléfono:</label>
     <input type="text" id="jefe-telefono" required>
 
-    <div>
-      <label>Equipo Jefe de Patrulla:</label>
-      <div class="equipment-grid">
-        <input type="text" id="jefe-calzo" placeholder="Calzo" required>
-        <input type="text" id="jefe-armamento" placeholder="Armamento" required>
-        <input type="text" id="jefe-chaleco" placeholder="Chaleco" required>
-        <input type="text" id="jefe-casco" placeholder="Casco" required>
-        <input type="text" id="jefe-portatil" placeholder="Portátil" required>
-        <input type="text" id="jefe-camara" placeholder="Cámara Corporal" required>
-      </div>
+    <label>Equipo Jefe de Patrulla:</label>
+    <div class="equipment-grid">
+      <input type="text" id="jefe-calzo" placeholder="Calzo" required>
+      <input type="text" id="jefe-armamento" placeholder="Armamento" required>
+      <input type="text" id="jefe-chaleco" placeholder="Chaleco" required>
+      <input type="text" id="jefe-casco" placeholder="Casco" required>
+      <input type="text" id="jefe-portatil" placeholder="Portátil" required>
+      <input type="text" id="jefe-camara" placeholder="Cámara Corporal" required>
     </div>
 
     <div id="companions-container"></div>
@@ -103,13 +103,10 @@
     });
 
     document.getElementById('register-departure').addEventListener('click', () => {
-      // Validar campos
       const form = document.getElementById('departure-form');
       if (!form.reportValidity()) return;
       departureTime = new Date();
-      // Copiar patente al return form
       document.getElementById('patente-return').value = document.getElementById('patente-departure').value;
-      // Mostrar return form
       document.getElementById('departure-form').style.display = 'none';
       document.getElementById('return-form').style.display = 'block';
     });
@@ -149,7 +146,6 @@
         document.getElementById('jefe-camara').value
       ];
 
-      // Header
       doc.setFontSize(14);
       doc.text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 105, 20, null, null, 'center');
       doc.setFontSize(11);
@@ -161,7 +157,6 @@
       doc.text(`Km regreso: ${kmRet}`, 14, 60);
       doc.text(`Teléfono JP: ${jefePhone}`, 14, 66);
 
-      // Tabla de equipo
       const head = [['Nombre','Calzo','Armamento','Chaleco','Casco','Portátil','Cámara']];
       const rows = [];
       rows.push([jefeName, ...jefeEq]);
@@ -173,27 +168,4 @@
           document.getElementById(`comp-${i}-chaleco`).value,
           document.getElementById(`comp-${i}-casco`).value,
           document.getElementById(`comp-${i}-portatil`).value,
-          document.getElementById(`comp-${i}-camara`).value,
-        ];
-        rows.push([compName, ...compEq]);
-      }
-      doc.autoTable({ startY: 72, head: head, body: rows, theme: 'grid', styles: { fontSize: 9 } });
-
-      // Firma
-      const finalY = doc.lastAutoTable.finalY + 20;
-      doc.setFontSize(11);
-      doc.text(jefeName.toUpperCase(), 105, finalY, null, null, 'center');
-      doc.text('JEFE DE PATRULLA', 105, finalY + 6, null, null, 'center');
-
-      // Generar PDF y compartir
-      const blob = doc.output('blob');
-      const file = new File([blob], `Salida_OS9_${patente}.pdf`, { type: 'application/pdf' });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        navigator.share({ files: [file], title: `Salida OS9 ${patente}` });
-      } else {
-        doc.save(`Salida_OS9_${patente}.pdf`);
-      }
-    }
-  </script>
-</body>
-</html>
+          document.getElementById(`comp-${
