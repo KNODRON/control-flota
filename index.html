@@ -4,77 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Salida OS9</title>
+  <!-- Enlazar CSS externo -->
+  <link rel="stylesheet" href="style.css">
   <!-- Librerías jsPDF y AutoTable -->
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f0f4f2;
-      color: #333;
-      padding: 1rem;
-      margin: 0;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #0f9d58;
-      color: white;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1rem;
-      border-radius: 0.5rem;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-    .logo-os9 {
-      height: 50px;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    input[type="text"], input[type="number"], select {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-    .equipment-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      row-gap: 2rem;
-      column-gap: 2rem;
-      margin-bottom: 2rem;
-    }
-    .companion {
-      border: 1px solid #ccc;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      background: #e8f5e9;
-      border-radius: 0.5rem;
-    }
-    button {
-      display: block;
-      margin: 1.5rem auto;
-      padding: 0.75rem 1.5rem;
-      background-color: #0f9d58;
-      color: white;
-      font-size: 1rem;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0c7d44;
-    }
-  </style>
+  <!-- Enlazar JS de la aplicación (defer) -->
+  <script defer src="app.js"></script>
 </head>
 <body>
   <div class="header">
@@ -83,144 +19,19 @@
   </div>
 
   <form id="departure-form">
-    <label>Sección:</label>
-    <select id="section" required>
-      <option value="" disabled selected>Seleccionar sección</option>
-      <option value="Análisis">Análisis</option>
-      <option value="Artefactos Explosivos">Artefactos Explosivos</option>
-      <option value="Crimen Organizado">Crimen Organizado</option>
-      <option value="Muertes Violentas">Muertes Violentas</option>
-      <option value="Económicos">Económicos</option>
-      <option value="Derechos Humanos">Derechos Humanos</option>
-    </select>
-
-    <label>Patente vehículo:</label>
-    <input type="text" id="patente-departure" required>
-
-    <label>Kilometraje de salida:</label>
-    <input type="number" id="km-departure" required>
-
-    <label>Nombre jefe de patrulla:</label>
-    <input type="text" id="jefe-nombre" required>
-
-    <label>Teléfono jefe de patrulla:</label>
-    <input type="text" id="jefe-telefono" required>
-
-    <label>Cargo jefe de patrulla:</label>
-    <div class="equipment-grid">
-      <input type="text" id="jefe-calzo" placeholder="Calzo" required>
-      <input type="text" id="jefe-armamento" placeholder="Armamento" required>
-      <input type="text" id="jefe-chaleco" placeholder="Chaleco" required>
-      <input type="text" id="jefe-casco" placeholder="Casco" required>
-      <input type="text" id="jefe-portatil" placeholder="Portátil" required>
-      <input type="text" id="jefe-camara" placeholder="Cámara Corporal" required>
-    </div>
-
+    <!-- … aquí van tus labels, selects e inputs … -->
     <div id="companions-container"></div>
     <button type="button" id="add-companion">Agregar Acompañante</button>
     <button type="button" id="register-departure">Registrar Salida</button>
   </form>
 
   <form id="return-form" style="display:none; margin-top:20px;">
-    <h2>Regreso de Patrulla</h2>
-    <label>Patente vehículo:</label>
-    <input type="text" id="patente-return" disabled>
-
-    <label>Kilometraje de regreso:</label>
-    <input type="number" id="km-return" required>
-
+    <!-- … campos de regreso … -->
     <button type="button" id="register-return">Registrar Regreso</button>
   </form>
 
-  <button type="button" id="generate-pdf" style="display:none; margin-top:20px;">Generar PDF y Enviar</button>
-
-  <script>
-    // Variables globales
-    let departureTime, returnTime;
-    let companionCount = 0;
-    const maxCompanions = 5;
-    const container = document.getElementById('companions-container');
-
-    // Agregar acompañante
-    document.getElementById('add-companion').addEventListener('click', () => {
-      if (companionCount >= maxCompanions) {
-        alert('Máximo 5 acompañantes.');
-        return;
-      }
-      companionCount++;
-      const div = document.createElement('div');
-      div.className = 'companion';
-      div.id = `companion-${companionCount}`;
-      div.innerHTML = `
-        <label>Acompañante ${companionCount} - Nombre:</label>
-        <input type="text" id="comp-name-${companionCount}" required>
-        <label>Cargo acompañante ${companionCount}:</label>
-        <div class="equipment-grid">
-          <input type="text" id="comp-${companionCount}-calzo" placeholder="Calzo" required>
-          <input type="text" id="comp-${companionCount}-armamento" placeholder="Armamento" required>
-          <input type="text" id="comp-${companionCount}-chaleco" placeholder="Chaleco" required>
-          <input type="text" id="comp-${companionCount}-casco" placeholder="Casco" required>
-          <input type="text" id="comp-${companionCount}-portatil" placeholder="Portátil" required>
-          <input type="text" id="comp-${companionCount}-camara" placeholder="Cámara Corporal" required>
-        </div>
-      `;
-      container.appendChild(div);
-    });
-
-    // Registrar salida
-    document.getElementById('register-departure').addEventListener('click', () => {
-      const form = document.getElementById('departure-form');
-      if (!form.reportValidity()) return;
-      departureTime = new Date();
-      document.getElementById('patente-return').value = document.getElementById('patente-departure').value;
-      form.style.display = 'none';
-      document.getElementById('return-form').style.display = 'block';
-    });
-
-    // Registrar regreso
-    document.getElementById('register-return').addEventListener('click', () => {
-      const form = document.getElementById('return-form');
-      if (!form.reportValidity()) return;
-      returnTime = new Date();
-      form.style.display = 'none';
-      document.getElementById('generate-pdf').style.display = 'block';
-    });
-
-    // Generar PDF
-    document.getElementById('generate-pdf').addEventListener('click', () => {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const section = document.getElementById('section').value;
-      const patente = document.getElementById('patente-departure').value;
-      const kmDep = document.getElementById('km-departure').value;
-      const kmRet = document.getElementById('km-return').value;
-      const jefeName = document.getElementById('jefe-nombre').value;
-      const jefePhone = document.getElementById('jefe-telefono').value;
-      const jefeEq = [
-        document.getElementById('jefe-calzo').value,
-        document.getElementById('jefe-armamento').value,
-        document.getElementById('jefe-chaleco').value,
-        document.getElementById('jefe-casco').value,
-        document.getElementById('jefe-portatil').value,
-        document.getElementById('jefe-camara').value
-      ];
-
-      doc.setFontSize(14);
-      doc.text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 105, 20, { align: 'center' });
-      doc.setFontSize(11);
-      doc.text(`Sección: ${section}`, 14, 30);
-      doc.text(`Patente: ${patente}`, 14, 36);
-      doc.text(`Fecha / Hora salida: ${departureTime.toLocaleString('es-CL')}`, 14, 42);
-      doc.text(`Fecha / Hora regreso: ${returnTime.toLocaleString('es-CL')}`, 14, 48);
-      doc.text(`Km salida: ${kmDep}`, 14, 54);
-      doc.text(`Km regreso: ${kmRet}`, 14, 60);
-      doc.text(`Teléfono JP: ${jefePhone}`, 14, 66);
-
-      const head = [['Nombre','Calzo','Armamento','Chaleco','Casco','Portátil','Cámara']];
-      const rows = [[jefeName, ...jefeEq]];
-      for (let i = 1; i <= companionCount; i++) {
-        const name = document.getElementById(`comp-name-${i}`).value;
-        const eq = [
-          document.getElementById(`comp-${i}-calzo`).value,
-          document.getElementById(`comp-${i}-armamento`).value,
-          document.getElementById(`comp-${
+  <button type="button" id="generate-pdf" style="display:none; margin-top:20px;">
+    Generar PDF y Enviar
+  </button>
+</body>
+</html>
