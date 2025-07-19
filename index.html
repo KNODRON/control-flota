@@ -1,71 +1,199 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Salida OS9</title>
-  <link rel="stylesheet" href="style.css" />
+  <!-- Librerías jsPDF y AutoTable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    h1 { margin: 0; }
+    label, select, input, button { display: block; margin: 8px 0; }
+    input, select { padding: 8px; width: 100%; max-width: 400px; }
+    button { padding: 10px 20px; cursor: pointer; }
+    .equipment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .companion { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>Salida OS9</h1>
-      <img src="logo-os9.jpeg" alt="Logo OS9" class="logo-os9" />
+  <header>
+    <h1>Salida OS9</h1>
+    <img src="logo_os9.png" alt="Logo OS9" style="height:50px;">
+  </header>
+
+  <!-- Formulario de Salida -->
+  <form id="departure-form">
+    <label>Sección:</label>
+    <select id="section">
+      <option value="Análisis">Análisis</option>
+      <option value="Artefactos Explosivos">Artefactos Explosivos</option>
+      <option value="Crimen Organizado">Crimen Organizado</option>
+      <option value="Muertes Violentas">Muertes Violentas</option>
+      <option value="Económicos">Económicos</option>
+      <option value="Derechos Humanos">Derechos Humanos</option>
+    </select>
+    <label>Patente vehículo:</label>
+    <input type="text" id="patente-departure" required>
+    <label>Kilometraje de salida:</label>
+    <input type="number" id="km-departure" required>
+
+    <label>Jefe de Patrulla - Nombre:</label>
+    <input type="text" id="jefe-nombre" required>
+    <label>Jefe de Patrulla - Teléfono:</label>
+    <input type="text" id="jefe-telefono" required>
+
+    <div>
+      <label>Equipo Jefe de Patrulla:</label>
+      <div class="equipment-grid">
+        <input type="text" id="jefe-calzo" placeholder="Calzo" required>
+        <input type="text" id="jefe-armamento" placeholder="Armamento" required>
+        <input type="text" id="jefe-chaleco" placeholder="Chaleco" required>
+        <input type="text" id="jefe-casco" placeholder="Casco" required>
+        <input type="text" id="jefe-portatil" placeholder="Portátil" required>
+        <input type="text" id="jefe-camara" placeholder="Cámara Corporal" required>
+      </div>
     </div>
 
-    <form id="salidaForm">
-      <label for="seccion">Sección:</label>
-      <select id="seccion" required>
-        <option value="">Seleccionar sección</option>
-        <option>Análisis</option>
-        <option>Art. Explosivos</option>
-        <option>Muertes Violentas</option>
-        <option>Crimen Organizado</option>
-        <option>Delitos Económicos</option>
-      </select>
+    <div id="companions-container"></div>
+    <button type="button" id="add-companion">Agregar Acompañante</button>
+    <button type="button" id="register-departure">Registrar Salida</button>
+  </form>
 
-      <label for="patente">Patente:</label>
-      <input type="text" id="patente" placeholder="Ej: AB1234" required />
+  <!-- Formulario de Regreso -->
+  <form id="return-form" style="display:none; margin-top:20px;">
+    <h2>Regreso de Patrulla</h2>
+    <label>Patente vehículo:</label>
+    <input type="text" id="patente-return" disabled>
+    <label>Kilometraje de regreso:</label>
+    <input type="number" id="km-return" required>
+    <button type="button" id="register-return">Registrar Regreso</button>
+  </form>
 
-      <h3>👮 Jefe de patrulla</h3>
-      <input type="text" id="jefeNombre" placeholder="Nombre completo" required />
-      <input type="tel" id="jefeTelefono" placeholder="Teléfono" required />
+  <button type="button" id="generate-pdf" style="display:none; margin-top:20px;">Generar PDF y Enviar</button>
 
-      <div class="grid">
-        <input type="text" id="jefeCalzo" placeholder="Calzo" />
-        <input type="text" id="jefeArma" placeholder="Armamento" />
-        <input type="text" id="jefeChaleco" placeholder="Chaleco" />
-        <input type="text" id="jefeCasco" placeholder="Casco" />
-        <input type="text" id="jefePortatil" placeholder="Portátil" />
-        <input type="text" id="jefeCamara" placeholder="Cámara corporal" />
-      </div>
+  <script>
+    const { jsPDF } = window.jspdf;
+    let departureTime, returnTime;
+    let companionCount = 0;
+    const maxCompanions = 5;
 
-      <div id="acompanantesContainer"></div>
-      <button type="button" id="agregarAcompanante">Agregar acompañante</button>
+    document.getElementById('add-companion').addEventListener('click', () => {
+      if (companionCount >= maxCompanions) return alert('Máximo 5 acompañantes.');
+      companionCount++;
+      const container = document.getElementById('companions-container');
+      const div = document.createElement('div');
+      div.className = 'companion';
+      div.id = `companion-${companionCount}`;
+      div.innerHTML = `
+        <label>Acompañante ${companionCount} - Nombre:</label>
+        <input type="text" id="comp-name-${companionCount}" required>
+        <div class="equipment-grid">
+          <input type="text" id="comp-${companionCount}-calzo" placeholder="Calzo" required>
+          <input type="text" id="comp-${companionCount}-armamento" placeholder="Armamento" required>
+          <input type="text" id="comp-${companionCount}-chaleco" placeholder="Chaleco" required>
+          <input type="text" id="comp-${companionCount}-casco" placeholder="Casco" required>
+          <input type="text" id="comp-${companionCount}-portatil" placeholder="Portátil" required>
+          <input type="text" id="comp-${companionCount}-camara" placeholder="Cámara Corporal" required>
+        </div>
+      `;
+      container.appendChild(div);
+    });
 
-      <label for="kmSalida">Kilometraje de salida:</label>
-      <input type="number" id="kmSalida" placeholder="Ej: 153000" required />
+    document.getElementById('register-departure').addEventListener('click', () => {
+      // Validar campos
+      const form = document.getElementById('departure-form');
+      if (!form.reportValidity()) return;
+      departureTime = new Date();
+      // Copiar patente al return form
+      document.getElementById('patente-return').value = document.getElementById('patente-departure').value;
+      // Mostrar return form
+      document.getElementById('departure-form').style.display = 'none';
+      document.getElementById('return-form').style.display = 'block';
+    });
 
-      <button type="submit">Registrar salida</button>
-    </form>
+    document.getElementById('register-return').addEventListener('click', () => {
+      const form = document.getElementById('return-form');
+      if (!form.reportValidity()) return;
+      returnTime = new Date();
+      document.getElementById('return-form').style.display = 'none';
+      document.getElementById('generate-pdf').style.display = 'block';
+    });
 
-    <hr />
+    document.getElementById('generate-pdf').addEventListener('click', () => {
+      generatePdf();
+    });
 
-    <form id="regresoForm">
-      <h3>🚗 Regresar vehículo</h3>
-      <label for="patenteRegreso">Patente:</label>
-      <input type="text" id="patenteRegreso" placeholder="Ej: AB1234" required />
+    function formatDateTime(date) {
+      const d = date.toLocaleDateString('es-CL');
+      const t = date.toLocaleTimeString('es-CL');
+      return `${d} ${t}`;
+    }
 
-      <label for="kmRegreso">Kilometraje de regreso:</label>
-      <input type="number" id="kmRegreso" placeholder="Ej: 153250" required />
+    function generatePdf() {
+      const doc = new jsPDF();
+      const section = document.getElementById('section').value;
+      const patente = document.getElementById('patente-departure').value;
+      const kmDep = document.getElementById('km-departure').value;
+      const kmRet = document.getElementById('km-return').value;
+      const jefeName = document.getElementById('jefe-nombre').value;
+      const jefePhone = document.getElementById('jefe-telefono').value;
+      const jefeEq = [
+        document.getElementById('jefe-calzo').value,
+        document.getElementById('jefe-armamento').value,
+        document.getElementById('jefe-chaleco').value,
+        document.getElementById('jefe-casco').value,
+        document.getElementById('jefe-portatil').value,
+        document.getElementById('jefe-camara').value
+      ];
 
-      <button type="submit">Registrar regreso</button>
-    </form>
+      // Header
+      doc.setFontSize(14);
+      doc.text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 105, 20, null, null, 'center');
+      doc.setFontSize(11);
+      doc.text(`Sección: ${section}`, 14, 30);
+      doc.text(`Patente: ${patente}`, 14, 36);
+      doc.text(`Fecha / Hora salida: ${formatDateTime(departureTime)}`, 14, 42);
+      doc.text(`Fecha / Hora regreso: ${formatDateTime(returnTime)}`, 14, 48);
+      doc.text(`Km salida: ${kmDep}`, 14, 54);
+      doc.text(`Km regreso: ${kmRet}`, 14, 60);
+      doc.text(`Teléfono JP: ${jefePhone}`, 14, 66);
 
-    <hr />
-    <button id="generarPDF">Generar PDF</button>
-  </div>
+      // Tabla de equipo
+      const head = [['Nombre','Calzo','Armamento','Chaleco','Casco','Portátil','Cámara']];
+      const rows = [];
+      rows.push([jefeName, ...jefeEq]);
+      for (let i = 1; i <= companionCount; i++) {
+        const compName = document.getElementById(`comp-name-${i}`).value;
+        const compEq = [
+          document.getElementById(`comp-${i}-calzo`).value,
+          document.getElementById(`comp-${i}-armamento`).value,
+          document.getElementById(`comp-${i}-chaleco`).value,
+          document.getElementById(`comp-${i}-casco`).value,
+          document.getElementById(`comp-${i}-portatil`).value,
+          document.getElementById(`comp-${i}-camara`).value,
+        ];
+        rows.push([compName, ...compEq]);
+      }
+      doc.autoTable({ startY: 72, head: head, body: rows, theme: 'grid', styles: { fontSize: 9 } });
 
-  <script src="app.js"></script>
+      // Firma
+      const finalY = doc.lastAutoTable.finalY + 20;
+      doc.setFontSize(11);
+      doc.text(jefeName.toUpperCase(), 105, finalY, null, null, 'center');
+      doc.text('JEFE DE PATRULLA', 105, finalY + 6, null, null, 'center');
+
+      // Generar PDF y compartir
+      const blob = doc.output('blob');
+      const file = new File([blob], `Salida_OS9_${patente}.pdf`, { type: 'application/pdf' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: `Salida OS9 ${patente}` });
+      } else {
+        doc.save(`Salida_OS9_${patente}.pdf`);
+      }
+    }
+  </script>
 </body>
 </html>
