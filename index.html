@@ -14,10 +14,10 @@
     .logo-os9 { height: 50px; }
     label { display: block; margin-top: 0.75rem; font-weight: bold; }
     input[type="text"], input[type="number"], select { width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+    .equipment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 10px; }
+    .companion { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background: #e8f5e9; border-radius: 0.5rem; }
     button { display: block; margin: 1.5rem auto; padding: 0.75rem 1.5rem; background-color: #0f9d58; color: white; font-size: 1rem; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background-color: #0c7d44; }
-    .equipment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .companion { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; background: #e8f5e9; border-radius: 0.5rem; }
   </style>
 </head>
 <body>
@@ -29,7 +29,8 @@
   <!-- Formulario de Salida -->
   <form id="departure-form">
     <label>Sección:</label>
-    <select id="section">
+    <select id="section" required>
+      <option value="" disabled selected>Seleccionar sección</option>
       <option value="Análisis">Análisis</option>
       <option value="Artefactos Explosivos">Artefactos Explosivos</option>
       <option value="Crimen Organizado">Crimen Organizado</option>
@@ -37,17 +38,20 @@
       <option value="Económicos">Económicos</option>
       <option value="Derechos Humanos">Derechos Humanos</option>
     </select>
+
     <label>Patente vehículo:</label>
     <input type="text" id="patente-departure" required>
+
     <label>Kilometraje de salida:</label>
     <input type="number" id="km-departure" required>
 
-    <label>Jefe de Patrulla - Nombre:</label>
+    <label>Nombre jefe de patrulla:</label>
     <input type="text" id="jefe-nombre" required>
-    <label>Jefe de Patrulla - Teléfono:</label>
+
+    <label>Teléfono jefe de patrulla:</label>
     <input type="text" id="jefe-telefono" required>
 
-    <label>Equipo Jefe de Patrulla:</label>
+    <label>Cargo jefe de patrulla:</label>
     <div class="equipment-grid">
       <input type="text" id="jefe-calzo" placeholder="Calzo" required>
       <input type="text" id="jefe-armamento" placeholder="Armamento" required>
@@ -58,6 +62,7 @@
     </div>
 
     <div id="companions-container"></div>
+
     <button type="button" id="add-companion">Agregar Acompañante</button>
     <button type="button" id="register-departure">Registrar Salida</button>
   </form>
@@ -67,8 +72,10 @@
     <h2>Regreso de Patrulla</h2>
     <label>Patente vehículo:</label>
     <input type="text" id="patente-return" disabled>
+
     <label>Kilometraje de regreso:</label>
     <input type="number" id="km-return" required>
+
     <button type="button" id="register-return">Registrar Regreso</button>
   </form>
 
@@ -90,6 +97,7 @@
       div.innerHTML = `
         <label>Acompañante ${companionCount} - Nombre:</label>
         <input type="text" id="comp-name-${companionCount}" required>
+        <label>Cargo acompañante ${companionCount}:</label>
         <div class="equipment-grid">
           <input type="text" id="comp-${companionCount}-calzo" placeholder="Calzo" required>
           <input type="text" id="comp-${companionCount}-armamento" placeholder="Armamento" required>
@@ -165,7 +173,4 @@
         const compEq = [
           document.getElementById(`comp-${i}-calzo`).value,
           document.getElementById(`comp-${i}-armamento`).value,
-          document.getElementById(`comp-${i}-chaleco`).value,
-          document.getElementById(`comp-${i}-casco`).value,
-          document.getElementById(`comp-${i}-portatil`).value,
           document.getElementById(`comp-${
