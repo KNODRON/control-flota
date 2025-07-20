@@ -358,6 +358,9 @@
             };
 
             console.log('Departure Data:', departureData);
+            console.log('Jefe Equipment Data (after collection):', jefeEquipment); // Added log
+            console.log('Acompañantes Data (after collection):', acompanantes); // Added log
+
 
             showMessageBox('¡Salida registrada exitosamente!');
             console.log('Message box shown.');
@@ -457,7 +460,7 @@
 
             // --- Equipment Table Headers ---
             // Adjusted column widths to better fit content and match the provided PDF's spacing
-            const columnWidths = [30, 60, 30, 30, 30, 30, 30]; 
+            const columnWidths = [30, 60, 40, 40, 40, 40, 40]; // Increased width for equipment columns
             const tableHeaders = ["CALZO", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil", "Cámara"];
             const startX = marginX;
             let currentX = startX;
@@ -483,10 +486,10 @@
                 departureData.jefeEquipment.camCorporal
             ];
 
-            console.log('Jefe Row Data for PDF:', jefeRow); // Log data before printing
+            console.log('Jefe Row Data for PDF (before drawing):', jefeRow); // Log data before printing
 
             jefeRow.forEach((data, i) => {
-                // For data cells, align left within their column, not centered
+                // For data cells, align left within their column
                 doc.text(data, currentX, y); 
                 currentX += columnWidths[i];
             });
@@ -504,10 +507,10 @@
                     acompanante.equipment.portatil,
                     acompanante.equipment.camCorporal
                 ];
-                console.log(`Acompañante ${index + 1} Row Data for PDF:`, acompananteRow); // Log data before printing
+                console.log(`Acompañante ${index + 1} Row Data for PDF (before drawing):`, acompananteRow); // Log data before printing
 
                 acompananteRow.forEach((data, i) => {
-                    // For data cells, align left within their column, not centered
+                    // For data cells, align left within their column
                     doc.text(data, currentX, y); 
                     currentX += columnWidths[i];
                 });
@@ -518,21 +521,22 @@
             const footerText = departureData.nombreJefe;
             const footerSubText = 'JEFE DE PATRULLA';
             const footerY = pageHeight - 25; // Position from bottom
+            const rightEdge = pageWidth - marginX;
 
             doc.setFontSize(10);
             const footerTextWidth = doc.getTextWidth(footerText);
             doc.setFontSize(8);
             const footerSubTextWidth = doc.getTextWidth(footerSubText);
 
-            // Calculate the X position for the right-aligned block
-            const rightAlignedBlockX = pageWidth - marginX;
+            // Calculate x-position for the main text (right-aligned)
+            const footerTextX = rightEdge - footerTextWidth;
+            // Calculate x-position for the subtext, centered relative to the main text's width, then shifted to be right-aligned with the block
+            const footerSubTextX = footerTextX + (footerTextWidth / 2) - (footerSubTextWidth / 2);
 
-            // Calculate the X position for centering each line within its own width,
-            // then offset it to be right-aligned with the block.
             doc.setFontSize(10);
-            doc.text(footerText, rightAlignedBlockX - footerTextWidth, footerY); // Right align the text
+            doc.text(footerText, footerTextX, footerY);
             doc.setFontSize(8);
-            doc.text(footerSubText, rightAlignedBlockX - footerSubTextWidth, footerY + 5); // Right align the text
+            doc.text(footerSubText, footerSubTextX, footerY + 5);
 
 
             // Save the PDF
