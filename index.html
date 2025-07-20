@@ -57,7 +57,7 @@
           <label for="seccion">Sección</label>
           <select id="seccion" required>
             <option value="" disabled selected>Seleccione</option>
-            <option>Análisis</option>
+            <option>Análisis Criminal</option>
             <option>Artefactos Explosivos</option>
             <option>Crimen Organizado</option>
             <option>Muertes Violentas</option>
@@ -77,15 +77,15 @@
         </div>
         <div>
           <label for="telefonoJefe">Teléfono Jefe de Patrulla</label>
-          <input id="telefonoJefe" type="tel" placeholder="+56912345678" required>
+          <input id="telefonoJefe" type="tel" placeholder="912345678" required>
         </div>
       </div>
       <div>
         <label for="nombreJefe">Nombre Jefe de Patrulla</label>
-        <input id="nombreJefe" type="text" placeholder="Sgto. 2 Gabriela Albino" required>
+        <input id="nombreJefe" type="text" placeholder="Sgto. 1ro. ..." required>
       </div>
 
-      <p class="section-title">Equipo Jefe de Patrulla</p>
+      <p class="section-title">Cargo Jefe de Patrulla</p>
       <div class="grid-2">
         <input id="calzoJefe" type="text" placeholder="Calzo">
         <input id="armamentoJefe" type="text" placeholder="Pistola">
@@ -155,7 +155,7 @@
       y+=10;doc.setFontSize(10);
       const lines=[`Sección: ${data.seccion}`,`Patente: ${data.patente}`,`Fecha/Hora Salida: ${formatDateTime(new Date(data.fechaRaw))}`,`Km Salida: ${fmtKm(data.km)}`,`Teléfono JP: ${data.telefono}`];
       lines.forEach(l=>{doc.text(l,15,y);y+=6;});y+=6;
-      const head=[['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
+      const head=[['CALZO','NOMBRE','ARMAMENTO','CHALECO','CASCO','PORTATIL','CAM. CORPORAL']];
       const body=[[data.equipo.calzo,data.jefe,data.equipo.armamento,data.equipo.chaleco,data.equipo.casco,data.equipo.portatil,data.equipo.camCorporal]];
       data.acompanantes.forEach(ac=>body.push([ac.equipo.calzo,ac.nombre,ac.equipo.armamento,ac.equipo.chaleco,ac.equipo.casco,ac.equipo.portatil,ac.equipo.camCorporal]));
       doc.autoTable({startY:y,head,body,theme:'grid',styles:{fontSize:9},headStyles:{fillColor:[0,81,49]}});
