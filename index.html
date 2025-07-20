@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Salida OS9</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +12,7 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
   <style>
-    body { font-family: 'Inter', sans-serif; background: #f5f5f5; margin:0; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; margin: 0; }
     .card { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; margin: 2rem auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .header h1 { font-size: 1.25rem; font-weight: 600; color: #005131; }
@@ -22,9 +22,7 @@
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .btn { width: 100%; text-align: center; padding: 0.75rem; margin-top: 1rem; border-radius: 5px; font-weight: 500; cursor: pointer; }
     .btn-primary { background: #005131; color: #fff; border: none; }
-    .btn-primary:active { background: #004022; }
     .btn-secondary { background: #edf2f7; color: #2d3748; border: 1px solid #ccc; }
-    .btn-secondary:active { background: #e2e8f0; }
     .section-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: #005131; }
     .companion { border-top: 1px solid #e0e0e0; padding-top: 1rem; margin-top: 1rem; }
     .message-box { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; visibility: hidden; }
@@ -33,11 +31,11 @@
   </style>
 </head>
 <body>
-  <!-- Logo oculto para PDF -->
+  <!-- Hidden logo for PDF -->
   <img id="logoPdf" src="logo_os9.png" style="display:none;" alt="Logo OS9">
 
-  <!-- Modal de mensajes -->
-  <div class="message-box" id="messageBox">
+  <!-- Message modal -->
+  <div id="messageBox" class="message-box">
     <div class="message-content">
       <p id="messageText"></p>
       <button onclick="closeMessage()" class="btn btn-primary">OK</button>
@@ -45,20 +43,18 @@
   </div>
 
   <div class="card">
-    <!-- Cabecera -->
     <div class="header">
       <h1>Salida OS9</h1>
       <img src="logo_os9.png" alt="Logo OS9" class="logo">
     </div>
 
-    <!-- Registro de Salida -->
     <p class="section-title">Registro de Salida de Patrulla</p>
     <form id="departureForm">
       <div class="grid-2">
         <div>
-          <label>Sección</label>
+          <label for="seccion">Sección</label>
           <select id="seccion" required>
-            <option disabled selected>Seleccione</option>
+            <option value="" disabled selected>Seleccione</option>
             <option>Análisis</option>
             <option>Artefactos Explosivos</option>
             <option>Crimen Organizado</option>
@@ -68,24 +64,25 @@
           </select>
         </div>
         <div>
-          <label>Patente del Vehículo</label>
+          <label for="patenteSalida">Patente del Vehículo</label>
           <input id="patenteSalida" type="text" class="uppercase" placeholder="ABCD12" required>
         </div>
       </div>
       <div class="grid-2">
         <div>
-          <label>Kilometraje de Salida</label>
+          <label for="kmSalida">Kilometraje de Salida</label>
           <input id="kmSalida" type="number" min="0" placeholder="123456" required>
         </div>
         <div>
-          <label>Teléfono Jefe de Patrulla</label>
+          <label for="telefonoJefe">Teléfono Jefe de Patrulla</label>
           <input id="telefonoJefe" type="tel" placeholder="+56912345678" required>
         </div>
       </div>
       <div>
-        <label>Nombre Jefe de Patrulla</label>
+        <label for="nombreJefe">Nombre Jefe de Patrulla</label>
         <input id="nombreJefe" type="text" placeholder="Sgto. 2 Gabriela Albino" required>
       </div>
+
       <p class="section-title">Equipo Jefe de Patrulla</p>
       <div class="grid-2">
         <input id="calzoJefe" type="text" placeholder="Calzo">
@@ -103,15 +100,14 @@
 
     <hr class="my-6">
 
-    <!-- Registro de Regreso -->
     <p class="section-title">Registro de Regreso de Patrulla</p>
     <form id="returnForm">
       <div>
-        <label>Patente del Vehículo</label>
+        <label for="patenteRegreso">Patente del Vehículo (cargar datos)</label>
         <input id="patenteRegreso" type="text" placeholder="ABCD12">
-      </\/div>
+      <//div>
       <div>
-        <label>Kilometraje de Regreso</label>
+        <label for="kmRegreso">Kilometraje de Regreso</label>
         <input id="kmRegreso" type="number" min="0" placeholder="123500" required>
       </div>
       <button type="submit" class="btn btn-primary">Registrar Regreso</button>
@@ -119,12 +115,12 @@
   </div>
 
   <script>
-    // Variables globales
-    let departureData = null,
-        acompCount = 0,
-        MAX_ACOMP = 5;
+    // Variables
+    let departureData = null;
+    let companionCount = 0;
+    const MAX_COMPANIONS = 5;
 
-    // Funciones modal
+    // Modal functions
     function showMessage(msg) {
       document.getElementById('messageText').innerText = msg;
       document.getElementById('messageBox').classList.add('active');
@@ -133,16 +129,20 @@
       document.getElementById('messageBox').classList.remove('active');
     }
 
-    // Añadir acompañante
+    // Add companion
     document.getElementById('addAcompananteBtn').addEventListener('click', () => {
-      if (acompCount >= MAX_ACOMP) return showMessage('Máximo 5 acompañantes.');
-      const idx = acompCount++;
+      if (companionCount >= MAX_COMPANIONS) {
+        showMessage('Máximo 5 acompañantes.');
+        return;
+      }
+      const idx = companionCount++;
+      const container = document.getElementById('acompanantesContainer');
       const div = document.createElement('div');
       div.className = 'companion';
       div.innerHTML = `
-        <label>Acompañante ${idx+1} - Nombre</label>
-        <input id="nombreAcomp${idx}" type="text" class="w-full p-2 border rounded mb-2">
-        <p class="section-title">Equipo</p>
+        <label for="nombreAcomp${idx}">Acompañante ${idx+1} - Nombre</label>
+        <input id="nombreAcomp${idx}" type="text" class="w-full mb-2 p-2 border rounded">
+        <p class="section-title">Equipo Acompañante</p>
         <div class="grid-2">
           <input id="calzoAcomp${idx}" type="text" placeholder="Calzo">
           <input id="armamentoAcomp${idx}" type="text" placeholder="Pistola">
@@ -151,117 +151,114 @@
           <input id="portatilAcomp${idx}" type="text" placeholder="Portátil">
           <input id="camAcomp${idx}" type="text" placeholder="Cámara">
         </div>`;
-      document.getElementById('acompanantesContainer').appendChild(div);
+      container.appendChild(div);
     });
 
-    // Formatear firma
-    function formatDrawerName(name) {
+    // Format name for signature
+    function formatName(name) {
       return name.replace(/^Sgto\.?/i, 'Sgto.');
     }
 
-    // Generar PDF de Salida
+    // Generate Departure PDF
     function genDepPDF(data) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-      const w = doc.internal.pageSize.getWidth();
-      const h = doc.internal.pageSize.getHeight();
+      const pageW = doc.internal.pageSize.getWidth();
+      const pageH = doc.internal.pageSize.getHeight();
 
-      // Guardar en memoria local
+      // Save in localStorage
       localStorage.setItem('departure_' + data.patente, JSON.stringify(data));
 
-      // Logo redondo
-      const logo = document.getElementById('logoPdf');
-      doc.addImage(logo, 'PNG', w - 30, 10, 20, 20);
+      // Logo
+      const logoImg = document.getElementById('logoPdf');
+      doc.addImage(logoImg, 'PNG', pageW - 30, 10, 20, 20);
 
       let y = 30;
       doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 15, y);
       y += 10;
       doc.setFontSize(10);
-      ['Sección','Patente','Fecha/Hora Salida','Km Salida','Teléfono JP']
-        .forEach((l,i) => {
-          const v = [data.seccion, data.patente, data.fecha, data.km, data.telefono][i];
-          doc.text(`${l}: ${v}`, 15, y); y += 6;
-        });
+      ['Sección', 'Patente', 'Fecha/Hora Salida', 'Km Salida', 'Teléfono JP'].forEach((label, i) => {
+        const values = [data.seccion, data.patente, data.fecha, data.km, data.telefono];
+        doc.text(`${label}: ${values[i]}`, 15, y);
+        y += 6;
+      });
       y += 6;
 
-      // Tabla
+      // Table
       const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
       const body = [[
-        data.equipo.calzo||'', data.jefe||'', data.equipo.armamento||'', data.equipo.chaleco||'',
-        data.equipo.casco||'', data.equipo.portatil||'', data.equipo.camCorporal||''
+        data.equipo.calzo, data.jefe, data.equipo.armamento,
+        data.equipo.chaleco, data.equipo.casco,
+        data.equipo.portatil, data.equipo.camCorporal
       ]];
-      data.acompanantes.forEach(ac => body.push([
-        ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'',
-        ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||''
-      ]));
+      data.acompanantes.forEach(ac => {
+        body.push([
+          ac.equipo.calzo, ac.nombre, ac.equipo.armamento,
+          ac.equipo.chaleco, ac.equipo.casco,
+          ac.equipo.portatil, ac.equipo.camCorporal
+        ]);
+      });
       doc.autoTable({ startY: y, head, body, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [0,81,49] } });
 
-      // Firma centrada a la derecha
-      const sigName = formatDrawerName(data.jefe).toUpperCase();
-      const sigX = w - 15;
-      const sigY = h - 20;
+      // Signature (centered at right)
+      const sigName = formatName(data.jefe).toUpperCase();
+      const sigX = pageW - 15;
+      const sigY = pageH - 20;
       doc.setFontSize(11).text(sigName, sigX, sigY, { align: 'center' });
       doc.setFontSize(9).text('JEFE DE PATRULLA', sigX, sigY + 6, { align: 'center' });
 
-      doc.save(`Salida_OS9_${data.patente}_${data.fecha.replace(/[/:, ]/g,'-')}.pdf`);
+      doc.save(`Salida_OS9_${data.patente}_${data.fecha.replace(/[/,: ]/g,'-')}.pdf`);
     }
 
-    // On patent change, load departure data
-    document.getElementById('patenteRegreso').addEventListener('change', e => {
-      const pat = e.target.value.toUpperCase();
-      const stored = localStorage.getItem('departure_' + pat);
-      if (stored) {
-        departureData = JSON.parse(stored);
-        showMessage('Datos de salida cargados para ' + pat);
-      } else {
-        showMessage('No hay datos de salida para la patente ' + pat);
-      }
-    });
-
-    // Generar PDF de Regreso
+    // Generate Return PDF
     function genRetPDF(dep, ret) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-      const w = doc.internal.pageSize.getWidth();
-      const h = doc.internal.pageSize.getHeight();
+      const pageW = doc.internal.pageSize.getWidth();
+      const pageH = doc.internal.pageSize.getHeight();
 
-      const logo = document.getElementById('logoPdf');
-      doc.addImage(logo, 'PNG', w - 30, 10, 20, 20);
+      // Logo
+      const logoImg = document.getElementById('logoPdf');
+      doc.addImage(logoImg, 'PNG', pageW - 30, 10, 20, 20);
 
       let y = 30;
       doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 15, y);
       y += 10;
       doc.setFontSize(10);
-      ['Sección','Patente','Fecha/Hora Salida','Km Salida','Fecha/Hora Regreso','Km Regreso','Teléfono JP']
-        .forEach((l,i) => {
-          const v = [dep.seccion, dep.patente, dep.fecha, dep.km, ret.fecha, ret.km, dep.telefono][i];
-          doc.text(`${l}: ${v}`, 15, y); y += 6;
+      ['Sección', 'Patente', 'Fecha/Hora Salida', 'Km Salida', 'Fecha/Hora Regreso', 'Km Regreso', 'Teléfono JP']
+        .forEach((label, i) => {
+          const values = [dep.seccion, dep.patente, dep.fecha, dep.km, ret.fecha, ret.km, dep.telefono];
+          doc.text(`${label}: ${values[i]}`, 15, y);
+          y += 6;
         });
       y += 6;
 
       const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
       const body = [[
-        dep.equipo.calzo||'', dep.jefe||'', dep.equipo.armamento||'', dep.equipo.chaleco||'',
-        dep.equipo.casco||'', dep.equipo.portatil||'', dep.equipo.camCorporal||''
+        dep.equipo.calzo, dep.jefe, dep.equipo.armamento,
+        dep.equipo.chaleco, dep.equipo.casco,
+        dep.equipo.portatil, dep.equipo.camCorporal
       ]];
-      dep.acompanantes.forEach(ac => body.push([
-        ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'',
-        ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||''
-      ]));
+      dep.acompanantes.forEach(ac => {
+        body.push([
+          ac.equipo.calzo, ac.nombre, ac.equipo.armamento,
+          ac.equipo.chaleco, ac.equipo.casco,
+          ac.equipo.portatil, ac.equipo.camCorporal
+        ]);
+      });
       doc.autoTable({ startY: y, head, body, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [0,81,49] } });
 
-      const sigNameR = formatDrawerName(dep.jefe).toUpperCase();
-      const sigX2 = w - 15;
-      const sigY2 = h - 20;
-      doc.setFontSize(11).text(sigNameR, sigX2, sigY2, { align: 'center' });
-      doc.setFontSize(9).text('JEFE DE PATRULLA', sigX2, sigY2 + 6, { align: 'center' });
-
-      doc.save(`Regreso_OS9_${dep.patente}_${ret.fecha.replace(/[/:, ]/g,'-')}.pdf`);
-      // Borrar memoria
+      // Signature and remove memory
+      const sigName = formatName(dep.jefe).toUpperCase();
+      const sigX = pageW - 15;
+      const sigY = pageH - 20;
+      doc.setFontSize(11).text(sigName, sigX, sigY, { align: 'center' });
+      doc.setFontSize(9).text('JEFE DE PATRULLA', sigX, sigY + 6, { align: 'center' });
+      doc.save(`Regreso_OS9_${dep.patente}_${ret.fecha.replace(/[/,: ]/g,'-')}.pdf`);
       localStorage.removeItem('departure_' + dep.patente);
     }
 
-    // Control de formularios
+    // Departure form
     document.getElementById('departureForm').addEventListener('submit', e => {
       e.preventDefault();
       const data = {
@@ -281,7 +278,7 @@
         },
         acompanantes: []
       };
-      for (let i = 0; i < acompCount; i++) {
+      for (let i = 0; i < companionCount; i++) {
         data.acompanantes.push({
           nombre: document.getElementById(`nombreAcomp${i}`).value,
           equipo: {
@@ -289,4 +286,41 @@
             armamento: document.getElementById(`armamentoAcomp${i}`).value,
             chaleco: document.getElementById(`chalecoAcomp${i}`).value,
             casco: document.getElementById(`cascoAcomp${i}`).value,
-            portatil: document.getElementById(`portatilAcomp${
+            portatil: document.getElementById(`portatilAcomp${i}`).value,
+            camCorporal: document.getElementById(`camAcomp${i}`).value
+          }
+        });
+      }
+      departureData = data;
+      genDepPDF(data);
+      showMessage('Salida registrada y PDF generado');
+      // prefill return patent
+      document.getElementById('patenteRegreso').value = data.patente;
+    });
+
+    // Prefill departure data on return
+    document.getElementById('patenteRegreso').addEventListener('change', e => {
+      const pat = e.target.value.toUpperCase();
+      const stored = localStorage.getItem('departure_' + pat);
+      if (stored) {
+        departureData = JSON.parse(stored);
+        showMessage('Datos de salida cargados para ' + pat);
+      } else {
+        showMessage('No se encontraron datos de salida para ' + pat);
+      }
+    });
+
+    // Return form
+    document.getElementById('returnForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!departureData) return showMessage('Primero registre la salida.');
+      const kmSal = parseInt(departureData.km, 10);
+      const kmReg = parseInt(document.getElementById('kmRegreso').value, 10);
+      if (kmReg <= kmSal) return showMessage('El km de regreso debe ser mayor al de salida.');
+      const ret = { fecha: new Date().toLocaleString('es-CL'), km: kmReg };
+      genRetPDF(departureData, ret);
+      showMessage('Regreso registrado y PDF generado');
+    });
+  </script>
+</body>
+</html>
