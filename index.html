@@ -122,7 +122,7 @@
         <!-- Header -->
         <header class="flex items-center justify-between mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Salida OS9</h1>
-            <img src="http://googleusercontent.com/file_content/3" alt="Logo OS9" class="logo">
+            <img src="https://web.whatsapp.com/" alt="Logo OS9" class="logo">
         </header>
 
         <!-- Message Box for Alerts -->
@@ -137,7 +137,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div class="input-group">
                     <label for="seccion" class="block text-gray-700 text-sm font-medium mb-1">Sección:</label>
-                    <select id="seccion" class="input-field" required>
+                    <select id="seccion" class="input-field">
                         <option value="">Seleccione una sección</option>
                         <option value="Análisis">Análisis</option>
                         <option value="Artefactos Explosivos">Artefactos Explosivos</option>
@@ -149,51 +149,51 @@
                 </div>
                 <div class="input-group">
                     <label for="patenteSalida" class="block text-gray-700 text-sm font-medium mb-1">Patente del Vehículo:</label>
-                    <input type="text" id="patenteSalida" class="input-field uppercase" placeholder="Ej: ABCD12" required>
+                    <input type="text" id="patenteSalida" class="input-field uppercase" placeholder="Ej: ABCD12">
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div class="input-group">
                     <label for="kilometrajeSalida" class="block text-gray-700 text-sm font-medium mb-1">Kilometraje de Salida:</label>
-                    <input type="number" id="kilometrajeSalida" class="input-field" placeholder="Ej: 123456" required min="0">
+                    <input type="number" id="kilometrajeSalida" class="input-field" placeholder="Ej: 123456" min="0">
                 </div>
                 <div class="input-group">
-                    <label for="telefonoJefe" class="block text-gray-700 text-sm font-medium mb-1">Teléfono del Jefe de Patrulla:</label>
-                    <input type="tel" id="telefonoJefe" class="input-field" placeholder="Ej: +56912345678" required>
+                    <label for="telefonoJefe" class="block text-gray-700 text-sm font-medium mb-1">Teléfono Jefe de Patrulla:</label>
+                    <input type="tel" id="telefonoJefe" class="input-field" placeholder="Ej: 912345678">
                 </div>
             </div>
 
             <div class="input-group mb-4">
                 <label for="nombreJefe" class="block text-gray-700 text-sm font-medium mb-1">Nombre del Jefe de Patrulla:</label>
-                <input type="text" id="nombreJefe" class="input-field" placeholder="Ej: Sgto 2 Juan Jimenez" required>
+                <input type="text" id="nombreJefe" class="input-field" placeholder="Ej: Tte. Francisco Pérez">
             </div>
 
-            <h3 class="text-lg font-semibold text-gray-800 mb-3">Equipo del Jefe de Patrulla:</h3>
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">Cargo Jefe de Patrulla:</h3>
             <div class="equipment-group">
                 <div class="input-group">
                     <label for="calzoJefe" class="block text-gray-700 text-sm font-medium mb-1">Calzo:</label>
-                    <input type="text" id="calzoJefe" class="input-field" placeholder="N° Serie/Estado">
+                    <input type="text" id="calzoJefe" class="input-field" placeholder="N° Calzo">
                 </div>
                 <div class="input-group">
                     <label for="armamentoJefe" class="block text-gray-700 text-sm font-medium mb-1">Armamento:</label>
-                    <input type="text" id="armamentoJefe" class="input-field" placeholder="N° Serie/Modelo">
+                    <input type="text" id="armamentoJefe" class="input-field" placeholder="N° Serie">
                 </div>
                 <div class="input-group">
                     <label for="chalecoJefe" class="block text-gray-700 text-sm font-medium mb-1">Chaleco:</label>
-                    <input type="text" id="chalecoJefe" class="input-field" placeholder="N° Serie/Talla">
+                    <input type="text" id="chalecoJefe" class="input-field" placeholder="N° Serie">
                 </div>
                 <div class="input-group">
                     <label for="cascoJefe" class="block text-gray-700 text-sm font-medium mb-1">Casco:</label>
-                    <input type="text" id="cascoJefe" class="input-field" placeholder="N° Serie/Talla">
+                    <input type="text" id="cascoJefe" class="input-field" placeholder="N° Serie">
                 </div>
                 <div class="input-group">
                     <label for="portatilJefe" class="block text-gray-700 text-sm font-medium mb-1">Portátil:</label>
-                    <input type="text" id="portatilJefe" class="input-field" placeholder="Modelo/N° Inventario">
+                    <input type="text" id="portatilJefe" class="input-field" placeholder="N°">
                 </div>
                 <div class="input-group">
                     <label for="camCorporalJefe" class="block text-gray-700 text-sm font-medium mb-1">Cámara Corporal:</label>
-                    <input type="text" id="camCorporalJefe" class="input-field" placeholder="Modelo/N° Serie">
+                    <input type="text" id="camCorporalJefe" class="input-field" placeholder="N°">
                 </div>
             </div>
 
@@ -268,32 +268,32 @@
                 <h3 class="text-lg font-semibold text-gray-800 mb-3">Acompañante ${index + 1}:</h3>
                 <div class="input-group mb-4">
                     <label for="nombreAcompanante${index}" class="block text-gray-700 text-sm font-medium mb-1">Nombre del Acompañante:</label>
-                    <input type="text" id="nombreAcompanante${index}" class="input-field" placeholder="Ej: Cabo 1 Sofia Perez" required>
+                    <input type="text" id="nombreAcompanante${index}" class="input-field" placeholder="Ej: Cabo 1 Sofia Perez">
                 </div>
                 <div class="equipment-group">
                     <div class="input-group">
                         <label for="calzoAcompanante${index}" class="block text-gray-700 text-sm font-medium mb-1">Calzo:</label>
-                        <input type="text" id="calzoAcompanante${index}" class="input-field" placeholder="N° Serie/Estado">
+                        <input type="text" id="calzoAcompanante${index}" class="input-field" placeholder="N° Calzo">
                     </div>
                     <div class="input-group">
                         <label for="armamentoAcompanante${index}" class="block text-gray-700 text-sm font-medium mb-1">Armamento:</label>
-                        <input type="text" id="armamentoAcompanante${index}" class="input-field" placeholder="N° Serie/Modelo">
+                        <input type="text" id="armamentoAcompanante${index}" class="input-field" placeholder="N° Serie">
                     </div>
                     <div class="input-group">
                         <label for="chalecoAcompanante${index}" class="block text-gray-700 text-sm font-medium mb-1">Chaleco:</label>
-                        <input type="text" id="chalecoAcompanante${index}" class="input-field" placeholder="N° Serie/Talla">
+                        <input type="text" id="chalecoAcompanante${index}" class="input-field" placeholder="N° Serie">
                     </div>
                     <div class="input-group">
                         <label for="cascoAcompanante${index}" class="block text-gray-700 text-sm font-medium mb-1">Casco:</label>
-                        <input type="text" id="cascoAcompanante${index}" class="input-field" placeholder="N° Serie/Talla">
+                        <input type="text" id="cascoAcompanante${index}" class="input-field" placeholder="N° Serie">
                     </div>
                     <div class="input-group">
                         <label for="portatilAcompanante${index}" class="block text-gray-700 text-sm font-medium mb-1">Portátil:</label>
-                        <input type="text" id="portatilAcompanante${index}" class="input-field" placeholder="Modelo/N° Inventario">
+                        <input type="text" id="portatilAcompanante${index}" class="input-field" placeholder="N°">
                     </div>
                     <div class="input-group">
                         <label for="camCorporalAcompanante${index}" class="block text-gray-700 text-sm font-medium mb-1">Cámara Corporal:</label>
-                        <input type="text" id="camCorporalAcompanante${index}" class="input-field" placeholder="Modelo/N° Serie">
+                        <input type="text" id="camCorporalAcompanante${index}" class="input-field" placeholder="N°">
                     </div>
                 </div>
             `;
@@ -325,22 +325,8 @@
         departureForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            // Explicit validation for required fields
-            const requiredFields = [
-                { id: 'seccion', name: 'Sección' },
-                { id: 'patenteSalida', name: 'Patente del Vehículo' },
-                { id: 'kilometrajeSalida', name: 'Kilometraje de Salida' },
-                { id: 'telefonoJefe', name: 'Teléfono del Jefe de Patrulla' },
-                { id: 'nombreJefe', name: 'Nombre del Jefe de Patrulla' }
-            ];
-
-            for (const field of requiredFields) {
-                const inputElement = document.getElementById(field.id);
-                if (!inputElement.value.trim()) {
-                    showMessageBox(`Por favor, complete el campo: ${field.name}`);
-                    return;
-                }
-            }
+            // No explicit validation for required fields, allowing partial submission
+            // The 'required' attribute has been removed from HTML inputs.
 
             // Collect Jefe de Patrulla data
             const jefeEquipment = getEquipmentData('jefe');
@@ -349,10 +335,7 @@
             // Collect Acompañantes data
             for (let i = 0; i < acompananteCount; i++) {
                 const nombre = document.getElementById(`nombreAcompanante${i}`).value;
-                if (!nombre.trim()) {
-                    showMessageBox(`Por favor, ingrese el nombre del acompañante ${i + 1}.`);
-                    return;
-                }
+                // No 'required' validation for companion names either
                 const equipment = {
                     calzo: document.getElementById(`calzoAcompanante${i}`).value,
                     armamento: document.getElementById(`armamentoAcompanante${i}`).value,
@@ -393,6 +376,7 @@
                 return;
             }
 
+            // These validations remain as they are critical for the return logic
             if (patenteSalidaInput.value.toUpperCase() !== patenteRegresoInput.value.toUpperCase()) {
                 showMessageBox('La patente de regreso debe coincidir con la patente de salida.');
                 return;
