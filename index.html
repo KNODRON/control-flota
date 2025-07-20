@@ -14,11 +14,7 @@
   <link rel="manifest" href="/manifest.json">
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; }
-    .message-box {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
-      visibility: hidden;
-    }
+    .message-box { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; visibility: hidden; }
     .message-box.active { visibility: visible; }
   </style>
 </head>
@@ -41,8 +37,61 @@
     <div class="mb-8">
       <h2 class="text-xl font-semibold text-gray-700 mb-4">Registro de Salida de Patrulla</h2>
       <form id="departureForm" class="space-y-4">
-        <!-- Campos de salida -->
-        <!-- ... (igual que antes) ... -->
+        <!-- Sección y Patente -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-gray-600 mb-1">Sección</label>
+            <select id="seccion" class="w-full p-2 border rounded" required>
+              <option value="" disabled selected>Seleccione</option>
+              <option>Análisis</option>
+              <option>Artefactos Explosivos</option>
+              <option>Crimen Organizado</option>
+              <option>Muertes Violentas</option>
+              <option>Económicos</option>
+              <option>Derechos Humanos</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-gray-600 mb-1">Patente del Vehículo</label>
+            <input id="patenteSalida" type="text" class="w-full p-2 border rounded uppercase" placeholder="ABCD12" required>
+          </div>
+        </div>
+        
+        <!-- Kilometraje y Teléfono -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-gray-600 mb-1">Kilometraje de Salida</label>
+            <input id="kmSalida" type="number" min="0" class="w-full p-2 border rounded" placeholder="123456" required>
+          </div>
+          <div>
+            <label class="block text-gray-600 mb-1">Teléfono Jefe de Patrulla</label>
+            <input id="telefonoJefe" type="tel" class="w-full p-2 border rounded" placeholder="+56912345678" required>
+          </div>
+        </div>
+
+        <!-- Nombre del Jefe -->
+        <div>
+          <label class="block text-gray-600 mb-1">Nombre Jefe de Patrulla</label>
+          <input id="nombreJefe" type="text" class="w-full p-2 border rounded" placeholder="Sgto 2 Juan Jimenez" required>
+        </div>
+
+        <!-- Equipo Jefe -->
+        <h3 class="text-lg font-medium text-gray-700">Equipo Jefe de Patrulla</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input id="calzoJefe" type="text" class="p-2 border rounded" placeholder="Calzo: Serie/Estado" required>
+          <input id="armamentoJefe" type="text" class="p-2 border rounded" placeholder="Armamento: Serie/Modelo" required>
+          <input id="chalecoJefe" type="text" class="p-2 border rounded" placeholder="Chaleco: Serie/Talla" required>
+          <input id="cascoJefe" type="text" class="p-2 border rounded" placeholder="Casco: Serie/Talla" required>
+          <input id="portatilJefe" type="text" class="p-2 border rounded" placeholder="Portátil: Modelo/Inventario" required>
+          <input id="camCorporalJefe" type="text" class="p-2 border rounded" placeholder="Cámara: Modelo/Serie" required>
+        </div>
+
+        <!-- Acompañantes Dinámicos -->
+        <div id="acompanantesContainer" class="space-y-4"></div>
+        <button type="button" id="addAcompananteBtn" class="w-full bg-gray-200 text-gray-800 p-2 rounded hover:bg-gray-300">Agregar Acompañante</button>
+
+        <!-- Registrar Salida -->
+        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Registrar Salida</button>
       </form>
     </div>
 
@@ -50,16 +99,24 @@
     <div class="mb-8">
       <h2 class="text-xl font-semibold text-gray-700 mb-4">Registro de Regreso de Patrulla</h2>
       <form id="returnForm" class="space-y-4">
-        <!-- Campos de regreso -->
+        <div>
+          <label class="block text-gray-600 mb-1">Patente del Vehículo</label>
+          <input id="patenteRegreso" type="text" class="w-full p-2 border rounded uppercase" readonly required>
+        </div>
+        <div>
+          <label class="block text-gray-600 mb-1">Kilometraje de Regreso</label>
+          <input id="kmRegreso" type="number" min="0" class="w-full p-2 border rounded" placeholder="123500" required>
+        </div>
+        <button type="submit" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">Registrar Regreso</button>
       </form>
     </div>
   </div>
 
   <script>
     // Variables globales
-    let depData = null;
+    let departureData = null;
     let returnData = null;
-    let compCount = 0;
+    let acompananteCount = 0;
     const MAX_COMP = 5;
 
     // Funciones de modal
@@ -71,54 +128,143 @@
       document.getElementById('messageBox').classList.remove('active');
     }
 
-    // Generar PDF de Salida (incluye acompañantes)
+    // Crear sección de acompañante
+    document.getElementById('addAcompananteBtn').addEventListener('click', () => {
+      if (acompananteCount >= MAX_COMP) { showMessage('Máximo 5 acompañantes.'); return; }
+      const idx = acompananteCount++;
+      const div = document.createElement('div');
+      div.className = 'bg-gray-100 p-4 rounded';
+      div.innerHTML = `
+        <label class="block text-gray-700 mb-1">Acompañante ${idx+1} - Nombre</label>
+        <input id="nombreAcomp${idx}" type="text" class="w-full p-2 border rounded mb-2" placeholder="Ej: Cabo 1 Sofia Perez" required>
+        <h4 class="text-gray-700 mb-2">Equipo</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input id="calzoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Calzo" required>
+          <input id="armamentoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Armamento" required>
+          <input id="chalecoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Chaleco" required>
+          <input id="cascoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Casco" required>
+          <input id="portatilAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Portátil" required>
+          <input id="camAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Cámara" required>
+        </div>`;
+      document.getElementById('acompanantesContainer').appendChild(div);
+    });
+
+    // Generar PDF Salida
     function genDepPDF(data) {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({unit:'mm',format:'a4'});
-      let y = 20;
-      doc.setFontSize(14).text('REPORTE DE SALIDA - OS9', 105, y, {align:'center'});
-      y += 10;
+      const doc = new jsPDF({ unit:'mm', format:'a4' });
+      let y=20;
+      doc.setFontSize(14).text('REPORTE DE SALIDA - OS9', 105, y, { align:'center' }); y+=10;
       doc.setFontSize(10);
-      doc.text(`Sección: ${data.seccion}`, 15, y); y += 6;
-      doc.text(`Patente: ${data.patente}`, 15, y); y += 6;
-      doc.text(`Fecha/Hora Salida: ${data.fecha}`, 15, y); y += 6;
-      doc.text(`Km Salida: ${data.km}`, 15, y); y += 10;
-
-      // Jefe de Patrulla
-      doc.text(`Jefe: ${data.jefe}`, 15, y); y += 6;
-      doc.text(`Teléfono: ${data.telefono}`, 15, y); y += 10;
-      doc.text('Equipo Jefe:', 15, y); y += 6;
-      const eq = data.equipo;
-      ['calzo', 'armamento', 'chaleco', 'casco', 'portatil', 'camCorporal'].forEach(key => {
-        doc.text(`${key.charAt(0).toUpperCase() + key.slice(1)}: ${eq[key]}`, 20, y);
-        y += 6;
-      });
-      y += 6;
-
+      // Datos básicos
+      ['seccion','patente','fecha','km'].forEach((key, i) => {
+        const labels = { seccion: 'Sección', patente: 'Patente', fecha: 'Fecha/Hora Salida', km: 'Km Salida' };
+        doc.text(`${labels[key]}: ${data[key]}`, 15, y); y+=6;
+      }); y+=6;
+      // Jefe
+      doc.text(`Jefe: ${data.jefe}`, 15, y); y+=6;
+      doc.text(`Teléfono: ${data.telefono}`, 15, y); y+=10;
+      // Equipo Jefe
+      Object.entries(data.equipo).forEach(([k,v]) => { doc.text(`${k.charAt(0).toUpperCase()+k.slice(1)}: ${v}`, 20, y); y+=6; }); y+=6;
       // Acompañantes
-      if (data.acom && data.acom.length > 0) {
-        doc.text('Acompañantes:', 15, y); y += 6;
-        data.acom.forEach((ac, idx) => {
-          doc.text(`${idx + 1}. ${ac.nombre}`, 20, y); y += 6;
-          const acEq = ac.equipo;
-          ['calzo', 'armamento', 'chaleco', 'casco', 'portatil', 'camCorporal'].forEach(key => {
-            doc.text(`   ${key.charAt(0).toUpperCase() + key.slice(1)}: ${acEq[key]}`, 25, y);
-            y += 6;
-          });
-          y += 4;
+      if (data.acompanantes.length) {
+        doc.text('Acompañantes:', 15, y); y+=6;
+        data.acompanantes.forEach((ac, idx) => {
+          doc.text(`${idx+1}. ${ac.nombre}`, 20, y); y+=6;
+          Object.entries(ac.equipo).forEach(([k,v]) => { doc.text(`   ${k.charAt(0).toUpperCase()+k.slice(1)}: ${v}`, 25, y); y+=6; });
+          y+=4;
         });
       }
-
       doc.save(`Salida_OS9_${data.patente}_${data.fecha.replace(/[/,: ]/g,'-')}.pdf`);
     }
 
-    // Generar PDF de Regreso (igual que antes)
+    // Generar PDF Regreso
     function genRetPDF(dep, ret) {
-      // ... misma lógica que tenías para retorno, incluyendo acompañantes ...
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit:'mm', format:'a4' });
+      let y=20;
+      doc.setFontSize(14).text('REPORTE DE REGRESO - OS9', 105, y, { align:'center' }); y+=10;
+      doc.setFontSize(10);
+      // Datos básicos salida
+      ['seccion','patente','fecha','km'].forEach((key, i) => {
+        const labels = { seccion: 'Sección', patente: 'Patente', fecha: 'Fecha/Hora Salida', km: 'Km Salida' };
+        doc.text(`${labels[key]}: ${dep[key]}`, 15, y); y+=6;
+      });
+      // Datos regreso
+      ['fecha','km'].forEach((key, i) => {
+        const labels = { fecha: 'Fecha/Hora Regreso', km: 'Km Regreso' };
+        doc.text(`${labels[key]}: ${ret[key]}`, 15, y); y+=6;
+      }); y+=6;
+      // Jefe
+      doc.text(`Jefe: ${dep.jefe}`, 15, y); y+=6;
+      doc.text(`Teléfono: ${dep.telefono}`, 15, y); y+=10;
+      // Equipo Jefe
+      Object.entries(dep.equipo).forEach(([k,v]) => { doc.text(`${k.charAt(0).toUpperCase()+k.slice(1)}: ${v}`, 20, y); y+=6; }); y+=6;
+      // Acompañantes
+      if (dep.acompanantes.length) {
+        doc.text('Acompañantes:', 15, y); y+=6;
+        dep.acompanantes.forEach((ac, idx) => {
+          doc.text(`${idx+1}. ${ac.nombre}`, 20, y); y+=6;
+          Object.entries(ac.equipo).forEach(([k,v]) => { doc.text(`   ${k.charAt(0).toUpperCase()+k.slice(1)}: ${v}`, 25, y); y+=6; });
+          y+=4;
+        });
+      }
+      doc.save(`Regreso_OS9_${dep.patente}_${ret.fecha.replace(/[/,: ]/g,'-')}.pdf`);
     }
 
-    // Controladores de formulario para llamar a genDepPDF con data.acom
-    // ... aquí va tu código de recolección de datos y envío de PDF ...
+    // Manejo de envíos de formularios
+    document.getElementById('departureForm').addEventListener('submit', e => {
+      e.preventDefault();
+      // Recolectar datos de salida
+      const data = {
+        seccion: document.getElementById('seccion').value,
+        patente: document.getElementById('patenteSalida').value.toUpperCase(),
+        fecha: new Date().toLocaleString('es-CL'),
+        km: document.getElementById('kmSalida').value,
+        jefe: document.getElementById('nombreJefe').value,
+        telefono: document.getElementById('telefonoJefe').value,
+        equipo: {
+          calzo: document.getElementById('calzoJefe').value,
+          armamento: document.getElementById('armamentoJefe').value,
+          chaleco: document.getElementById('chalecoJefe').value,
+          casco: document.getElementById('cascoJefe').value,
+          portatil: document.getElementById('portatilJefe').value,
+          camCorporal: document.getElementById('camCorporalJefe').value
+        },
+        acompanantes: []
+      };
+      // Recolectar acompañantes
+      for (let i=0; i<acompananteCount; i++) {
+        data.acompanantes.push({
+          nombre: document.getElementById(`nombreAcomp${i}`).value,
+          equipo: {
+            calzo: document.getElementById(`calzoAcomp${i}`).value,
+            armamento: document.getElementById(`armamentoAcomp${i}`).value,
+            chaleco: document.getElementById(`chalecoAcomp${i}`).value,
+            casco: document.getElementById(`cascoAcomp${i}`).value,
+            portatil: document.getElementById(`portatilAcomp${i}`).value,
+            camCorporal: document.getElementById(`camAcomp${i}`).value
+          }
+        });
+      }
+      departureData = data;
+      genDepPDF(data);
+      showMessage('PDF de salida generado.');
+      document.getElementById('patenteRegreso').value = data.patente;
+    });
+
+    document.getElementById('returnForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!departureData) return showMessage('Primero registre la salida.');
+      // Recolectar datos de regreso
+      const data = {
+        fecha: new Date().toLocaleString('es-CL'),
+        km: document.getElementById('kmRegreso').value
+      };
+      returnData = data;
+      genRetPDF(departureData, data);
+      showMessage('PDF de regreso generado.');
+    });
   </script>
 </body>
 </html>
