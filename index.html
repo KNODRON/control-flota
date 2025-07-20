@@ -93,12 +93,12 @@
           <input id="kmSalida" type="number" min="0" placeholder="123456" required>
         </div>
         <div>
-          <label for="telefonoJefe">Teléfono Jefe de Patrulla</label>
+          <label for="telefonoJefe">Teléfono JP</label>
           <input id="telefonoJefe" type="tel" placeholder="912345678" required>
         </div>
       </div>
       <div>
-        <label for="nombreJefe">Nombre Jefe de Patrulla</label>
+        <label for="nombreJefe">Jefe de Patrulla</label>
         <input id="nombreJefe" type="text" placeholder="Sgto. 1ro. ..." required>
       </div>
 
@@ -109,7 +109,7 @@
         <input id="chalecoJefe" type="text" placeholder="Chaleco">
         <input id="cascoJefe" type="text" placeholder="Casco">
         <input id="portatilJefe" type="text" placeholder="Portátil">
-        <input id="camCorporalJefe" type="text" placeholder="Cámara">
+        <input id="camCorporalJefe" type="text" placeholder="Cámara Corporal">
       </div>
 
       <div id="acompanantesContainer"></div>
@@ -189,7 +189,7 @@
         `<input id="chalecoAcomp${idx}" placeholder="Chaleco">`+
         `<input id="cascoAcomp${idx}" placeholder="Casco">`+
         `<input id="portatilAcomp${idx}" placeholder="Portátil">`+
-        `<input id="camAcomp${idx}" placeholder="Cámara">`+
+        `<input id="camAcomp${idx}" placeholder="Cámara Corporal">`+
         `</div>`;
       document.getElementById('acompanantesContainer').appendChild(div);
     });
@@ -224,7 +224,7 @@
     y += 6;
 
     // Tabla de equipo
-    const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
+    const head = [['CALZO','NOMBRE','ARMAMENTO','CHALECO','CASCO','PORTATIL','CAM. CORPORAL']];
     const body = [
       [
         data.equipo.calzo,
@@ -289,7 +289,7 @@
     ].forEach(line => { doc.text(line, 15, y); y += 6; });
     y += 6;
 
-    const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
+    const head = [['CALZO','NOMBRE','ARMAMENTO','CHALECO','CASCO','PORTATIL','CAM. CORPORAL']];
     const body = [
       [
         dep.equipo.calzo,
