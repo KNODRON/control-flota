@@ -7,7 +7,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- jsPDF CDN for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -369,7 +369,7 @@
             // Enable return form and pre-fill patente
             patenteRegresoInput.value = departureData.patente;
             patenteRegresoInput.disabled = true; // Prevent changing it
-            checkPdfButtonStatus();
+            checkPdfButtonStatus(); // Check status after departure is registered
             console.log('Return form updated and PDF button status checked.');
         });
 
@@ -402,13 +402,13 @@
             showMessageBox('¡Regreso registrado exitosamente!');
             registrarRegresoBtn.disabled = true;
             registrarRegresoBtn.classList.add('disabled-btn');
-            checkPdfButtonStatus();
+            checkPdfButtonStatus(); // Check status after return is registered
         });
 
         // Check if PDF button should be enabled
         function checkPdfButtonStatus() {
-            // The PDF button is enabled only when both departure and return data are available
-            if (departureData && returnData) {
+            // The PDF button is enabled if departure data is available
+            if (departureData) {
                 generatePdfBtn.disabled = false;
                 generatePdfBtn.classList.remove('disabled-btn');
             } else {
@@ -419,8 +419,8 @@
 
         // Generate PDF button event listener
         generatePdfBtn.addEventListener('click', () => {
-            if (!departureData || !returnData) {
-                showMessageBox('Debe registrar tanto la salida como el regreso para generar el PDF.');
+            if (!departureData) { // Only check for departureData, returnData can be null
+                showMessageBox('Debe registrar la salida para generar el PDF.');
                 return;
             }
 
@@ -445,9 +445,14 @@
             doc.text(`Sección: ${departureData.seccion}`, marginX, y); y += lineHeight;
             doc.text(`Patente: ${departureData.patente}`, marginX, y); y += lineHeight;
             doc.text(`Fecha / Hora salida: ${departureData.fechaSalida}`, marginX, y); y += lineHeight;
-            doc.text(`Fecha / Hora regreso: ${returnData.fechaRegreso}`, marginX, y); y += lineHeight;
+            
+            // Handle return data, display blank if not available
+            const fechaRegresoText = returnData ? returnData.fechaRegreso : '';
+            const kmRegresoText = returnData ? returnData.kilometrajeRegreso : '';
+
+            doc.text(`Fecha / Hora regreso: ${fechaRegresoText}`, marginX, y); y += lineHeight;
             doc.text(`Km salida: ${departureData.kilometrajeSalida}`, marginX, y); y += lineHeight;
-            doc.text(`Km regreso: ${returnData.kilometrajeRegreso}`, marginX, y); y += lineHeight;
+            doc.text(`Km regreso: ${kmRegresoText}`, marginX, y); y += lineHeight;
             doc.text(`Teléfono JP: ${departureData.telefonoJefe}`, marginX, y); y += sectionSpacing * 2; // Extra space before next section
 
             // --- Equipment Table Headers ---
