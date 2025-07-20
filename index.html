@@ -29,7 +29,7 @@
     <div id="messageBox" class="message-box">
       <div class="bg-white p-6 rounded-lg shadow-lg text-center">
         <p id="messageText" class="text-gray-800 mb-4"></p>
-        <button onclick="closeMessage()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">OK</button>
+        <button onclick="closeMessage()" class="px-4 py-2 bg-[#005131] text-white rounded hover:bg-[#004022]">OK</button>
       </div>
     </div>
 
@@ -37,6 +37,7 @@
     <section class="mb-8">
       <h2 class="text-xl font-semibold text-gray-700 mb-4">Registro de Salida de Patrulla</h2>
       <form id="departureForm" class="space-y-4">
+        <!-- Sección y Patente -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-gray-600 mb-1">Sección</label>
@@ -55,6 +56,8 @@
             <input id="patenteSalida" type="text" class="w-full p-2 border rounded uppercase" placeholder="ABCD12" required>
           </div>
         </div>
+        
+        <!-- Kilometraje y Teléfono -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-gray-600 mb-1">Kilometraje de Salida</label>
@@ -65,22 +68,30 @@
             <input id="telefonoJefe" type="tel" class="w-full p-2 border rounded" placeholder="+56912345678" required>
           </div>
         </div>
+
+        <!-- Nombre del Jefe -->
         <div>
           <label class="block text-gray-600 mb-1">Nombre Jefe de Patrulla</label>
           <input id="nombreJefe" type="text" class="w-full p-2 border rounded" placeholder="Sgto 2 Juan Jimenez" required>
         </div>
+
+        <!-- Equipo Jefe -->
         <h3 class="text-lg font-medium text-gray-700">Equipo Jefe de Patrulla</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <input id="calzoJefe" type="text" class="p-2 border rounded" placeholder="Calzo" required>
-          <input id="armamentoJefe" type="text" class="p-2 border rounded" placeholder="Pistola" required>
-          <input id="chalecoJefe" type="text" class="p-2 border rounded" placeholder="Chaleco" required>
-          <input id="cascoJefe" type="text" class="p-2 border rounded" placeholder="Casco" required>
-          <input id="portatilJefe" type="text" class="p-2 border rounded" placeholder="Portátil" required>
-          <input id="camCorporalJefe" type="text" class="p-2 border rounded" placeholder="Cámara" required>
+          <input id="calzoJefe" type="text" class="p-2 border rounded" placeholder="Calzo">
+          <input id="armamentoJefe" type="text" class="p-2 border rounded" placeholder="Pistola">
+          <input id="chalecoJefe" type="text" class="p-2 border rounded" placeholder="Chaleco">
+          <input id="cascoJefe" type="text" class="p-2 border rounded" placeholder="Casco">
+          <input id="portatilJefe" type="text" class="p-2 border rounded" placeholder="Portátil">
+          <input id="camCorporalJefe" type="text" class="p-2 border rounded" placeholder="Cámara">
         </div>
+
+        <!-- Acompañantes Dinámicos -->
         <div id="acompanantesContainer" class="space-y-4"></div>
         <button type="button" id="addAcompananteBtn" class="w-full bg-gray-200 text-gray-800 p-2 rounded hover:bg-gray-300">Agregar Acompañante</button>
-        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Registrar Salida</button>
+
+        <!-- Registrar Salida -->
+        <button type="submit" class="w-full bg-[#005131] text-white p-2 rounded hover:bg-[#004022]">Registrar Salida</button>
       </form>
     </section>
 
@@ -96,7 +107,7 @@
           <label class="block text-gray-600 mb-1">Kilometraje de Regreso</label>
           <input id="kmRegreso" type="number" min="0" class="w-full p-2 border rounded" placeholder="123500" required>
         </div>
-        <button type="submit" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600">Registrar Regreso</button>
+        <button type="submit" class="w-full bg-[#005131] text-white p-2 rounded hover:bg-[#004022]">Registrar Regreso</button>
       </form>
     </section>
   </div>
@@ -118,15 +129,15 @@
       const div = document.createElement('div'); div.className = 'bg-gray-100 p-4 rounded';
       div.innerHTML = `
         <label class="block text-gray-700 mb-1">Acompañante ${idx+1} - Nombre</label>
-        <input id="nombreAcomp${idx}" type="text" class="w-full p-2 border rounded mb-2" required>
+        <input id="nombreAcomp${idx}" type="text" class="w-full p-2 border rounded mb-2">
         <h4 class="text-gray-700 mb-2">Equipo</h4>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <input id="calzoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Calzo" required>
-          <input id="armamentoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Pistola" required>
-          <input id="chalecoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Chaleco" required>
-          <input id="cascoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Casco" required>
-          <input id="portatilAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Portátil" required>
-          <input id="camAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Cámara" required>
+          <input id="calzoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Calzo">
+          <input id="armamentoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Pistola">
+          <input id="chalecoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Chaleco">
+          <input id="cascoAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Casco">
+          <input id="portatilAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Portátil">
+          <input id="camAcomp${idx}" type="text" class="p-2 border rounded" placeholder="Cámara">
         </div>`;
       document.getElementById('acompanantesContainer').appendChild(div);
     });
@@ -137,23 +148,15 @@
       let y=20;
       doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 105, y, { align:'center' }); y+=10;
       doc.setFontSize(10);
-      // Fields
-      ['Sección', 'Patente', 'Fecha/Hora Salida', 'Km Salida', 'Teléfono JP'].forEach((label, i) => {
-        const val = [data.seccion, data.patente, data.fecha, data.km, data.telefono][i];
-        doc.text(`${label}: ${val}`, 15, y); y+=6;
-      }); y+=6;
-      // Table
+      Object.entries({ 'Sección':data.seccion, 'Patente':data.patente, 'Fecha/Hora Salida':data.fecha, 'Km Salida':data.km, 'Teléfono JP':data.telefono }).forEach(([label,val]) => { doc.text(`${label}: ${val}`,15,y); y+=6; }); y+=6;
       const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
-      const body = [];
-      // Jefe
-      body.push([data.equipo.calzo, data.jefe, data.equipo.armamento, data.equipo.chaleco, data.equipo.casco, data.equipo.portatil, data.equipo.camCorporal]);
-      // Acompañantes
-      data.acompanantes.forEach(ac => body.push([ac.equipo.calzo, ac.nombre, ac.equipo.armamento, ac.equipo.chaleco, ac.equipo.casco, ac.equipo.portatil, ac.equipo.camCorporal]));
-      doc.autoTable({ startY: y, head, body, theme:'grid', styles:{ fontSize:9 }, headStyles:{ fillColor:[31, 58, 147] }});
-      // Footer signature
+      const body = [[data.equipo.calzo||'', data.jefe||'', data.equipo.armamento||'', data.equipo.chaleco||'', data.equipo.casco||'', data.equipo.portatil||'', data.equipo.camCorporal||'']];
+      data.acompanantes.forEach(ac => body.push([ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'', ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||'']));
+      doc.autoTable({ startY:y, head, body, theme:'grid', styles:{ fontSize:9 }, headStyles:{ fillColor:[0,81,49] } });
       const finalY = doc.lastAutoTable.finalY + 10;
-      doc.setFontSize(11).text(data.jefe.toUpperCase(), 105, finalY, { align:'center' });
-      doc.setFontSize(9).text('JEFE DE PATRULLA', 105, finalY+6, { align:'center' });
+      const rightX = doc.internal.pageSize.getWidth() - 15;
+      doc.setFontSize(11).text(data.jefe.toUpperCase(), rightX, finalY, { align:'right' });
+      doc.setFontSize(9).text('JEFE DE PATRULLA', rightX, finalY+6, { align:'right' });
       doc.save(`Salida_OS9_${data.patente}_${data.fecha.replace(/[/:, ]/g,'-')}.pdf`);
     }
 
@@ -163,59 +166,19 @@
       let y=20;
       doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 105, y, { align:'center' }); y+=10;
       doc.setFontSize(10);
-      ['Sección','Patente','Fecha/Hora Salida','Km Salida','Fecha/Hora Regreso','Km Regreso','Teléfono JP'].forEach((label,i) => {
-        const val = [dep.seccion, dep.patente, dep.fecha, dep.km, ret.fecha, ret.km, dep.telefono][i];
-        doc.text(`${label}: ${val}`, 15, y); y+=6;
-      }); y+=6;
-      // Table
-      const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
-      const body = [];
-      body.push([dep.equipo.calzo, dep.jefe, dep.equipo.armamento, dep.equipo.chaleco, dep.equipo.casco, dep.equipo.portatil, dep.equipo.camCorporal]);
-      dep.acompanantes.forEach(ac => body.push([ac.equipo.calzo, ac.nombre, ac.equipo.armamento, ac.equipo.chaleco, ac.equipo.casco, ac.equipo.portatil, ac.equipo.camCorporal]));
-      doc.autoTable({ startY: y, head, body, theme:'grid', styles:{ fontSize:9 }, headStyles:{ fillColor:[31, 58, 147] }});
-      const finalY = doc.lastAutoTable.finalY + 10;
-      doc.setFontSize(11).text(dep.jefe.toUpperCase(), 105, finalY, { align:'center' });
-      doc.setFontSize(9).text('JEFE DE PATRULLA', 105, finalY+6, { align:'center' });
+      Object.entries({ 'Sección':dep.seccion, 'Patente':dep.patente, 'Fecha/Hora Salida':dep.fecha, 'Km Salida':dep.km, 'Fecha/Hora Regreso':ret.fecha, 'Km Regreso':ret.km, 'Teléfono JP':dep.telefono }).forEach(([l,v])=>{ doc.text(`${l}: ${v}`,15,y); y+=6; }); y+=6;
+      const head=[['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']]; const body=[];
+      body.push([dep.equipo.calzo||'', dep.jefe||'', dep.equipo.armamento||'', dep.equipo.chaleco||'', dep.equipo.casco||'', dep.equipo.portatil||'', dep.equipo.camCorporal||'']);
+      dep.acompanantes.forEach(ac=>body.push([ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'', ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||'']));
+      doc.autoTable({ startY:y, head, body, theme:'grid', styles:{ fontSize:9 }, headStyles:{ fillColor:[0,81,49] } });
+      const finalY = doc.lastAutoTable.finalY + 10; const rightX = doc.internal.pageSize.getWidth() - 15;
+      doc.setFontSize(11).text(dep.jefe.toUpperCase(), rightX, finalY, { align:'right' }); doc.setFontSize(9).text('JEFE DE PATRULLA', rightX, finalY+6, { align:'right' });
       doc.save(`Regreso_OS9_${dep.patente}_${ret.fecha.replace(/[/:, ]/g,'-')}.pdf`);
     }
 
     // Handle forms
-    document.getElementById('departureForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const data = {
-        seccion: document.getElementById('seccion').value,
-        patente: document.getElementById('patenteSalida').value.toUpperCase(),
-        fecha: new Date().toLocaleString('es-CL'),
-        km: document.getElementById('kmSalida').value,
-        jefe: document.getElementById('nombreJefe').value,
-        telefono: document.getElementById('telefonoJefe').value,
-        equipo: {
-          calzo: document.getElementById('calzoJefe').value,
-          armamento: document.getElementById('armamentoJefe').value,
-          chaleco: document.getElementById('chalecoJefe').value,
-          casco: document.getElementById('cascoJefe').value,
-          portatil: document.getElementById('portatilJefe').value,
-          camCorporal: document.getElementById('camCorporalJefe').value
-        },
-        acompanantes: []
-      };
-      for (let i=0; i<acompCount; i++) data.acompanantes.push({ nombre: document.getElementById(`nombreAcomp${i}`).value, equipo: { calzo: document.getElementById(`calzoAcomp${i}`).value, armamento: document.getElementById(`armamentoAcomp${i}`).value, chaleco: document.getElementById(`chalecoAcomp${i}`).value, casco: document.getElementById(`cascoAcomp${i}`).value, portatil: document.getElementById(`portatilAcomp${i}`).value, camCorporal: document.getElementById(`camAcomp${i}`).value }});
-      departureData = data;
-      genDepPDF(data);
-      showMessage('PDF de salida generado.');
-      document.getElementById('patenteRegreso').value = data.patente;
-    });
-
-    document.getElementById('returnForm').addEventListener('submit', e => {
-      e.preventDefault();
-      if (!departureData) return showMessage('Primero registre la salida.');
-      const kmSal = parseInt(departureData.km, 10);
-      const kmReg = parseInt(document.getElementById('kmRegreso').value, 10);
-      if (kmReg <= kmSal) return showMessage('El kilometraje de regreso debe ser mayor que el de salida.');
-      const data = { fecha: new Date().toLocaleString('es-CL'), km: document.getElementById('kmRegreso').value };
-      genRetPDF(departureData, data);
-      showMessage('PDF de regreso generado.');
-    });
+    document.getElementById('departureForm').addEventListener('submit', e=>{ e.preventDefault(); const data={ seccion:document.getElementById('seccion').value, patente:document.getElementById('patenteSalida').value.toUpperCase(), fecha:new Date().toLocaleString('es-CL'), km:document.getElementById('kmSalida').value, jefe:document.getElementById('nombreJefe').value, telefono:document.getElementById('telefonoJefe').value, equipo:{ calzo:document.getElementById('calzoJefe').value, armamento:document.getElementById('armamentoJefe').value, chaleco:document.getElementById('chalecoJefe').value, casco:document.getElementById('cascoJefe').value, portatil:document.getElementById('portatilJefe').value, camCorporal:document.getElementById('camCorporalJefe').value }, acompanantes:[] }; for(let i=0;i<acompCount;i++)data.acompanantes.push({ nombre:document.getElementById(`nombreAcomp${i}`).value, equipo:{ calzo:document.getElementById(`calzoAcomp${i}`).value, armamento:document.getElementById(`armamentoAcomp${i}`).value, chaleco:document.getElementById(`chalecoAcomp${i}`).value, casco:document.getElementById(`cascoAcomp${i}`).value, portatil:document.getElementById(`portatilAcomp${i}`).value, camCorporal:document.getElementById(`camAcomp${i}`).value } }); departureData=data; genDepPDF(data); showMessage('PDF de salida generado.'); document.getElementById('patenteRegreso').value=data.patente; });
+    document.getElementById('returnForm').addEventListener('submit', e=>{ e.preventDefault(); if(!departureData)return showMessage('Primero registre la salida.'); const kmSal=parseInt(departureData.km,10), kmReg=parseInt(document.getElementById('kmRegreso').value,10); if(kmReg<=kmSal)return showMessage('El kilometraje de regreso debe ser mayor que el de salida.'); const data={ fecha:new Date().toLocaleString('es-CL'), km:document.getElementById('kmRegreso').value }; genRetPDF(departureData,data); showMessage('PDF de regreso generado.'); });
   </script>
 </body>
 </html>
