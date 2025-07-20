@@ -325,6 +325,23 @@
         departureForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
+            // Explicit validation for required fields
+            const requiredFields = [
+                { id: 'seccion', name: 'Sección' },
+                { id: 'patenteSalida', name: 'Patente del Vehículo' },
+                { id: 'kilometrajeSalida', name: 'Kilometraje de Salida' },
+                { id: 'telefonoJefe', name: 'Teléfono del Jefe de Patrulla' },
+                { id: 'nombreJefe', name: 'Nombre del Jefe de Patrulla' }
+            ];
+
+            for (const field of requiredFields) {
+                const inputElement = document.getElementById(field.id);
+                if (!inputElement.value.trim()) {
+                    showMessageBox(`Por favor, complete el campo: ${field.name}`);
+                    return;
+                }
+            }
+
             // Collect Jefe de Patrulla data
             const jefeEquipment = getEquipmentData('jefe');
             const acompanantes = [];
@@ -332,7 +349,7 @@
             // Collect Acompañantes data
             for (let i = 0; i < acompananteCount; i++) {
                 const nombre = document.getElementById(`nombreAcompanante${i}`).value;
-                if (!nombre) {
+                if (!nombre.trim()) {
                     showMessageBox(`Por favor, ingrese el nombre del acompañante ${i + 1}.`);
                     return;
                 }
