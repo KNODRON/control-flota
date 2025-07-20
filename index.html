@@ -108,8 +108,8 @@
     <form id="returnForm">
       <div>
         <label>Patente del Vehículo</label>
-        <input id="patenteRegreso" type="text" readonly required>
-      </div>
+        <input id="patenteRegreso" type="text" placeholder="ABCD12">
+      </\/div>
       <div>
         <label>Kilometraje de Regreso</label>
         <input id="kmRegreso" type="number" min="0" placeholder="123500" required>
@@ -154,19 +154,22 @@
       document.getElementById('acompanantesContainer').appendChild(div);
     });
 
-    // Formatear firma: añade punto tras 'Sgto' si falta
+    // Formatear firma
     function formatDrawerName(name) {
       return name.replace(/^Sgto\.?/i, 'Sgto.');
     }
 
-    // Generar PDF de Salida (horizontal)
+    // Generar PDF de Salida
     function genDepPDF(data) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
       const w = doc.internal.pageSize.getWidth();
       const h = doc.internal.pageSize.getHeight();
 
-      // Logo redondo en PDF (cuadrado)
+      // Guardar en memoria local
+      localStorage.setItem('departure_' + data.patente, JSON.stringify(data));
+
+      // Logo redondo
       const logo = document.getElementById('logoPdf');
       doc.addImage(logo, 'PNG', w - 30, 10, 20, 20);
 
@@ -193,7 +196,7 @@
       ]));
       doc.autoTable({ startY: y, head, body, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [0,81,49] } });
 
-      // Firma al borde derecho, centrada
+      // Firma centrada a la derecha
       const sigName = formatDrawerName(data.jefe).toUpperCase();
       const sigX = w - 15;
       const sigY = h - 20;
@@ -203,7 +206,19 @@
       doc.save(`Salida_OS9_${data.patente}_${data.fecha.replace(/[/:, ]/g,'-')}.pdf`);
     }
 
-    // Generar PDF de Regreso (horizontal)
+    // On patent change, load departure data
+    document.getElementById('patenteRegreso').addEventListener('change', e => {
+      const pat = e.target.value.toUpperCase();
+      const stored = localStorage.getItem('departure_' + pat);
+      if (stored) {
+        departureData = JSON.parse(stored);
+        showMessage('Datos de salida cargados para ' + pat);
+      } else {
+        showMessage('No hay datos de salida para la patente ' + pat);
+      }
+    });
+
+    // Generar PDF de Regreso
     function genRetPDF(dep, ret) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
@@ -242,6 +257,8 @@
       doc.setFontSize(9).text('JEFE DE PATRULLA', sigX2, sigY2 + 6, { align: 'center' });
 
       doc.save(`Regreso_OS9_${dep.patente}_${ret.fecha.replace(/[/:, ]/g,'-')}.pdf`);
+      // Borrar memoria
+      localStorage.removeItem('departure_' + dep.patente);
     }
 
     // Control de formularios
@@ -272,27 +289,4 @@
             armamento: document.getElementById(`armamentoAcomp${i}`).value,
             chaleco: document.getElementById(`chalecoAcomp${i}`).value,
             casco: document.getElementById(`cascoAcomp${i}`).value,
-            portatil: document.getElementById(`portatilAcomp${i}`).value,
-            camCorporal: document.getElementById(`camAcomp${i}`).value
-          }
-        });
-      }
-      departureData = data;
-      genDepPDF(data);
-      showMessage('PDF de salida generado.');
-      document.getElementById('patenteRegreso').value = data.patente;
-    });
-
-    document.getElementById('returnForm').addEventListener('submit', e => {
-      e.preventDefault();
-      if (!departureData) return showMessage('Primero registre la salida.');
-      const kmSal = parseInt(departureData.km, 10),
-            kmReg = parseInt(document.getElementById('kmRegreso').value, 10);
-      if (kmReg <= kmSal) return showMessage('El kilometraje de regreso debe ser mayor que el de salida.');
-      const data = { fecha: new Date().toLocaleString('es-CL'), km: document.getElementById('kmRegreso').value };
-      genRetPDF(departureData, data);
-      showMessage('PDF de regreso generado.');
-    });
-  </script>
-</body>
-</html>
+            portatil: document.getElementById(`portatilAcomp${
