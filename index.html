@@ -16,7 +16,7 @@
     .card { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; margin: 2rem auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .header h1 { font-size: 1.25rem; font-weight: 600; color: #005131; }
-    .logo { height: 40px; width: 40px; border-radius: 50%; object-fit: cover; }
+    .logo { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
     label { display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #333; }
     input, select { width: 100%; height: 2.5rem; padding: 0 0.75rem; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; background: #fafafa; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -84,7 +84,7 @@
       </div>
       <div>
         <label>Nombre Jefe de Patrulla</label>
-        <input id="nombreJefe" type="text" placeholder="Sgto 2 Juan Jimenez" required>
+        <input id="nombreJefe" type="text" placeholder="Sgto. 2 Gabriela Albino" required>
       </div>
       <p class="section-title">Equipo Jefe de Patrulla</p>
       <div class="grid-2">
@@ -154,18 +154,23 @@
       document.getElementById('acompanantesContainer').appendChild(div);
     });
 
-    // Generar PDF de Salida (landscape)
+    // Formatear firma: añade punto tras 'Sgto' si falta
+    function formatDrawerName(name) {
+      return name.replace(/^Sgto\.?/i, 'Sgto.');
+    }
+
+    // Generar PDF de Salida (horizontal)
     function genDepPDF(data) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-      const w = doc.internal.pageSize.getWidth(),
-            h = doc.internal.pageSize.getHeight();
+      const w = doc.internal.pageSize.getWidth();
+      const h = doc.internal.pageSize.getHeight();
 
-      // Logo en esquina superior derecha
+      // Logo redondo en PDF (cuadrado)
       const logo = document.getElementById('logoPdf');
-      doc.addImage(logo, 'PNG', w - 50, 10, 40, 10);
+      doc.addImage(logo, 'PNG', w - 30, 10, 20, 20);
 
-      let y = 20;
+      let y = 30;
       doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 15, y);
       y += 10;
       doc.setFontSize(10);
@@ -178,31 +183,37 @@
 
       // Tabla
       const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
-      const body = [[data.equipo.calzo||'', data.jefe||'', data.equipo.armamento||'', data.equipo.chaleco||'', data.equipo.casco||'', data.equipo.portatil||'', data.equipo.camCorporal||'']];
-      data.acompanantes.forEach(ac => body.push([ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'', ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||'']));
+      const body = [[
+        data.equipo.calzo||'', data.jefe||'', data.equipo.armamento||'', data.equipo.chaleco||'',
+        data.equipo.casco||'', data.equipo.portatil||'', data.equipo.camCorporal||''
+      ]];
+      data.acompanantes.forEach(ac => body.push([
+        ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'',
+        ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||''
+      ]));
       doc.autoTable({ startY: y, head, body, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [0,81,49] } });
 
-      // Firma al borde derecho
-      const sigY = h - 20;
+      // Firma al borde derecho, centrada
+      const sigName = formatDrawerName(data.jefe).toUpperCase();
       const sigX = w - 15;
-      doc.setFontSize(11).text(data.jefe.toUpperCase(), sigX, sigY, { align: 'right' });
-      doc.setFontSize(9).text('JEFE DE PATRULLA', sigX, sigY + 6, { align: 'right' });
+      const sigY = h - 20;
+      doc.setFontSize(11).text(sigName, sigX, sigY, { align: 'center' });
+      doc.setFontSize(9).text('JEFE DE PATRULLA', sigX, sigY + 6, { align: 'center' });
 
       doc.save(`Salida_OS9_${data.patente}_${data.fecha.replace(/[/:, ]/g,'-')}.pdf`);
     }
 
-    // Generar PDF de Regreso (landscape)
+    // Generar PDF de Regreso (horizontal)
     function genRetPDF(dep, ret) {
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-      const w = doc.internal.pageSize.getWidth(),
-            h = doc.internal.pageSize.getHeight();
+      const w = doc.internal.pageSize.getWidth();
+      const h = doc.internal.pageSize.getHeight();
 
-      // Logo
       const logo = document.getElementById('logoPdf');
-      doc.addImage(logo, 'PNG', w - 50, 10, 40, 10);
+      doc.addImage(logo, 'PNG', w - 30, 10, 20, 20);
 
-      let y = 20;
+      let y = 30;
       doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 15, y);
       y += 10;
       doc.setFontSize(10);
@@ -213,17 +224,22 @@
         });
       y += 6;
 
-      // Tabla
-      const headR = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
-      const bodyR = [[dep.equipo.calzo||'', dep.jefe||'', dep.equipo.armamento||'', dep.equipo.chaleco||'', dep.equipo.casco||'', dep.equipo.portatil||'', dep.equipo.camCorporal||'']];
-      dep.acompanantes.forEach(ac => bodyR.push([ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'', ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||'']));
-      doc.autoTable({ startY: y, head: headR, body: bodyR, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [0,81,49] } });
+      const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
+      const body = [[
+        dep.equipo.calzo||'', dep.jefe||'', dep.equipo.armamento||'', dep.equipo.chaleco||'',
+        dep.equipo.casco||'', dep.equipo.portatil||'', dep.equipo.camCorporal||''
+      ]];
+      dep.acompanantes.forEach(ac => body.push([
+        ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'',
+        ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||''
+      ]));
+      doc.autoTable({ startY: y, head, body, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [0,81,49] } });
 
-      // Firma
-      const sigY2 = h - 20;
+      const sigNameR = formatDrawerName(dep.jefe).toUpperCase();
       const sigX2 = w - 15;
-      doc.setFontSize(11).text(dep.jefe.toUpperCase(), sigX2, sigY2, { align: 'right' });
-      doc.setFontSize(9).text('JEFE DE PATRULLA', sigX2, sigY2 + 6, { align: 'right' });
+      const sigY2 = h - 20;
+      doc.setFontSize(11).text(sigNameR, sigX2, sigY2, { align: 'center' });
+      doc.setFontSize(9).text('JEFE DE PATRULLA', sigX2, sigY2 + 6, { align: 'center' });
 
       doc.save(`Regreso_OS9_${dep.patente}_${ret.fecha.replace(/[/:, ]/g,'-')}.pdf`);
     }
