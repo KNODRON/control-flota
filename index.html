@@ -456,8 +456,8 @@
             doc.text(`Teléfono JP: ${departureData.telefonoJefe}`, marginX, y); y += sectionSpacing * 2; // Extra space before next section
 
             // --- Equipment Table Headers ---
-            const columnWidths = [30, 60, 30, 30, 30, 30, 30]; // Adjusted for better spacing
-            // Changed "Armamento" to "Pistola" as per user's provided PDF
+            // Adjusted column widths to better fit content and match the provided PDF's spacing
+            const columnWidths = [30, 60, 30, 30, 30, 30, 30]; 
             const tableHeaders = ["CALZO", "Nombre", "Pistola", "Chaleco", "Casco", "Portátil", "Cámara"];
             const startX = marginX;
             let currentX = startX;
@@ -465,7 +465,7 @@
             doc.setFontSize(9);
             doc.setFont(undefined, 'bold'); // Set font to bold for headers
             tableHeaders.forEach((header, i) => {
-                doc.text(header, currentX + (columnWidths[i] / 2), y, { align: 'center' });
+                doc.text(header, currentX + (columnWidths[i] / 2), y, { align: 'center' }); // Centered header
                 currentX += columnWidths[i];
             });
             doc.setFont(undefined, 'normal'); // Reset font to normal
@@ -473,19 +473,21 @@
 
             // --- Equipment Table Data (Jefe de Patrulla) ---
             currentX = startX;
-            // Ensure correct mapping for "Pistola" which comes from 'armamento' input
             const jefeRow = [
                 departureData.jefeEquipment.calzo,
                 departureData.nombreJefe,
-                departureData.jefeEquipment.armamento, // This is the 'armamento' input, used for 'Pistola' column
+                departureData.jefeEquipment.armamento, 
                 departureData.jefeEquipment.chaleco,
                 departureData.jefeEquipment.casco,
                 departureData.jefeEquipment.portatil,
                 departureData.jefeEquipment.camCorporal
             ];
 
+            console.log('Jefe Row Data for PDF:', jefeRow); // Log data before printing
+
             jefeRow.forEach((data, i) => {
-                doc.text(data, currentX + (columnWidths[i] / 2), y, { align: 'center' });
+                // For data cells, align left within their column, not centered
+                doc.text(data, currentX, y); 
                 currentX += columnWidths[i];
             });
             y += lineHeight * 1.5; // Space after chief's row
@@ -496,14 +498,17 @@
                 const acompananteRow = [
                     acompanante.equipment.calzo,
                     acompanante.nombre,
-                    acompanante.equipment.armamento, // This is the 'armamento' input, used for 'Pistola' column
+                    acompanante.equipment.armamento, 
                     acompanante.equipment.chaleco,
                     acompanante.equipment.casco,
                     acompanante.equipment.portatil,
                     acompanante.equipment.camCorporal
                 ];
+                console.log(`Acompañante ${index + 1} Row Data for PDF:`, acompananteRow); // Log data before printing
+
                 acompananteRow.forEach((data, i) => {
-                    doc.text(data, currentX + (columnWidths[i] / 2), y, { align: 'center' });
+                    // For data cells, align left within their column, not centered
+                    doc.text(data, currentX, y); 
                     currentX += columnWidths[i];
                 });
                 y += lineHeight * 1.5;
@@ -519,19 +524,15 @@
             doc.setFontSize(8);
             const footerSubTextWidth = doc.getTextWidth(footerSubText);
 
-            const maxWidth = Math.max(footerTextWidth, footerSubTextWidth);
+            // Calculate the X position for the right-aligned block
+            const rightAlignedBlockX = pageWidth - marginX;
 
-            // Calculate the rightmost point for the block
-            const rightEdge = pageWidth - marginX;
-
-            // Calculate the X position for centering each line within the 'maxWidth' block,
-            // then aligning that block to the right.
+            // Calculate the X position for centering each line within its own width,
+            // then offset it to be right-aligned with the block.
             doc.setFontSize(10);
-            // The X position is rightEdge - (maxWidth / 2) + (current_line_width / 2)
-            // This centers each line within a block of `maxWidth` and then shifts the whole block to the right.
-            doc.text(footerText, rightEdge - (maxWidth / 2) + (footerTextWidth / 2), footerY, { align: 'center' });
+            doc.text(footerText, rightAlignedBlockX - footerTextWidth, footerY); // Right align the text
             doc.setFontSize(8);
-            doc.text(footerSubText, rightEdge - (maxWidth / 2) + (footerSubTextWidth / 2), footerY + 5, { align: 'center' });
+            doc.text(footerSubText, rightAlignedBlockX - footerSubTextWidth, footerY + 5); // Right align the text
 
 
             // Save the PDF
