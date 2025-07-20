@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Salida OS9</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,91 +12,250 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; margin:0; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; margin: 2rem auto; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .header h1 { font-size: 1.25rem; font-weight: 600; color: #005131; }
+    .logo { height: 40px; }
+    label { display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #333; }
+    input, select { width: 100%; height: 2.5rem; padding: 0 0.75rem; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; background: #fafafa; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .btn { width: 100%; text-align: center; padding: 0.75rem; margin-top: 1rem; border-radius: 5px; font-weight: 500; cursor: pointer; }
+    .btn-primary { background: #005131; color: #fff; border: none; }
+    .btn-primary:active { background: #004022; }
+    .btn-secondary { background: #edf2f7; color: #2d3748; border: 1px solid #ccc; }
+    .btn-secondary:active { background: #e2e8f0; }
+    .section-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: #005131; }
+    .companion { border-top: 1px solid #e0e0e0; padding-top: 1rem; margin-top: 1rem; }
     .message-box { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; visibility: hidden; }
     .message-box.active { visibility: visible; }
+    .message-content { background: #fff; padding: 1.5rem; border-radius: 8px; text-align: center; }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
   <!-- Logo oculto para PDF -->
   <img id="logoPdf" src="logo_os9.png" style="display:none;" alt="Logo OS9">
 
-  <div class="container mx-auto max-w-2xl bg-white rounded-lg shadow-lg p-6">
-    <!-- Header -->
-    <header class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-semibold text-gray-800">Salida OS9</h1>
-      <img src="logo_os9.png" alt="Logo OS9" class="h-10">
-    </header>
+  <div class="message-box" id="messageBox">
+    <div class="message-content">
+      <p id="messageText"></p>
+      <button onclick="closeMessage()" class="btn btn-primary">OK</button>
+    </div>
+  </div>
 
-    <!-- Modal de mensajes -->
-    <div id="messageBox" class="message-box">
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-        <p id="messageText" class="text-gray-800 mb-4"></p>
-        <button onclick="closeMessage()" class="px-4 py-2 bg-[#005131] text-white rounded hover:bg-[#004022]">OK</button>
-      </div>
+  <div class="card">
+    <div class="header">
+      <h1>Salida OS9</h1>
+      <img src="logo_os9.png" alt="Logo OS9" class="logo">
     </div>
 
-    <!-- Formulario de Salida -->
-    <section class="mb-8">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">Registro de Salida de Patrulla</h2>
-      <form id="departureForm" class="space-y-4">
-        <!-- ... aquí van todos los campos de sección, patente, jefe y equipo ... -->
-      </form>
-    </section>
+    <p class="section-title">Registro de Salida de Patrulla</p>
+    <form id="departureForm">
+      <div class="grid-2">
+        <div>
+          <label>Sección</label>
+          <select id="seccion" required>
+            <option disabled selected>Seleccione</option>
+            <option>Análisis</option>
+            <option>Artefactos Explosivos</option>
+            <option>Crimen Organizado</option>
+            <option>Muertes Violentas</option>
+            <option>Económicos</option>
+            <option>Derechos Humanos</option>
+          </select>
+        </div>
+        <div>
+          <label>Patente del Vehículo</label>
+          <input id="patenteSalida" type="text" class="uppercase" placeholder="ABCD12" required>
+        </div>
+      </div>
 
-    <!-- Formulario de Regreso -->
-    <section>
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">Registro de Regreso de Patrulla</h2>
-      <form id="returnForm" class="space-y-4">
-        <!-- ... aquí van los campos de regreso ... -->
-      </form>
-    </section>
+      <div class="grid-2">
+        <div>
+          <label>Kilometraje de Salida</label>
+          <input id="kmSalida" type="number" min="0" placeholder="123456" required>
+        </div>
+        <div>
+          <label>Teléfono Jefe de Patrulla</label>
+          <input id="telefonoJefe" type="tel" placeholder="+56912345678" required>
+        </div>
+      </div>
+
+      <div>
+        <label>Nombre Jefe de Patrulla</label>
+        <input id="nombreJefe" type="text" placeholder="Sgto 2 Juan Jimenez" required>
+      </div>
+
+      <p class="section-title">Equipo Jefe de Patrulla</p>
+      <div class="grid-2">
+        <input id="calzoJefe" type="text" placeholder="Calzo">
+        <input id="armamentoJefe" type="text" placeholder="Pistola">
+        <input id="chalecoJefe" type="text" placeholder="Chaleco">
+        <input id="cascoJefe" type="text" placeholder="Casco">
+        <input id="portatilJefe" type="text" placeholder="Portátil">
+        <input id="camCorporalJefe" type="text" placeholder="Cámara">
+      </div>
+
+      <div id="acompanantesContainer"></div>
+      <button type="button" id="addAcompananteBtn" class="btn btn-secondary">Agregar Acompañante</button>
+      <button type="submit" class="btn btn-primary">Registrar Salida</button>
+    </form>
+
+    <hr class="my-6">
+
+    <p class="section-title">Registro de Regreso de Patrulla</p>
+    <form id="returnForm">
+      <div>
+        <label>Patente del Vehículo</label>
+        <input id="patenteRegreso" type="text" readonly required>
+      </div>
+      <div>
+        <label>Kilometraje de Regreso</label>
+        <input id="kmRegreso" type="number" min="0" placeholder="123500" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Registrar Regreso</button>
+    </form>
   </div>
 
   <script>
-    // Variables globales
-    let departureData = null;
-    let acompCount = 0;
-    const MAX_ACOMP = 5;
+    // Variables
+    let departureData = null, acompCount = 0, MAX_ACOMP = 5;
 
-    // Funciones de modal
+    // Modal
     function showMessage(msg) {
-      const mb = document.getElementById('messageBox');
       document.getElementById('messageText').innerText = msg;
-      mb.classList.add('active');
+      document.getElementById('messageBox').classList.add('active');
     }
     function closeMessage() {
       document.getElementById('messageBox').classList.remove('active');
     }
 
-    // Lógica para agregar acompañantes, generar PDFs, etc.
-    document.getElementById('departureForm').addEventListener('submit', e => {
-      e.preventDefault();
-      // Recolectar datos...
-      // Generar PDF de salida con logo y firma a la derecha:
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit:'mm', format:'a4' });
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-
-      // Colocar logo (40×10 mm) en la esquina superior derecha
-      const logo = document.getElementById('logoPdf');
-      doc.addImage(logo, 'PNG', pageWidth - 50, 10, 40, 10);
-
-      // Encabezado y datos...
-      // Tabla con jsPDF-AutoTable...
-      // Pie de firma a la derecha, 15 mm del borde:
-      const sigY = pageHeight - 20;
-      const sigX = pageWidth - 15;
-      doc.setFontSize(11).text(departureData.jefe.toUpperCase(), sigX, sigY, { align:'right' });
-      doc.setFontSize(9).text('JEFE DE PATRULLA', sigX, sigY + 6, { align:'right' });
-
-      doc.save(`Salida_OS9_${departureData.patente}_${departureData.fecha.replace(/[/:, ]/g,'-')}.pdf`);
+    // Añadir acompañante
+    document.getElementById('addAcompananteBtn').addEventListener('click', () => {
+      if (acompCount >= MAX_ACOMP) return showMessage('Máximo 5 acompañantes.');
+      const idx = acompCount++;
+      const div = document.createElement('div');
+      div.className = 'companion';
+      div.innerHTML = `
+        <label>Acompañante ${idx+1} - Nombre</label>
+        <input id="nombreAcomp${idx}" type="text" class="w-full p-2 border rounded mb-2">
+        <p class="section-title">Equipo</p>
+        <div class="grid-2">
+          <input id="calzoAcomp${idx}" type="text" placeholder="Calzo">
+          <input id="armamentoAcomp${idx}" type="text" placeholder="Pistola">
+          <input id="chalecoAcomp${idx}" type="text" placeholder="Chaleco">
+          <input id="cascoAcomp${idx}" type="text" placeholder="Casco">
+          <input id="portatilAcomp${idx}" type="text" placeholder="Portátil">
+          <input id="camAcomp${idx}" type="text" placeholder="Cámara">
+        </div>`;
+      document.getElementById('acompanantesContainer').appendChild(div);
     });
 
-    document.getElementById('returnForm').addEventListener('submit', e => {
+    // Generar PDF de Salida
+    function genDepPDF(data) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit:'mm', format:'a4' });
+      const w = doc.internal.pageSize.getWidth(), h = doc.internal.pageSize.getHeight();
+
+      // Logo arriba a la derecha
+      const logo = document.getElementById('logoPdf');
+      doc.addImage(logo, 'PNG', w-50, 10, 40, 10);
+
+      let y=30;
+      doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 15, y);
+      y+=10;
+      doc.setFontSize(10);
+      ['Sección','Patente','Fecha/Hora Salida','Km Salida','Teléfono JP'].forEach((l,i)=>{
+        const v=[data.seccion,data.patente,data.fecha,data.km,data.telefono][i];
+        doc.text(`${l}: ${v}`,15,y); y+=6;
+      });
+      y+=6;
+      // Tabla
+      const head=[['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
+      const body=[[data.equipo.calzo,data.jefe,data.equipo.armamento,data.equipo.chaleco,data.equipo.casco,data.equipo.portatil,data.equipo.camCorporal]];
+      data.acompanantes.forEach(ac=> body.push([ac.equipo.calzo,ac.nombre,ac.equipo.armamento,ac.equipo.chaleco,ac.equipo.casco,ac.equipo.portatil,ac.equipo.camCorporal]));
+      doc.autoTable({ startY:y, head, body, theme:'grid', styles:{fontSize:9}, headStyles:{fillColor:[0,81,49]} });
+      // Firma derecha
+      const sigY = h-20, sigX=w-15;
+      doc.setFontSize(11).text(data.jefe.toUpperCase(), sigX, sigY, { align:'right' });
+      doc.setFontSize(9).text('JEFE DE PATRULLA', sigX, sigY+6, { align:'right' });
+      doc.save(`Salida_OS9_${data.patente}_${data.fecha.replace(/[/:, ]/g,'-')}.pdf`);
+    }
+
+    // Generar PDF de Regreso
+    function genRetPDF(dep,ret){
+      const { jsPDF }=window.jspdf;
+      const doc=new jsPDF({unit:'mm',format:'a4'});
+      const w=doc.internal.pageSize.getWidth(), h=doc.internal.pageSize.getHeight();
+      // Logo
+      const logo=document.getElementById('logoPdf');
+      doc.addImage(logo,'PNG',w-50,10,40,10);
+      let y=30;
+      doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9',15,y); y+=10;
+      doc.setFontSize(10);
+      ['Sección','Patente','Fecha/Hora Salida','Km Salida','Fecha/Hora Regreso','Km Regreso','Teléfono JP'].forEach((l,i)=>{
+        const v=[dep.seccion,dep.patente,dep.fecha,dep.km,ret.fecha,ret.km,dep.telefono][i];
+        doc.text(`${l}: ${v}`,15,y); y+=6;
+      });
+      y+=6;
+      const head=[['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
+      const body=[[dep.equipo.calzo,dep.jefe,dep.equipo.armamento,dep.equipo.chaleco,dep.equipo.casco,dep.equipo.portatil,dep.equipo.camCorporal]];
+      dep.acompanantes.forEach(ac=> body.push([ac.equipo.calzo,ac.nombre,ac.equipo.armamento,ac.equipo.chaleco,ac.equipo.casco,ac.equipo.portatil,ac.equipo.camCorporal]));
+      doc.autoTable({ startY:y, head, body, theme:'grid', styles:{fontSize:9}, headStyles:{fillColor:[0,81,49]} });
+      const sigY2=h-20, sigX2=w-15;
+      doc.setFontSize(11).text(dep.jefe.toUpperCase(),sigX2,sigY2,{align:'right'});
+      doc.setFontSize(9).text('JEFE DE PATRULLA',sigX2,sigY2+6,{align:'right'});
+      doc.save(`Regreso_OS9_${dep.patente}_${ret.fecha.replace(/[/:, ]/g,'-')}.pdf`);
+    }
+
+    // Formularios
+    document.getElementById('departureForm').addEventListener('submit', e=>{
       e.preventDefault();
-      // Lógica similar para el PDF de regreso...
+      const data={
+        seccion:document.getElementById('seccion').value,
+        patente:document.getElementById('patenteSalida').value.toUpperCase(),
+        fecha:new Date().toLocaleString('es-CL'),
+        km:document.getElementById('kmSalida').value,
+        jefe:document.getElementById('nombreJefe').value,
+        telefono:document.getElementById('telefonoJefe').value,
+        equipo:{
+          calzo:document.getElementById('calzoJefe').value,
+          armamento:document.getElementById('armamentoJefe').value,
+          chaleco:document.getElementById('chalecoJefe').value,
+          casco:document.getElementById('cascoJefe').value,
+          portatil:document.getElementById('portatilJefe').value,
+          camCorporal:document.getElementById('camCorporalJefe').value
+        },
+        acompanantes:[]
+      };
+      for(let i=0; i<acompCount; i++){
+        data.acompanantes.push({
+          nombre:document.getElementById(`nombreAcomp${i}`).value,
+          equipo:{
+            calzo:document.getElementById(`calzoAcomp${i}`).value,
+            armamento:document.getElementById(`armamentoAcomp${i}`).value,
+            chaleco:document.getElementById(`chalecoAcomp${i}`).value,
+            casco:document.getElementById(`cascoAcomp${i}`).value,
+            portatil:document.getElementById(`portatilAcomp${i}`).value,
+            camCorporal:document.getElementById(`camAcomp${i}`).value
+          }
+        });
+      }
+      departureData=data;
+      genDepPDF(data);
+      showMessage('PDF de salida generado.');
+      document.getElementById('patenteRegreso').value=data.patente;
+    });
+
+    document.getElementById('returnForm').addEventListener('submit',e=>{
+      e.preventDefault();
+      if(!departureData) return showMessage('Primero registre la salida.');
+      const kmSal=parseInt(departureData.km,10),
+            kmReg=parseInt(document.getElementById('kmRegreso').value,10);
+      if(kmReg<=kmSal) return showMessage('El kilometraje de regreso debe ser mayor que el de salida.');
+      const data={fecha:new Date().toLocaleString('es-CL'),km:document.getElementById('kmRegreso').value};
+      genRetPDF(departureData,data);
+      showMessage('PDF de regreso generado.');
     });
   </script>
 </body>
