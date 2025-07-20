@@ -7,7 +7,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;500;600;700&display=swap" rel="stylesheet">
     <!-- jsPDF CDN for PDF generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -407,6 +407,7 @@
 
         // Check if PDF button should be enabled
         function checkPdfButtonStatus() {
+            // The PDF button is enabled only when both departure and return data are available
             if (departureData && returnData) {
                 generatePdfBtn.disabled = false;
                 generatePdfBtn.classList.remove('disabled-btn');
@@ -448,13 +449,6 @@
             doc.text(`Km salida: ${departureData.kilometrajeSalida}`, marginX, y); y += lineHeight;
             doc.text(`Km regreso: ${returnData.kilometrajeRegreso}`, marginX, y); y += lineHeight;
             doc.text(`Teléfono JP: ${departureData.telefonoJefe}`, marginX, y); y += sectionSpacing * 2; // Extra space before next section
-
-            // --- Middle Section Text ---
-            doc.setFontSize(12);
-            doc.text('VESTIGACIÓN DE CURICANIZACION', marginX, y); y += lineHeight;
-            doc.setFontSize(10);
-            doc.text('O.S.9', marginX, y); y += lineHeight;
-            doc.text('VESTISTAR PARA PREVENIR', marginX, y); y += sectionSpacing * 2;
 
             // --- Equipment Table Headers ---
             const columnWidths = [30, 60, 30, 30, 30, 30, 30]; // Adjust as needed
@@ -513,10 +507,11 @@
             const footerSubText = 'JEFE DE PATRULLA';
             const footerY = pageHeight - 25; // Position from bottom
 
+            // Align footer to the right
             doc.setFontSize(10);
-            doc.text(footerText, pageWidth / 2, footerY, { align: 'center' });
+            doc.text(footerText, pageWidth - marginX, footerY, { align: 'right' });
             doc.setFontSize(8);
-            doc.text(footerSubText, pageWidth / 2, footerY + 5, { align: 'center' });
+            doc.text(footerSubText, pageWidth - marginX, footerY + 5, { align: 'right' });
 
 
             // Save the PDF
