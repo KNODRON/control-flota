@@ -16,7 +16,7 @@
     .card { background: #fff; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 480px; margin: 2rem auto; }
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .header h1 { font-size: 1.25rem; font-weight: 600; color: #005131; }
-    .logo { height: 40px; }
+    .logo { height: 40px; width: 40px; border-radius: 50%; object-fit: cover; }
     label { display: block; margin-bottom: 0.25rem; font-size: 0.875rem; color: #333; }
     input, select { width: 100%; height: 2.5rem; padding: 0 0.75rem; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; background: #fafafa; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
@@ -154,10 +154,10 @@
       document.getElementById('acompanantesContainer').appendChild(div);
     });
 
-    // Función para generar PDF de Salida
+    // Generar PDF de Salida (landscape)
     function genDepPDF(data) {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit:'mm', format:'a4' });
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
       const w = doc.internal.pageSize.getWidth(),
             h = doc.internal.pageSize.getHeight();
 
@@ -165,7 +165,7 @@
       const logo = document.getElementById('logoPdf');
       doc.addImage(logo, 'PNG', w - 50, 10, 40, 10);
 
-      let y = 30;
+      let y = 20;
       doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 15, y);
       y += 10;
       doc.setFontSize(10);
@@ -176,28 +176,11 @@
         });
       y += 6;
 
-      // Tabla con AutoTable
+      // Tabla
       const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
-      const body = [[
-        data.equipo.calzo||'', data.jefe||'', data.equipo.armamento||'',
-        data.equipo.chaleco||'', data.equipo.casco||'', data.equipo.portatil||'',
-        data.equipo.camCorporal||''
-      ]];
-      data.acompanantes.forEach(ac => {
-        body.push([
-          ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'',
-          ac.equipo.chaleco||'', ac.equipo.casco||'', ac.equipo.portatil||'',
-          ac.equipo.camCorporal||''
-        ]);
-      });
-      doc.autoTable({
-        startY: y,
-        head,
-        body,
-        theme: 'grid',
-        styles: { fontSize: 9 },
-        headStyles: { fillColor: [0,81,49] }
-      });
+      const body = [[data.equipo.calzo||'', data.jefe||'', data.equipo.armamento||'', data.equipo.chaleco||'', data.equipo.casco||'', data.equipo.portatil||'', data.equipo.camCorporal||'']];
+      data.acompanantes.forEach(ac => body.push([ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'', ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||'']));
+      doc.autoTable({ startY: y, head, body, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [0,81,49] } });
 
       // Firma al borde derecho
       const sigY = h - 20;
@@ -208,10 +191,10 @@
       doc.save(`Salida_OS9_${data.patente}_${data.fecha.replace(/[/:, ]/g,'-')}.pdf`);
     }
 
-    // Función para generar PDF de Regreso
+    // Generar PDF de Regreso (landscape)
     function genRetPDF(dep, ret) {
       const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit:'mm', format:'a4' });
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
       const w = doc.internal.pageSize.getWidth(),
             h = doc.internal.pageSize.getHeight();
 
@@ -219,7 +202,7 @@
       const logo = document.getElementById('logoPdf');
       doc.addImage(logo, 'PNG', w - 50, 10, 40, 10);
 
-      let y = 30;
+      let y = 20;
       doc.setFontSize(14).text('REGISTRO DE SALIDA Y REGRESO DE VEHÍCULO OS9', 15, y);
       y += 10;
       doc.setFontSize(10);
@@ -231,27 +214,10 @@
       y += 6;
 
       // Tabla
-      const head = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
-      const body = [[
-        dep.equipo.calzo||'', dep.jefe||'', dep.equipo.armamento||'',
-        dep.equipo.chaleco||'', dep.equipo.casco||'', dep.equipo.portatil||'',
-        dep.equipo.camCorporal||''
-      ]];
-      dep.acompanantes.forEach(ac => {
-        body.push([
-          ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'',
-          ac.equipo.chaleco||'', ac.equipo.casco||'', ac.equipo.portatil||'',
-          ac.equipo.camCorporal||''
-        ]);
-      });
-      doc.autoTable({
-        startY: y,
-        head,
-        body,
-        theme: 'grid',
-        styles: { fontSize: 9 },
-        headStyles: { fillColor: [0,81,49] }
-      });
+      const headR = [['CALZO','Nombre','Pistola','Chaleco','Casco','Portátil','Cámara']];
+      const bodyR = [[dep.equipo.calzo||'', dep.jefe||'', dep.equipo.armamento||'', dep.equipo.chaleco||'', dep.equipo.casco||'', dep.equipo.portatil||'', dep.equipo.camCorporal||'']];
+      dep.acompanantes.forEach(ac => bodyR.push([ac.equipo.calzo||'', ac.nombre||'', ac.equipo.armamento||'', ac.equipo.chaleco||'', ac.equipo.casco||'', ac.equipo.portatil||'', ac.equipo.camCorporal||'']));
+      doc.autoTable({ startY: y, head: headR, body: bodyR, theme: 'grid', styles: { fontSize: 9 }, headStyles: { fillColor: [0,81,49] } });
 
       // Firma
       const sigY2 = h - 20;
@@ -307,10 +273,7 @@
       const kmSal = parseInt(departureData.km, 10),
             kmReg = parseInt(document.getElementById('kmRegreso').value, 10);
       if (kmReg <= kmSal) return showMessage('El kilometraje de regreso debe ser mayor que el de salida.');
-      const data = {
-        fecha: new Date().toLocaleString('es-CL'),
-        km: document.getElementById('kmRegreso').value
-      };
+      const data = { fecha: new Date().toLocaleString('es-CL'), km: document.getElementById('kmRegreso').value };
       genRetPDF(departureData, data);
       showMessage('PDF de regreso generado.');
     });
